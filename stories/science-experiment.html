@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Science Squad - StoryLand</title>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600&family=Orbitron:wght@600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --lab-purple: #9C27B0;
+            --experiment-blue: #03A9F4;
+            --safety-yellow: #FFD600;
+            --chemical-green: #00E676;
+            --data-pink: #FF4081;
+            --neutral-gray: #37474F;
+            --bg-gradient: linear-gradient(135deg, #311B92, #4A148C);
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            background: var(--bg-gradient);
+            font-family: 'Space Grotesk', sans-serif;
+            color: var(--neutral-gray);
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        .lab-particles {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            background: 
+                radial-gradient(2px 2px at 20px 30px, var(--chemical-green) 50%, transparent),
+                radial-gradient(2px 2px at 40px 70px, var(--experiment-blue) 50%, transparent),
+                radial-gradient(2px 2px at 50px 160px, var(--data-pink) 50%, transparent),
+                radial-gradient(2px 2px at 90px 40px, var(--safety-yellow) 50%, transparent);
+            background-size: 200px 200px;
+            opacity: 0.3;
+            animation: float 20s linear infinite;
+        }
+
+        @keyframes float {
+            0% { background-position: 0px 0px; }
+            100% { background-position: 200px 200px; }
+        }
+
+        .story-container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 2rem;
+            position: relative;
+        }
+
+        .content-wrapper {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 
+                0 0 40px rgba(156, 39, 176, 0.3),
+                0 0 80px rgba(3, 169, 244, 0.2);
+            overflow: hidden;
+            position: relative;
+            border: 4px solid var(--lab-purple);
+            backdrop-filter: blur(10px);
+        }
+
+        .navigation-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 2rem;
+            background: linear-gradient(to right, var(--lab-purple), var(--experiment-blue));
+            position: relative;
+            overflow: hidden;
+        }
+
+        .back-button {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: white;
+            text-decoration: none;
+            font-size: 1.2rem;
+            padding: 0.8rem 1.5rem;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 25px;
+            transition: all 0.3s ease;
+            border: 2px solid rgba(255, 255, 255, 0.4);
+        }
+
+        .back-button:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateX(-5px);
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.4);
+        }
+
+        .font-controls {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .control-button {
+            font-family: 'Space Grotesk', sans-serif;
+            color: white;
+            background: rgba(255, 255, 255, 0.2);
+            border: 2px solid rgba(255, 255, 255, 0.4);
+            padding: 0.8rem 1.2rem;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .control-button:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .story-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 3.5rem;
+            text-align: center;
+            color: var(--lab-purple);
+            margin: 2rem 0;
+            position: relative;
+            text-shadow: 
+                2px 2px 0 var(--experiment-blue),
+                4px 4px 0 rgba(0, 0, 0, 0.1);
+            letter-spacing: 2px;
+        }
+
+        .story-icon {
+            position: absolute;
+            font-size: 2.5rem;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        .icon-left { left: 10%; top: 50%; transform: translateY(-50%); }
+        .icon-right { right: 10%; top: 50%; transform: translateY(-50%); }
+
+        @keyframes pulse {
+            0%, 100% { transform: translateY(-50%) scale(1); opacity: 0.8; }
+            50% { transform: translateY(-50%) scale(1.2); opacity: 1; }
+        }
+
+        .cover-section {
+            position: relative;
+            max-width: 800px;
+            margin: 2rem auto;
+            padding: 1rem;
+        }
+
+        .cover-frame {
+            position: relative;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 
+                0 10px 30px rgba(0, 0, 0, 0.2),
+                0 0 0 10px rgba(156, 39, 176, 0.2);
+            background: linear-gradient(45deg, var(--lab-purple), var(--experiment-blue));
+            padding: 10px;
+        }
+
+        .cover-frame::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                linear-gradient(45deg, 
+                    transparent 45%, 
+                    rgba(255, 255, 255, 0.1) 50%,
+                    transparent 55%
+                );
+            background-size: 20px 20px;
+            animation: slide 20s linear infinite;
+        }
+
+        @keyframes slide {
+            0% { background-position: 0 0; }
+            100% { background-position: 40px 40px; }
+        }
+
+        .cover-image {
+            width: 100%;
+            height: auto;
+            display: block;
+            border-radius: 10px;
+            transition: transform 0.5s ease;
+        }
+
+        .cover-frame:hover .cover-image {
+            transform: scale(1.05);
+        }
+
+        .story-tags {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .story-tag {
+            font-family: 'Space Grotesk', sans-serif;
+            padding: 0.6rem 1.5rem;
+            border-radius: 20px;
+            font-size: 1.1rem;
+            background: rgba(156, 39, 176, 0.1);
+            color: var(--lab-purple);
+            border: 2px solid var(--lab-purple);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .story-tag:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(156, 39, 176, 0.2);
+        }
+
+        .story-content {
+            padding: 2rem;
+            font-size: 1.2rem;
+            line-height: 1.8;
+            position: relative;
+        }
+
+        .story-paragraph {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            border-radius: 15px;
+            border: 2px solid rgba(156, 39, 176, 0.2);
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .story-paragraph:hover {
+            transform: translateX(10px);
+            box-shadow: 0 10px 20px rgba(156, 39, 176, 0.1);
+        }
+
+        .story-paragraph::before {
+            content: '🧪';
+            position: absolute;
+            left: -30px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 1.5rem;
+        }
+
+        .floating-element {
+            position: fixed;
+            pointer-events: none;
+            opacity: 0.8;
+            animation: float-element 15s linear infinite;
+        }
+
+        @keyframes float-element {
+            0% { transform: translateX(-100%) rotate(0deg); }
+            50% { transform: translateX(50vw) rotate(180deg); }
+            100% { transform: translateX(100vw) rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="lab-particles"></div>
+    <div class="story-container">
+        <div class="content-wrapper">
+            <nav class="navigation-bar">
+                <a href="../library.html" class="back-button">
+                    🔬 Back to Library
+                </a>
+                <div class="font-controls">
+                    <button class="control-button" onclick="changeFontSize('decrease')">A-</button>
+                    <button class="control-button" onclick="changeFontSize('increase')">A+</button>
+                </div>
+            </nav>
+
+            <h1 class="story-title">
+                <span class="story-icon icon-left">⚗️</span>
+                Science Squad
+                <span class="story-icon icon-right">🧬</span>
+            </h1>
+
+            <div class="cover-section">
+                <div class="cover-frame">
+                    <picture>
+                        <source srcset="../images/library/covers/science-experiment.avif" type="image/avif">
+                        <img 
+                            src="../images/library/covers/science-experiment.avif" 
+                            alt="Young scientists conducting exciting experiments in a colorful laboratory" 
+                            class="cover-image"
+                            onerror="handleImageError(this)"
+                        >
+                    </picture>
+                </div>
+            </div>
+
+            <div class="story-tags">
+                <span class="story-tag">🔬 6-8 years</span>
+                <span class="story-tag">📚 Intermediate</span>
+                <span class="story-tag">🧪 Educational</span>
+            </div>
+
+            <div class="story-content">
+                <div class="story-paragraph">
+                    In Mrs. Thompson's third-grade class, four best friends formed the Science Squad: Emma, who loved chemistry; Leo, who was fascinated by physics; Maya, who adored biology; and Sam, who couldn't get enough of astronomy. Together, they turned their classroom into a laboratory of wonder.
+                </div>
+
+                <div class="story-paragraph">
+                    One day, Mrs. Thompson announced a special science fair. "Your challenge," she said, "is to create an experiment that shows how different scientific principles work together." The Science Squad was excited but also a bit nervous.
+                </div>
+
+                <div class="story-paragraph">
+                    After brainstorming, they decided to create a "Rainbow Rocket Garden." Emma mixed special nutrients for the plants, Leo designed a pulley system for watering, Maya selected fast-growing bean seeds, and Sam calculated the best sunlight angles.
+                </div>
+
+                <div class="story-paragraph">
+                    Their experiment combined chemistry (plant food), physics (pulleys), biology (plant growth), and astronomy (sun patterns). Each day brought new discoveries as their garden grew in unexpected ways.
+                </div>
+
+                <div class="story-paragraph">
+                    On science fair day, the Squad's project was a huge success! The other students were amazed by the colorful plants growing at different heights, the clever watering system, and the way the garden changed throughout the day with the sun's movement.
+                </div>
+
+                <div class="story-paragraph">
+                    Mrs. Thompson awarded them first prize, saying, "You've shown that science is best when we work together and combine different ideas." The Science Squad learned that the best experiments happen when friends share their unique interests and skills.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function changeFontSize(action) {
+            const content = document.querySelector('.story-content');
+            const currentSize = parseFloat(window.getComputedStyle(content).fontSize);
+            
+            if (action === 'increase' && currentSize < 24) {
+                content.style.fontSize = (currentSize + 2) + 'px';
+            } else if (action === 'decrease' && currentSize > 14) {
+                content.style.fontSize = (currentSize - 2) + 'px';
+            }
+        }
+
+        function handleImageError(element) {
+            const errorMessage = `
+                <div style="
+                    padding: 4rem; 
+                    text-align: center; 
+                    background: linear-gradient(45deg, var(--lab-purple), var(--experiment-blue));
+                    color: white;
+                    border-radius: 15px;
+                    min-height: 300px;
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: center;
+                    align-items: center;
+                    position: relative;
+                    overflow: hidden;
+                ">
+                    <div style="font-size: 4rem; margin-bottom: 1rem;">🧪 ⚗️ 🔬</div>
+                    <div style="
+                        font-family: 'Orbitron', sans-serif; 
+                        font-size: 2rem; 
+                        margin-bottom: 1rem;
+                        text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+                    ">Experiment in Progress!</div>
+                    <div style="
+                        font-family: 'Space Grotesk', sans-serif; 
+                        font-size: 1.2rem;
+                        max-width: 80%;
+                        line-height: 1.6;
+                    ">
+                        Join the Science Squad as they explore the wonders of chemistry, physics, biology, and astronomy...
+                    </div>
+                </div>
+            `;
+            element.parentElement.parentElement.innerHTML = errorMessage;
+        }
+
+        function createLabElements() {
+            const elements = ['🧪', '⚗️', '🔬', '🧬', '📡'];
+            setInterval(() => {
+                const element = document.createElement('div');
+                element.className = 'floating-element';
+                element.textContent = elements[Math.floor(Math.random() * elements.length)];
+                element.style.top = `${Math.random() * 70 + 20}vh`;
+                element.style.fontSize = `${Math.random() * 2 + 2}rem`;
+                document.body.appendChild(element);
+                
+                setTimeout(() => {
+                    element.remove();
+                }, 15000);
+            }, 3000);
+        }
+
+        createLabElements();
+    </script>
+</body>
+</html>

@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Boy Who Cried Wolf - StoryLand</title>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600&family=Short+Stack&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --grass-green: #4CAF50;
+            --hill-green: #81C784;
+            --sky-blue: #64B5F6;
+            --cloud-white: #FFFFFF;
+            --sheep-cream: #FFECB3;
+            --wolf-gray: #607D8B;
+            --wood-brown: #795548;
+            --text-dark: #2C3E50;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            background: linear-gradient(180deg, var(--sky-blue) 0%, var(--cloud-white) 100%);
+            font-family: 'Fredoka', sans-serif;
+            color: var(--text-dark);
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        .hills-overlay {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 30vh;
+            background: 
+                radial-gradient(ellipse at 20% 100%, var(--grass-green) 0%, var(--grass-green) 50%, transparent 50.1%),
+                radial-gradient(ellipse at 50% 100%, var(--hill-green) 0%, var(--hill-green) 60%, transparent 60.1%),
+                radial-gradient(ellipse at 80% 100%, var(--grass-green) 0%, var(--grass-green) 40%, transparent 40.1%);
+            opacity: 0.3;
+            pointer-events: none;
+        }
+
+        .cloud {
+            position: fixed;
+            background: var(--cloud-white);
+            border-radius: 50px;
+            animation: float-cloud 30s linear infinite;
+            opacity: 0.8;
+            pointer-events: none;
+        }
+
+        @keyframes float-cloud {
+            from { transform: translateX(-100%); }
+            to { transform: translateX(100vw); }
+        }
+
+        .story-container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 2rem;
+            position: relative;
+        }
+
+        .content-wrapper {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 30px;
+            box-shadow: 
+                0 0 40px rgba(100, 181, 246, 0.2),
+                0 0 80px rgba(255, 255, 255, 0.3);
+            overflow: hidden;
+            position: relative;
+            border: 8px solid var(--wood-brown);
+        }
+
+        .navigation-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 2rem;
+            background: linear-gradient(to right, var(--grass-green), var(--hill-green));
+            position: relative;
+            overflow: hidden;
+        }
+
+        .back-button {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: white;
+            text-decoration: none;
+            font-size: 1.2rem;
+            padding: 0.8rem 1.5rem;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 25px;
+            transition: all 0.3s ease;
+            border: 2px solid rgba(255, 255, 255, 0.4);
+            z-index: 1;
+        }
+
+        .back-button:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateX(-5px);
+        }
+
+        .font-controls {
+            display: flex;
+            gap: 1rem;
+            z-index: 1;
+        }
+
+        .control-button {
+            font-family: 'Fredoka', sans-serif;
+            color: white;
+            background: rgba(255, 255, 255, 0.2);
+            border: 2px solid rgba(255, 255, 255, 0.4);
+            padding: 0.8rem 1.2rem;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .control-button:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .story-title {
+            font-family: 'Short Stack', cursive;
+            font-size: 4rem;
+            text-align: center;
+            color: var(--text-dark);
+            margin: 2rem 0;
+            position: relative;
+            text-shadow: 
+                2px 2px 0 var(--cloud-white),
+                4px 4px 0 rgba(0, 0, 0, 0.1);
+        }
+
+        .story-icon {
+            position: absolute;
+            font-size: 2.5rem;
+            animation: bounce 3s ease-in-out infinite;
+        }
+
+        .icon-left { left: 10%; top: 50%; transform: translateY(-50%) scaleX(-1); }
+        .icon-right { right: 10%; top: 50%; transform: translateY(-50%); }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(-50%); }
+            50% { transform: translateY(-70%); }
+        }
+
+        .cover-section {
+            position: relative;
+            max-width: 800px;
+            margin: 2rem auto;
+            padding: 1rem;
+        }
+
+        .cover-frame {
+            position: relative;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 
+                0 10px 30px rgba(0, 0, 0, 0.2),
+                0 0 0 10px var(--wood-brown);
+            background: white;
+        }
+
+        .cover-image {
+            width: 100%;
+            height: auto;
+            display: block;
+            transition: transform 0.5s ease;
+        }
+
+        .cover-frame:hover .cover-image {
+            transform: scale(1.05);
+        }
+
+        .story-tags {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .story-tag {
+            font-family: 'Fredoka', sans-serif;
+            padding: 0.6rem 1.5rem;
+            border-radius: 20px;
+            font-size: 1.1rem;
+            background: white;
+            color: var(--text-dark);
+            border: 2px solid var(--wood-brown);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .story-tag:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .story-content {
+            padding: 2rem;
+            font-size: 1.2rem;
+            line-height: 1.8;
+            position: relative;
+        }
+
+        .story-paragraph {
+            background: white;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            border-radius: 15px;
+            border: 2px solid var(--wood-brown);
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .story-paragraph:hover {
+            transform: translateX(10px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .story-paragraph::before {
+            content: '🌾';
+            position: absolute;
+            left: -30px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 1.5rem;
+        }
+
+        .scene-element {
+            position: absolute;
+            pointer-events: none;
+            z-index: 2;
+            font-size: 1.5rem;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-15px) rotate(5deg); }
+        }
+
+        .moral-box {
+            background: var(--sheep-cream);
+            padding: 2rem;
+            margin: 2rem;
+            border-radius: 15px;
+            border: 3px solid var(--wood-brown);
+            text-align: center;
+            font-family: 'Short Stack', cursive;
+            font-size: 1.3rem;
+            color: var(--text-dark);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .moral-box::before {
+            content: '📜';
+            font-size: 2rem;
+            display: block;
+            margin-bottom: 1rem;
+        }
+
+        .dark-mode {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: var(--wood-brown);
+            border: none;
+            color: white;
+            padding: 10px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.2rem;
+            transition: all 0.3s ease;
+            z-index: 100;
+        }
+
+        .dark-mode:hover {
+            transform: rotate(360deg);
+            background: var(--wolf-gray);
+        }
+
+        body.dark {
+            background: linear-gradient(180deg, #1a237e 0%, #303f9f 100%);
+        }
+
+        body.dark .content-wrapper {
+            background: rgba(255, 255, 255, 0.9);
+        }
+
+        .sheep-counter {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: white;
+            padding: 10px 20px;
+            border-radius: 25px;
+            border: 2px solid var(--wood-brown);
+            font-family: 'Short Stack', cursive;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+<body>
+    <div class="hills-overlay"></div>
+    <div class="story-container">
+        <div class="content-wrapper">
+            <nav class="navigation-bar">
+                <a href="../library.html" class="back-button">
+                    🏠 Back to Library
+                </a>
+                <div class="font-controls">
+                    <button class="control-button" onclick="changeFontSize('decrease')">A-</button>
+                    <button class="control-button" onclick="changeFontSize('increase')">A+</button>
+                </div>
+            </nav>
+
+            <h1 class="story-title">
+                <span class="story-icon icon-left">🐺</span>
+                The Boy Who Cried Wolf
+                <span class="story-icon icon-right">🐑</span>
+            </h1>
+
+            <div class="cover-section">
+                <div class="cover-frame">
+                    <picture>
+                        <source srcset="../images/library/covers/boy-wolf.jpg" type="image/jpeg">
+                        <img 
+                            src="../images/library/covers/boy-wolf.jpg" 
+                            alt="A young shepherd boy running from wolves while sheep graze in the background" 
+                            class="cover-image"
+                            onerror="handleImageError(this)"
+                        >
+                    </picture>
+                </div>
+            </div>
+
+            <div class="story-tags">
+                <span class="story-tag">👦 3-8 years</span>
+                <span class="story-tag">📚 Beginner</span>
+                <span class="story-tag">🎯 Moral</span>
+            </div>
+
+            <div class="story-content">
+                <div class="story-paragraph">
+                    Once upon a time, there was a young boy who was given the job of watching over the village's sheep. Every day, he would take the sheep to the hillside to graze.
+                </div>
+
+                <div class="story-paragraph">
+                    One day, the boy felt bored. He thought it would be fun to play a trick on the villagers. He ran down to the village, shouting, "Wolf! Wolf! A wolf is attacking the sheep!"
+                </div>
+
+                <div class="story-paragraph">
+                    The villagers dropped their work and rushed up the hill to help the boy drive the wolf away. But when they arrived, they found no wolf. The boy laughed at them, "I fooled you all! I was only joking!"
+                </div>
+
+                <div class="story-paragraph">
+                    The villagers were angry at being tricked, but they went back to their work. A few days later, the boy played the same trick again. "Wolf! Wolf!" he shouted. Again, the villagers ran up the hill to find no wolf, and the boy laughed at them even harder.
+                </div>
+
+                <div class="story-paragraph">
+                    Then one day, a real wolf actually did come. The wolf was big and fierce, with sharp teeth and hungry eyes. The boy was terrified! "Wolf! Wolf!" he cried out, louder than ever before. "Please help! This time there really is a wolf!"
+                </div>
+
+                <div class="story-paragraph">
+                    But this time, when the villagers heard the boy crying "wolf," they shook their heads and said, "He's trying to fool us again. We won't be tricked this time." No one came to help.
+                </div>
+
+                <div class="story-paragraph">
+                    The boy watched helplessly as the wolf attacked his flock. Many sheep ran away in fear, and some were caught by the wolf. When the boy finally returned to the village that evening with the few remaining sheep, he was very sad.
+                </div>
+
+                <div class="story-paragraph">
+                    "I learned my lesson," he told the villagers with tears in his eyes. "I'll never lie again. I see now that nobody believes a liar, even when they're telling the truth!"
+                </div>
+
+                <div class="moral-box">
+                    Moral of the story: Always tell the truth. If you lie too often, people might not believe you even when you're telling the truth.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <button class="dark-mode" onclick="toggleDarkMode()">🌙</button>
+    <div class="sheep-counter">🐑 <span id="sheep-count">0</span></div>
+
+    <script>
+        function changeFontSize(action) {
+            const content = document.querySelector('.story-content');
+            const currentSize = parseFloat(window.getComputedStyle(content).fontSize);
+            
+            if (action === 'increase' && currentSize < 24) {
+                content.style.fontSize = (currentSize + 2) + 'px';
+            } else if (action === 'decrease' && currentSize > 14) {
+                content.style.fontSize = (currentSize - 2) + 'px';
+            }
+        }
+
+        function handleImageError(element) {
+            const errorMessage = `
+                <div style="padding: 4rem; text-align: center; background: linear-gradient(45deg, var(--grass-green), var(--hill-green)); color: white; border-radius: 15px;">
+                    <div style="font-size: 4rem; margin-bottom: 1rem;">🐑 👦 🐺</div>
+                    <div style="font-family: 'Short Stack', cursive; font-size: 1.5rem; margin-bottom: 1rem;">The Story Begins...</div>
+                    <div style="font-family: 'Fredoka', sans-serif; font-size: 1rem;">Loading the tale of truth and consequences...</div>
+                </div>
+            `;
+            element.parentElement.parentElement.innerHTML = errorMessage;
+        }
+
+        function createSceneElements() {
+            const container = document.querySelector('.story-container');
+            const sceneItems = ['🌾', '🌿', '🍃', '🐑', '🦊', '🌳', '🌲', '🏠'];
+            
+            for (let i = 0; i < 12; i++) {
+                const element = document.createElement('div');
+                element.className = 'scene-element';
+                element.textContent = sceneItems[Math.floor(Math.random() * sceneItems.length)];
+                element.style.left = `${Math.random() * 90 + 5}%`;
+                element.style.top = `${Math.random() * 90 + 5}%`;
+                element.style.animationDelay = `${Math.random() * 2}s`;
+                container.appendChild(element);
+            }
+
+            createClouds();
+            updateSheepCounter();
+        }
+
+        function createClouds() {
+            const body = document.body;
+            for (let i = 0; i < 3; i++) {
+                const cloud = document.createElement('div');
+                cloud.className = 'cloud';
+                cloud.style.top = `${Math.random() * 30}%`;
+                cloud.style.width = `${Math.random() * 100 + 50}px`;
+                cloud.style.height = `${Math.random() * 30 + 20}px`;
+                cloud.style.animationDelay = `${Math.random() * 20}s`;
+                body.appendChild(cloud);
+            }
+        }
+
+        function updateSheepCounter() {
+            let count = 0;
+            const counter = document.getElementById('sheep-count');
+            setInterval(() => {
+                count = (count + 1) % 100;
+                counter.textContent = count;
+            }, 1000);
+        }
+
+        function toggleDarkMode() {
+            document.body.classList.toggle('dark');
+            const button = document.querySelector('.dark-mode');
+            button.textContent = document.body.classList.contains('dark') ? '☀️' : '🌙';
+        }
+
+        createSceneElements();
+    </script>
+</body>
+</html> 

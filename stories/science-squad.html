@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Science Squad - StoryLand</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600&family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --lab-blue: #00B4D8;
+            --tech-purple: #7209B7;
+            --neon-green: #4CAF50;
+            --chemical-orange: #FF9F1C;
+            --screen-blue: #90E0EF;
+            --circuit-gray: #3D3D3D;
+            --data-pink: #F72585;
+            --experiment-yellow: #FFD60A;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            font-family: 'Roboto', sans-serif;
+            background: linear-gradient(135deg, var(--tech-purple) 0%, var(--lab-blue) 100%);
+            color: #333;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 20 20'%3E%3Ccircle cx='10' cy='10' r='2' fill='%2390E0EF' fill-opacity='0.1'/%3E%3C/svg%3E"),
+                url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='40' viewBox='0 0 40 40'%3E%3Cpath d='M0 0h40v40H0V0zm20 20h20v20H20V20zM0 20h20v20H0V20z' fill='%234CAF50' fill-opacity='0.05'/%3E%3C/svg%3E");
+            z-index: -1;
+        }
+
+        .lab-container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+            position: relative;
+        }
+
+        .story-panel {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 
+                0 0 30px rgba(0, 180, 216, 0.3),
+                0 0 60px rgba(114, 9, 183, 0.2);
+            overflow: hidden;
+            position: relative;
+            backdrop-filter: blur(10px);
+            border: 2px solid var(--lab-blue);
+        }
+
+        .navigation-bar {
+            background: linear-gradient(to right, var(--tech-purple), var(--lab-blue));
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 3px solid var(--neon-green);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .back-button {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: white;
+            text-decoration: none;
+            font-size: 1.2rem;
+            padding: 0.5rem 1.5rem;
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid var(--neon-green);
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            font-family: 'Orbitron', sans-serif;
+        }
+
+        .back-button:hover {
+            transform: translateX(-5px);
+            background: rgba(255, 255, 255, 0.2);
+            box-shadow: 0 0 20px var(--neon-green);
+        }
+
+        .font-controls {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .font-button {
+            padding: 0.5rem 1rem;
+            border: 2px solid var(--neon-green);
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Orbitron', sans-serif;
+        }
+
+        .font-button:hover {
+            background: rgba(255, 255, 255, 0.2);
+            box-shadow: 0 0 15px var(--neon-green);
+        }
+
+        .story-header {
+            text-align: center;
+            padding: 2rem;
+            background: linear-gradient(to bottom right, var(--tech-purple), var(--lab-blue));
+            position: relative;
+            overflow: hidden;
+        }
+
+        .story-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 3.5rem;
+            color: var(--screen-blue);
+            margin: 0;
+            text-shadow: 
+                2px 2px 4px rgba(0, 0, 0, 0.3),
+                0 0 20px var(--neon-green);
+            letter-spacing: 2px;
+        }
+
+        .cover-container {
+            position: relative;
+            padding: 2rem;
+            background: linear-gradient(to bottom, var(--tech-purple), var(--lab-blue));
+        }
+
+        .cover-frame {
+            position: relative;
+            max-width: 800px;
+            margin: 0 auto;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 
+                0 0 30px rgba(0, 180, 216, 0.4),
+                0 0 60px rgba(76, 175, 80, 0.3);
+            border: 4px solid var(--neon-green);
+        }
+
+        .cover-image {
+            width: 100%;
+            height: auto;
+            display: block;
+            transition: transform 0.5s ease;
+        }
+
+        .cover-frame:hover .cover-image {
+            transform: scale(1.05);
+        }
+
+        .story-tags {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .story-tag {
+            padding: 0.5rem 1.5rem;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            font-family: 'Orbitron', sans-serif;
+            animation: pulse 3s ease-in-out infinite;
+        }
+
+        .tag-age {
+            background: rgba(114, 9, 183, 0.2);
+            border: 2px solid var(--tech-purple);
+            color: white;
+        }
+
+        .tag-level {
+            background: rgba(247, 37, 133, 0.2);
+            border: 2px solid var(--data-pink);
+            color: white;
+        }
+
+        .tag-genre {
+            background: rgba(0, 180, 216, 0.2);
+            border: 2px solid var(--lab-blue);
+            color: white;
+        }
+
+        .story-content {
+            padding: 2rem;
+            font-size: 1.2rem;
+            line-height: 1.8;
+            position: relative;
+            color: #2C1810;
+        }
+
+        .story-paragraph {
+            background: rgba(255, 255, 255, 0.8);
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            border-radius: 12px;
+            border-left: 4px solid var(--lab-blue);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .story-paragraph:hover {
+            transform: translateX(10px);
+            background: rgba(255, 255, 255, 0.9);
+            box-shadow: 
+                0 5px 15px rgba(0, 180, 216, 0.2),
+                0 0 30px rgba(76, 175, 80, 0.1);
+        }
+
+        .science-decoration {
+            position: absolute;
+            pointer-events: none;
+            animation: float 6s ease-in-out infinite;
+            z-index: 1;
+            font-size: 1.5rem;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-10px) rotate(5deg); }
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+
+        .circuit-line {
+            position: absolute;
+            background: var(--neon-green);
+            opacity: 0.2;
+            height: 2px;
+        }
+
+        .circuit-dot {
+            position: absolute;
+            width: 6px;
+            height: 6px;
+            background: var(--neon-green);
+            border-radius: 50%;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        .data-stream {
+            position: absolute;
+            font-family: 'Orbitron', sans-serif;
+            color: var(--neon-green);
+            font-size: 0.8rem;
+            opacity: 0.3;
+            animation: scroll 10s linear infinite;
+            white-space: nowrap;
+        }
+
+        @keyframes scroll {
+            from { transform: translateY(-100%); }
+            to { transform: translateY(100vh); }
+        }
+    </style>
+</head>
+<body>
+    <div class="lab-container">
+        <div class="story-panel">
+            <nav class="navigation-bar">
+                <a href="../library.html" class="back-button">
+                    ← Back to Library
+                </a>
+                <div class="font-controls">
+                    <button class="font-button" onclick="changeFontSize('decrease')">A-</button>
+                    <button class="font-button" onclick="changeFontSize('increase')">A+</button>
+                </div>
+            </nav>
+
+            <header class="story-header">
+                <h1 class="story-title">Science Squad</h1>
+                <div class="story-tags">
+                    <span class="story-tag tag-age">9-12 years</span>
+                    <span class="story-tag tag-level">advanced</span>
+                    <span class="story-tag tag-genre">educational</span>
+                </div>
+            </header>
+
+            <div class="cover-container">
+                <div class="cover-frame">
+                    <img src="../images/library/covers/science-squad.jpg" 
+                         alt="Science Squad" 
+                         class="cover-image"
+                         onerror="this.parentElement.innerHTML='<div style=\'padding: 4rem; text-align: center; background: var(--tech-purple); color: var(--screen-blue);\'><span style=\'font-size: 4rem;\'>🧪</span><br>Laboratory Scene Coming Soon</div>';">
+                </div>
+            </div>
+
+            <div class="story-content">
+                <div class="story-paragraph">
+                    In the small town of Brightville, four best friends – Emma, Leo, Maya, and Sam – loved science more than anything 
+                    else. They called themselves the Science Squad and spent every afternoon after school in their secret laboratory, 
+                    which was actually just Leo's garage filled with beakers, test tubes, and all sorts of scientific equipment.
+                </div>
+
+                <div class="story-paragraph">
+                    Each member of the Science Squad had their own specialty. Emma loved chemistry and could mix potions that 
+                    changed colors in amazing ways. Leo was fascinated by physics and built all sorts of machines. Maya studied 
+                    biology and kept detailed notes about every plant and animal she found. Sam was the computer expert, always 
+                    coding new programs to help with their experiments.
+                </div>
+
+                <div class="story-paragraph">
+                    One day, their teacher announced a school science fair with a special prize for the most innovative project. The Science Squad was excited but couldn't agree on what to create. Emma wanted to make a volcano, Leo wanted to build a robot, Maya wanted to grow special plants, and Sam wanted to create a model of the solar system.
+                </div>
+
+                <div class="story-paragraph">
+                    After much discussion, they had a brilliant idea. "What if we combine all our specialties?" suggested Maya. "We could create something that shows how different sciences work together!" The others agreed, and they started brainstorming.
+                </div>
+
+                <div class="story-paragraph">
+                    Their project, "The Amazing Plant Rocket," combined all their interests. Emma created a special nutrient solution that would help plants grow faster. Leo built a small rocket with a clear chamber for the plant. Maya selected a special type of bean that grew quickly and could survive in different conditions. Sam designed the rocket's trajectory to simulate different gravitational forces.
+                </div>
+
+                <div class="story-paragraph">
+                    The day of the science fair arrived, and their project was a huge success. The judges were amazed by how the Science Squad had combined chemistry, physics, biology, and astronomy into one experiment. The plant grew in the rocket's chamber, showing how life could adapt to different environments, just like in space.
+                </div>
+
+                <div class="story-paragraph">
+                    "This project shows how all sciences are connected," explained Emma. "Chemistry helps us understand the nutrients plants need, physics helps us understand how they grow in different conditions, biology shows us how they adapt, and astronomy helps us think about how plants might grow on other planets."
+                </div>
+
+                <div class="story-paragraph">
+                    The Science Squad won first prize, but more importantly, they learned that science is about working together and seeing how different ideas connect. They realized that the best discoveries often happen when people with different specialties collaborate.
+                </div>
+
+                <div class="story-paragraph">
+                    After the fair, the Science Squad continued their experiments, always looking for ways to combine their different interests. They knew that by working together, they could solve any scientific mystery that came their way.
+                </div>
+
+                <div class="story-paragraph">
+                    And so, in their garage laboratory, the Science Squad continued to explore, experiment, and discover, proving that when different kinds of science come together, amazing things can happen.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function changeFontSize(action) {
+            const content = document.querySelector('.story-content');
+            const currentSize = parseFloat(window.getComputedStyle(content).fontSize);
+            
+            if (action === 'increase' && currentSize < 24) {
+                content.style.fontSize = (currentSize + 2) + 'px';
+            } else if (action === 'decrease' && currentSize > 14) {
+                content.style.fontSize = (currentSize - 2) + 'px';
+            }
+        }
+
+        function createCircuitElements() {
+            const container = document.querySelector('.story-panel');
+            const circuitPoints = [
+                { x: '10%', y: '20%' }, { x: '90%', y: '30%' },
+                { x: '5%', y: '60%' }, { x: '95%', y: '70%' },
+                { x: '15%', y: '85%' }, { x: '85%', y: '40%' }
+            ];
+
+            circuitPoints.forEach(point => {
+                const dot = document.createElement('div');
+                dot.className = 'circuit-dot';
+                dot.style.left = point.x;
+                dot.style.top = point.y;
+                container.appendChild(dot);
+
+                const line = document.createElement('div');
+                line.className = 'circuit-line';
+                line.style.left = point.x;
+                line.style.top = point.y;
+                line.style.width = '50px';
+                container.appendChild(line);
+            });
+        }
+
+        function createScienceDecorations() {
+            const container = document.querySelector('.story-panel');
+            const decorations = [
+                { emoji: '🧪', positions: [
+                    { top: '15%', right: '5%' },
+                    { top: '45%', left: '3%' }
+                ]},
+                { emoji: '🔬', positions: [
+                    { top: '25%', left: '5%' },
+                    { top: '75%', right: '4%' }
+                ]},
+                { emoji: '⚡', positions: [
+                    { top: '35%', right: '7%' },
+                    { top: '85%', left: '6%' }
+                ]},
+                { emoji: '💻', positions: [
+                    { top: '55%', right: '5%' },
+                    { top: '65%', left: '4%' }
+                ]}
+            ];
+
+            decorations.forEach(decor => {
+                decor.positions.forEach(pos => {
+                    const element = document.createElement('div');
+                    element.className = 'science-decoration';
+                    element.textContent = decor.emoji;
+                    Object.assign(element.style, pos);
+                    container.appendChild(element);
+                });
+            });
+        }
+
+        function createDataStreams() {
+            const container = document.querySelector('.story-panel');
+            const dataStrings = ['10101', 'E=mc²', 'H₂O', 'DNA', 'RGB'];
+            
+            for (let i = 0; i < 8; i++) {
+                const stream = document.createElement('div');
+                stream.className = 'data-stream';
+                stream.textContent = dataStrings[Math.floor(Math.random() * dataStrings.length)];
+                stream.style.left = `${Math.random() * 100}%`;
+                stream.style.animationDelay = `${Math.random() * 5}s`;
+                container.appendChild(stream);
+            }
+        }
+
+        createCircuitElements();
+        createScienceDecorations();
+        createDataStreams();
+    </script>
+</body>
+</html> 

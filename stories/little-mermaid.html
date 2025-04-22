@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Little Mermaid - StoryLand</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600&family=Lobster+Two:ital,wght@0,400;1,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --ocean-deep: #006994;
+            --ocean-light: #4FB4D8;
+            --coral-pink: #FF7F7F;
+            --shell-purple: #C8A2C8;
+            --sand-gold: #FFE4B5;
+            --seaweed-green: #2E8B57;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            background: linear-gradient(180deg, var(--ocean-light) 0%, var(--ocean-deep) 100%);
+            font-family: 'Quicksand', sans-serif;
+            color: #333;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* Bubble effect */
+        .bubbles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .bubble {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            animation: float-up 15s infinite;
+            opacity: 0;
+        }
+
+        @keyframes float-up {
+            0% {
+                transform: translateY(100vh) scale(0);
+                opacity: 0.8;
+            }
+            100% {
+                transform: translateY(-100px) scale(1);
+                opacity: 0;
+            }
+        }
+
+        .story-container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 2rem;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 30px;
+            box-shadow: 0 0 40px rgba(79, 180, 216, 0.3);
+            position: relative;
+            z-index: 1;
+            border: 4px solid var(--shell-purple);
+        }
+
+        .navigation-bar {
+            background: linear-gradient(to right, var(--shell-purple), var(--coral-pink));
+            padding: 1rem;
+            border-radius: 20px;
+            margin-bottom: 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .back-button {
+            background: var(--ocean-deep);
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            border: 2px solid var(--sand-gold);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .back-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            background: var(--ocean-light);
+        }
+
+        .control-button {
+            background: var(--ocean-deep);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            border: 2px solid var(--sand-gold);
+            margin: 0 0.25rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .control-button:hover {
+            background: var(--ocean-light);
+        }
+
+        .story-title {
+            font-family: 'Lobster Two', cursive;
+            font-size: 3.5rem;
+            color: var(--ocean-deep);
+            text-align: center;
+            margin: 2rem 0;
+            position: relative;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .cover-section {
+            position: relative;
+            margin: 2rem auto;
+            max-width: 800px;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        .cover-frame {
+            position: relative;
+            padding-top: 56.25%; /* 16:9 aspect ratio */
+            background: linear-gradient(45deg, var(--ocean-deep), var(--ocean-light));
+            border-radius: 20px;
+            overflow: hidden;
+        }
+
+        .cover-image {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        .cover-frame:hover .cover-image {
+            transform: scale(1.05);
+        }
+
+        .story-tags {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin: 2rem 0;
+            flex-wrap: wrap;
+        }
+
+        .story-tag {
+            background: rgba(200, 162, 200, 0.1);
+            color: var(--ocean-deep);
+            padding: 0.5rem 1.5rem;
+            border-radius: 20px;
+            font-size: 1.1rem;
+            border: 2px solid var(--shell-purple);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .story-content {
+            font-size: 1.2rem;
+            line-height: 1.8;
+            color: #2C3E50;
+            padding: 2rem;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 20px;
+            margin-top: 2rem;
+        }
+
+        .story-paragraph {
+            position: relative;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            border-left: 4px solid var(--coral-pink);
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 0 20px 20px 0;
+            transition: all 0.3s ease;
+        }
+
+        .story-paragraph:hover {
+            transform: translateX(10px);
+            box-shadow: 5px 5px 15px rgba(0,0,0,0.1);
+            border-left-color: var(--shell-purple);
+        }
+
+        /* Sea decorations */
+        .sea-decoration {
+            position: absolute;
+            font-size: 2rem;
+            opacity: 0.6;
+            pointer-events: none;
+            animation: sway 6s ease-in-out infinite;
+        }
+
+        @keyframes sway {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-15px) rotate(5deg); }
+        }
+
+        .fish { top: 50px; right: 50px; }
+        .shell { top: 100px; left: 50px; }
+        .starfish { bottom: 100px; right: 100px; }
+        .coral { bottom: 150px; left: 100px; }
+        .dolphin { top: 200px; right: 150px; }
+
+        /* Dark mode */
+        @media (prefers-color-scheme: dark) {
+            .story-container {
+                background: rgba(0, 105, 148, 0.95);
+                color: #fff;
+            }
+            .story-content {
+                background: rgba(255, 255, 255, 0.1);
+                color: #fff;
+            }
+            .story-paragraph {
+                background: rgba(0, 105, 148, 0.8);
+                color: #fff;
+            }
+            .story-title {
+                color: var(--sand-gold);
+            }
+            .story-tag {
+                color: var(--sand-gold);
+                background: rgba(0, 105, 148, 0.8);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="bubbles" id="bubbles"></div>
+    <div class="story-container">
+        <nav class="navigation-bar">
+            <button onclick="goBackToLibrary()" class="back-button">
+                <i class="fas fa-wave-square"></i> Back to Library
+            </button>
+            <div class="font-controls">
+                <button class="control-button" onclick="changeFontSize('decrease')">A-</button>
+                <button class="control-button" onclick="changeFontSize('increase')">A+</button>
+            </div>
+        </nav>
+
+        <h1 class="story-title">The Little Mermaid</h1>
+
+        <div class="cover-section">
+            <div class="cover-frame">
+                <picture>
+                    <img src="../images/library/covers/little-mermaid.jpg" 
+                         alt="The Little Mermaid and the Prince" 
+                         class="cover-image"
+                         onerror="handleImageError(this)">
+                </picture>
+            </div>
+        </div>
+
+        <div class="story-tags">
+            <span class="story-tag"><i class="fas fa-child"></i> 6-12 years</span>
+            <span class="story-tag"><i class="fas fa-book-reader"></i> Intermediate</span>
+            <span class="story-tag"><i class="fas fa-crown"></i> Folk tale</span>
+        </div>
+
+        <div class="story-content">
+            <div class="story-paragraph">
+                Deep beneath the ocean waves lived the Sea King and his six mermaid daughters. The youngest was the most beautiful of all, with a voice as sweet as a nightingale's song.
+            </div>
+
+            <div class="story-paragraph">
+                The Little mermaid loved to hear stories about the world above the sea. On her fifteenth birthday, she was finally allowed to swim to the surface. That night, she saw a handsome prince celebrating on a ship.
+            </div>
+
+            <div class="story-paragraph">
+                Suddenly, a terrible storm struck! The ship was wrecked, and the prince fell into the water. The Little mermaid saved him and brought him to shore. She watched over him until he woke up, then quickly swam away.
+            </div>
+
+            <div class="story-paragraph">
+                The Little mermaid fell deeply in love with the prince. She longed to be human so she could be with him. She went to the Sea Witch, who offered her a potion that would give her legs. But there was a price: she would lose her beautiful voice.
+            </div>
+
+            <div class="story-paragraph">
+                "If the prince marries someone else," warned the Sea Witch, "you will turn into sea foam and disappear forever." The Little mermaid agreed and drank the potion. The next morning, she found herself on the shore with human legs.
+            </div>
+
+            <div class="story-paragraph">
+                Though she danced beautifully for the prince and they became good friends, he fell in love with another princess. The Little mermaid's heart was broken, but her sisters brought her a knife from the Sea Witch. If she killed the prince, she could become a mermaid again.
+            </div>
+
+            <div class="story-paragraph">
+                But the Little mermaid loved the prince too much to harm him. As the sun rose after his wedding, she threw herself into the sea. Instead of becoming sea foam, she transformed into a daughter of the air, given a chance to earn her own soul through good deeds.
+            </div>
+        </div>
+
+        <!-- Sea decorations -->
+        <div class="sea-decoration fish">🐠</div>
+        <div class="sea-decoration shell">🐚</div>
+        <div class="sea-decoration starfish">⭐</div>
+        <div class="sea-decoration coral">🪸</div>
+        <div class="sea-decoration dolphin">🐬</div>
+    </div>
+
+    <script>
+        let currentFontSize = 1.2;
+        const minFontSize = 1;
+        const maxFontSize = 1.6;
+        const stepSize = 0.1;
+
+        function createBubbles() {
+            const bubblesContainer = document.getElementById('bubbles');
+            const bubbleCount = 50;
+
+            for (let i = 0; i < bubbleCount; i++) {
+                const bubble = document.createElement('div');
+                bubble.className = 'bubble';
+                
+                // Random size between 10px and 30px
+                const size = Math.random() * 20 + 10;
+                bubble.style.width = `${size}px`;
+                bubble.style.height = `${size}px`;
+                
+                // Random position
+                bubble.style.left = `${Math.random() * 100}%`;
+                
+                // Random delay
+                bubble.style.animationDelay = `${Math.random() * 15}s`;
+                
+                bubblesContainer.appendChild(bubble);
+            }
+        }
+
+        function changeFontSize(action) {
+            if (action === 'increase' && currentFontSize < maxFontSize) {
+                currentFontSize += stepSize;
+            } else if (action === 'decrease' && currentFontSize > minFontSize) {
+                currentFontSize -= stepSize;
+            }
+            document.querySelector('.story-content').style.fontSize = `${currentFontSize}rem`;
+            localStorage.setItem('preferredFontSize', currentFontSize);
+        }
+
+        function handleImageError(img) {
+            const container = img.parentElement;
+            container.innerHTML = `
+                <div class="w-full h-full flex flex-col items-center justify-center bg-gradient-to-r from-[var(--ocean-deep)] to-[var(--ocean-light)]">
+                    <span class="text-6xl mb-4">🧜‍♀️ 🌊</span>
+                    <p class="text-xl text-white text-center px-4">A Tale from the Deep Blue Sea...</p>
+                </div>
+            `;
+        }
+
+        function goBackToLibrary() {
+            window.location.href = '../library.html';
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            createBubbles();
+            
+            // Restore font size preference
+            const savedFontSize = localStorage.getItem('preferredFontSize');
+            if (savedFontSize) {
+                currentFontSize = parseFloat(savedFontSize);
+                document.querySelector('.story-content').style.fontSize = `${currentFontSize}rem`;
+            }
+        });
+    </script>
+</body>
+</html> 

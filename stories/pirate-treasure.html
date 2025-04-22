@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Captain Jack's Treasure Hunt - StoryLand</title>
+    <link href="https://fonts.googleapis.com/css2?family=Pirata+One&family=MedievalSharp&family=Cabin:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --aged-paper: #D4B995;
+            --dark-wood: #4A3728;
+            --light-wood: #8B6B4A;
+            --ocean-deep: #1a3c5b;
+            --ocean-surface: #3498db;
+            --sand-color: #f4d03f;
+            --gold: #FFD700;
+            --coral: #ff7f50;
+            --map-brown: #8B4513;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            background: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 0h100v100H0z' fill='%231a3c5b'/%3E%3Cpath d='M10 10h10v10H10zM30 10h10v10H30zM50 10h10v10H50zM70 10h10v10H70zM90 10h10v10H90zM20 20h10v10H20zM40 20h10v10H40zM60 20h10v10H60zM80 20h10v10H80zM10 30h10v10H10z' fill='%233498db' fill-opacity='0.1'/%3E%3C/svg%3E");
+            font-family: 'Cabin', sans-serif;
+            color: #2C1810;
+        }
+
+        .main-container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+            position: relative;
+        }
+
+        .scroll-container {
+            background: var(--aged-paper);
+            border-radius: 10px;
+            box-shadow: 
+                0 0 20px rgba(0, 0, 0, 0.3),
+                0 0 40px rgba(0, 0, 0, 0.2);
+            position: relative;
+            overflow: hidden;
+            border: 12px solid var(--dark-wood);
+            background-image: 
+                repeating-linear-gradient(
+                    var(--aged-paper) 0px,
+                    var(--aged-paper) 24px,
+                    rgba(139, 69, 19, 0.1) 25px
+                );
+        }
+
+        .scroll-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M20 0L40 20L20 40L0 20z' fill='%238B4513' fill-opacity='0.05'/%3E%3C/svg%3E");
+            pointer-events: none;
+        }
+
+        .wooden-header {
+            background: linear-gradient(to right, var(--dark-wood), var(--light-wood));
+            padding: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 4px solid var(--gold);
+            position: relative;
+        }
+
+        .wooden-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                url("data:image/svg+xml,%3Csvg width='52' height='26' viewBox='0 0 52 26' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23000000' fill-opacity='0.1'%3E%3Cpath d='M10 10c0-2.21-1.79-4-4-4-3.314 0-6-2.686-6-6h2c0 2.21 1.79 4 4 4 3.314 0 6 2.686 6 6 0 2.21 1.79 4 4 4 3.314 0 6 2.686 6 6 0 2.21 1.79 4 4 4v2c-3.314 0-6-2.686-6-6 0-2.21-1.79-4-4-4-3.314 0-6-2.686-6-6zm25.464-1.95l8.486 8.486-1.414 1.414-8.486-8.486 1.414-1.414z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+            opacity: 0.8;
+        }
+
+        .nav-button {
+            color: var(--aged-paper);
+            text-decoration: none;
+            font-family: 'Pirata One', cursive;
+            font-size: 1.4rem;
+            padding: 0.5rem 1.5rem;
+            background: rgba(74, 55, 40, 0.6);
+            border: 2px solid var(--gold);
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .nav-button::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: linear-gradient(45deg, var(--gold), transparent);
+            z-index: -1;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .nav-button:hover::before {
+            opacity: 1;
+        }
+
+        .nav-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255, 215, 0, 0.3);
+        }
+
+        .font-controls {
+            display: flex;
+            gap: 0.8rem;
+        }
+
+        .font-button {
+            font-family: 'Pirata One', cursive;
+            color: var(--aged-paper);
+            background: rgba(74, 55, 40, 0.6);
+            border: 2px solid var(--gold);
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .font-button:hover {
+            background: rgba(74, 55, 40, 0.8);
+            box-shadow: 0 0 15px rgba(255, 215, 0, 0.3);
+        }
+
+        .story-header {
+            text-align: center;
+            padding: 2rem;
+            background: linear-gradient(to bottom, var(--light-wood), var(--dark-wood));
+            position: relative;
+            overflow: hidden;
+        }
+
+        .story-title {
+            font-family: 'MedievalSharp', cursive;
+            font-size: 4.5rem;
+            color: var(--gold);
+            margin: 0;
+            text-shadow: 
+                3px 3px 0 var(--map-brown),
+                -1px -1px 0 var(--map-brown),
+                1px -1px 0 var(--map-brown),
+                -1px 1px 0 var(--map-brown),
+                1px 1px 0 var(--map-brown);
+            letter-spacing: 4px;
+            transform: rotate(-2deg);
+        }
+
+        .story-tags {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .story-tag {
+            font-family: 'Pirata One', cursive;
+            padding: 0.6rem 1.8rem;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            background: rgba(74, 55, 40, 0.4);
+            border: 2px solid var(--gold);
+            color: var(--aged-paper);
+            transform: rotate(2deg);
+            animation: float 3s ease-in-out infinite;
+        }
+
+        .cover-section {
+            padding: 2rem;
+            background: linear-gradient(to bottom, var(--ocean-deep), var(--ocean-surface));
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cover-frame {
+            max-width: 800px;
+            margin: 0 auto;
+            position: relative;
+            border-radius: 15px;
+            padding: 15px;
+            background: var(--dark-wood);
+            transform: rotate(-1deg);
+            transition: transform 0.3s ease;
+        }
+
+        .cover-frame::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, var(--gold), transparent);
+            opacity: 0.3;
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        .cover-frame:hover {
+            transform: rotate(1deg) scale(1.02);
+        }
+
+        .cover-image {
+            width: 100%;
+            height: auto;
+            border-radius: 10px;
+            display: block;
+            transition: transform 0.5s ease;
+        }
+
+        .cover-frame:hover .cover-image {
+            transform: scale(1.05);
+        }
+
+        .story-content {
+            padding: 2rem;
+            font-size: 1.2rem;
+            line-height: 1.8;
+            position: relative;
+        }
+
+        .story-paragraph {
+            background: rgba(255, 255, 255, 0.7);
+            padding: 1.8rem;
+            margin-bottom: 2rem;
+            border-radius: 12px;
+            border: 2px solid var(--map-brown);
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .story-paragraph::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url("data:image/svg+xml,%3Csvg width='20' height='20' viewBox='0 0 20 20' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 0h20v20H0z' fill='%238B4513' fill-opacity='0.05'/%3E%3C/svg%3E");
+            border-radius: 10px;
+            pointer-events: none;
+        }
+
+        .story-paragraph:hover {
+            transform: translateX(10px) rotate(0.5deg);
+            box-shadow: 
+                0 5px 15px rgba(139, 69, 19, 0.2),
+                0 0 30px rgba(255, 215, 0, 0.1);
+        }
+
+        .nautical-decoration {
+            position: absolute;
+            pointer-events: none;
+            z-index: 2;
+            font-size: 2rem;
+            filter: drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.3));
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-15px) rotate(5deg); }
+        }
+
+        .wave {
+            position: absolute;
+            width: 100%;
+            height: 15px;
+            background: linear-gradient(to right, 
+                transparent, 
+                rgba(52, 152, 219, 0.3), 
+                transparent
+            );
+            opacity: 0.6;
+            animation: wave 3s ease-in-out infinite;
+        }
+
+        @keyframes wave {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .compass-rose {
+            position: absolute;
+            width: 80px;
+            height: 80px;
+            opacity: 0.2;
+            animation: rotate 20s linear infinite;
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .treasure-mark {
+            position: absolute;
+            font-family: 'Pirata One', cursive;
+            color: var(--coral);
+            font-size: 1.5rem;
+            opacity: 0.4;
+            transform: rotate(-15deg);
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .scroll-edges {
+            position: relative;
+        }
+
+        .scroll-edges::before,
+        .scroll-edges::after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 30px;
+            background: var(--dark-wood);
+            left: 0;
+        }
+
+        .scroll-edges::before {
+            top: 0;
+            background: linear-gradient(to bottom, var(--dark-wood), transparent);
+        }
+
+        .scroll-edges::after {
+            bottom: 0;
+            background: linear-gradient(to top, var(--dark-wood), transparent);
+        }
+    </style>
+</head>
+<body>
+    <div class="main-container">
+        <div class="scroll-container">
+            <div class="scroll-edges">
+                <header class="wooden-header">
+                    <a href="../library.html" class="nav-button">
+                        ← Back to Port
+                    </a>
+                    <div class="font-controls">
+                        <button class="font-button" onclick="changeFontSize('decrease')">A-</button>
+                        <button class="font-button" onclick="changeFontSize('increase')">A+</button>
+                    </div>
+                </header>
+
+                <div class="story-header">
+                    <h1 class="story-title">Captain Jack's Treasure Hunt</h1>
+                    <div class="story-tags">
+                        <span class="story-tag">6-8 years</span>
+                        <span class="story-tag">intermediate</span>
+                        <span class="story-tag">adventure</span>
+                    </div>
+                </div>
+
+                <div class="cover-section">
+                    <div class="cover-frame">
+                        <picture>
+                            <source srcset="../images/library/covers/pirate-treasure.avif" type="image/avif">
+                            <img 
+                                src="../images/library/covers/pirate-treasure.avif" 
+                                alt="A colorful illustration of pirates on a ship, with palm trees and treasure in the background" 
+                                class="cover-image"
+                                onerror="handleImageError(this)"
+                            >
+                        </picture>
+                    </div>
+                </div>
+
+                <div class="story-content">
+                    <div class="story-paragraph">
+                        On a bright morning, young Captain Jack set sail on his small boat, the Sea Sprite, in search of the legendary 
+                        Treasure Island. His grandfather's old map showed a path through the Coral Reef, past the Singing Rocks, and to a 
+                        hidden cove where the treasure was said to be buried.
+                    </div>
+
+                    <div class="story-paragraph">
+                        As Jack navigated through the sparkling waters, he met a friendly dolphin named Splash. "I know the way to 
+                        Treasure Island," said Splash. "But be careful - the island is protected by riddles and puzzles!" Jack thanked Splash 
+                        and followed his guidance through the waves.
+                    </div>
+
+                    <div class="story-paragraph">
+                        When he reached the Singing Rocks, Jack heard beautiful music coming from the cliffs. The rocks were covered in strange symbols that glowed in the sunlight. "To find the treasure, you must solve the riddle of the rocks," said a voice in the wind. Jack studied the symbols carefully and realized they formed a message: "Look for the tree that grows upside down."
+                    </div>
+
+                    <div class="story-paragraph">
+                        Following the clue, Jack found a tree with roots growing up into the sky and branches reaching down into the ground. At its base was a small door with three locks. Each lock had a different puzzle to solve. The first was a pattern of seashells, the second was a maze of stars, and the third was a riddle about the ocean.
+                    </div>
+
+                    <div class="story-paragraph">
+                        Jack solved each puzzle with patience and clever thinking. When the last lock clicked open, the door revealed a tunnel leading deep underground. The walls were covered in glowing crystals that lit the way. At the end of the tunnel was a large chamber filled with treasure chests.
+                    </div>
+
+                    <div class="story-paragraph">
+                        But the greatest treasure wasn't gold or jewels. It was a book - the Captain's Log of the legendary pirate who had hidden the treasure. The book contained maps of all the islands in the sea, stories of amazing adventures, and most importantly, lessons about being a good captain.
+                    </div>
+
+                    <div class="story-paragraph">
+                        "A true captain's treasure is knowledge and wisdom," read Jack from the book. "Share your discoveries with others, help those in need, and always follow your compass of kindness." Jack realized that the real treasure was the journey itself and the lessons he had learned along the way.
+                    </div>
+
+                    <div class="story-paragraph">
+                        As Jack sailed back home, he thought about all the adventures he would have with his new knowledge. He knew that being a good captain wasn't about finding gold, but about being brave, kind, and always ready to help others on their own journeys.
+                    </div>
+
+                    <div class="story-paragraph">
+                        When he reached his home port, Jack shared the Captain's Log with his friends. Together, they planned new adventures, knowing that the greatest treasures were the friendships they made and the lessons they learned along the way.
+                    </div>
+
+                    <div class="story-paragraph">
+                        And so, Captain Jack and his crew continued to sail the seas, not in search of gold, but in search of new adventures, new friends, and new lessons to learn. For they had discovered that the real treasure was the joy of exploration and the magic of friendship.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function changeFontSize(action) {
+            const content = document.querySelector('.story-content');
+            const currentSize = parseFloat(window.getComputedStyle(content).fontSize);
+            
+            if (action === 'increase' && currentSize < 24) {
+                content.style.fontSize = (currentSize + 2) + 'px';
+            } else if (action === 'decrease' && currentSize > 14) {
+                content.style.fontSize = (currentSize - 2) + 'px';
+            }
+        }
+
+        function createNauticalElements() {
+            const container = document.querySelector('.scroll-container');
+            const decorations = [
+                { emoji: '⚓', positions: [
+                    { top: '15%', right: '5%' },
+                    { top: '45%', left: '3%' }
+                ]},
+                { emoji: '🏴‍☠️', positions: [
+                    { top: '25%', left: '5%' },
+                    { top: '75%', right: '4%' }
+                ]},
+                { emoji: '🗺️', positions: [
+                    { top: '35%', right: '7%' },
+                    { top: '85%', left: '6%' }
+                ]},
+                { emoji: '🏝️', positions: [
+                    { top: '55%', right: '5%' },
+                    { top: '65%', left: '4%' }
+                ]},
+                { emoji: '⛵', positions: [
+                    { top: '40%', right: '6%' },
+                    { top: '70%', left: '5%' }
+                ]},
+                { emoji: '🌊', positions: [
+                    { top: '20%', right: '8%' },
+                    { top: '60%', left: '7%' }
+                ]}
+            ];
+
+            decorations.forEach(decor => {
+                decor.positions.forEach(pos => {
+                    const element = document.createElement('div');
+                    element.className = 'nautical-decoration';
+                    element.textContent = decor.emoji;
+                    element.style.top = pos.top;
+                    element.style.left = pos.left;
+                    element.style.right = pos.right;
+                    element.style.animationDelay = Math.random() * 2 + 's';
+                    container.appendChild(element);
+                });
+            });
+        }
+
+        function createWaves() {
+            const container = document.querySelector('.cover-section');
+            for (let i = 0; i < 5; i++) {
+                const wave = document.createElement('div');
+                wave.className = 'wave';
+                wave.style.bottom = `${i * 20}%`;
+                wave.style.animationDelay = `${i * 0.5}s`;
+                container.appendChild(wave);
+            }
+        }
+
+        function createTreasureMarks() {
+            const container = document.querySelector('.scroll-container');
+            const marks = ['X', '✖', '×', '☠'];
+            
+            for (let i = 0; i < 8; i++) {
+                const mark = document.createElement('div');
+                mark.className = 'treasure-mark';
+                mark.textContent = marks[Math.floor(Math.random() * marks.length)];
+                mark.style.left = `${Math.random() * 90 + 5}%`;
+                mark.style.top = `${Math.random() * 90 + 5}%`;
+                mark.style.transform = `rotate(${Math.random() * 30 - 15}deg)`;
+                container.appendChild(mark);
+            }
+        }
+
+        function handleImageError(element) {
+            const errorMessage = `
+                <div style='padding: 4rem; text-align: center; background: linear-gradient(45deg, var(--ocean-deep), var(--ocean-surface)); color: var(--gold); border: 3px solid var(--dark-wood); border-radius: 12px;'>
+                    <div style='font-size: 4rem; margin-bottom: 1rem;'>⚓ 🏴‍☠️ 🗺️</div>
+                    <div style='font-family: "Pirata One", cursive; font-size: 1.5rem; margin-bottom: 1rem;'>Ahoy, Matey!</div>
+                    <div style='font-family: "Cabin", sans-serif; font-size: 1rem;'>The treasure map is being drawn by our finest cartographer...</div>
+                </div>
+            `;
+            element.parentElement.parentElement.innerHTML = errorMessage;
+        }
+
+        createNauticalElements();
+        createWaves();
+        createTreasureMarks();
+    </script>
+</body>
+</html>

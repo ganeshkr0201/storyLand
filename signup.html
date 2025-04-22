@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up - StoryLand</title>
+    <!-- Load API.js before any scripts that use it -->
+    <script src="js/api.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Patrick+Hand&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Patrick Hand', cursive;
+        }
+        .comic-border {
+            border: 4px solid #000;
+            border-radius: 8px;
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-b from-purple-100 to-blue-100 min-h-screen">
+    <!-- Navigation Bar -->
+    <nav class="bg-[#1D70B8] p-4 comic-border">
+        <div class="container mx-auto flex justify-between items-center">
+            <a href="index.html" class="text-white text-2xl font-bold">StoryLand</a>
+            <div class="space-x-4">
+                <a href="index.html" class="text-white hover:text-[#E63946]">Home</a>
+                <a href="library.html" class="text-white hover:text-[#E63946]">Library</a>
+                <a href="about.html" class="text-white hover:text-[#E63946]">About</a>
+                <a href="login.html" class="text-white hover:text-[#E63946]">Login</a>
+                <a href="signup.html" class="bg-[#E63946] text-white px-4 py-2 rounded-md hover:bg-red-600">Sign Up</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Sign Up Form -->
+    <div class="container mx-auto px-4 py-16">
+        <div class="max-w-md mx-auto bg-white p-8 comic-border">
+            <h2 class="text-3xl font-bold text-[#1D70B8] mb-6 text-center">Join StoryLand!</h2>
+            
+            <form id="signupForm" class="space-y-6">
+                <div>
+                    <label for="name" class="block text-gray-700 mb-2">Full Name</label>
+                    <input type="text" id="name" name="name" 
+                           class="w-full px-4 py-2 comic-border focus:outline-none focus:ring-2 focus:ring-[#1D70B8]"
+                           placeholder="Enter your full name" required>
+                </div>
+                
+                <div>
+                    <label for="email" class="block text-gray-700 mb-2">Email</label>
+                    <input type="email" id="email" name="email" 
+                           class="w-full px-4 py-2 comic-border focus:outline-none focus:ring-2 focus:ring-[#1D70B8]"
+                           placeholder="Enter your email" required>
+                </div>
+                
+                <div>
+                    <label for="password" class="block text-gray-700 mb-2">Password</label>
+                    <input type="password" id="password" name="password" 
+                           class="w-full px-4 py-2 comic-border focus:outline-none focus:ring-2 focus:ring-[#1D70B8]"
+                           placeholder="Create a password" required>
+                </div>
+                
+                <div>
+                    <label for="confirmPassword" class="block text-gray-700 mb-2">Confirm Password</label>
+                    <input type="password" id="confirmPassword" name="confirmPassword" 
+                           class="w-full px-4 py-2 comic-border focus:outline-none focus:ring-2 focus:ring-[#1D70B8]"
+                           placeholder="Confirm your password" required>
+                </div>
+                
+                <div class="flex items-center">
+                    <input type="checkbox" id="terms" name="terms" 
+                           class="h-4 w-4 text-[#1D70B8] focus:ring-[#1D70B8] comic-border" required>
+                    <label for="terms" class="ml-2 text-gray-700">
+                        I agree to the <a href="#" class="text-[#1D70B8] hover:text-[#E63946]">Terms of Service</a> and 
+                        <a href="#" class="text-[#1D70B8] hover:text-[#E63946]">Privacy Policy</a>
+                    </label>
+                </div>
+                
+                <button type="submit" 
+                        class="w-full bg-[#E63946] text-white py-3 rounded-md text-xl hover:bg-red-600 comic-border">
+                    Create Account
+                </button>
+            </form>
+            
+            <div class="mt-6 text-center">
+                <p class="text-gray-600">Already have an account? 
+                    <a href="login.html" class="text-[#1D70B8] hover:text-[#E63946]">Login here</a>
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-[#1D70B8] text-white py-8 comic-border mt-16">
+        <div class="container mx-auto text-center">
+            <p>&copy; 2024 StoryLand. All rights reserved.</p>
+            <div class="mt-4 space-x-4">
+                <a href="#" class="hover:text-[#E63946]">Privacy Policy</a>
+                <a href="#" class="hover:text-[#E63946]">Terms of Service</a>
+                <a href="#" class="hover:text-[#E63946]">Contact Us</a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Wait for DOM content to be loaded
+        document.addEventListener('DOMContentLoaded', function() {
+            // Check if API is loaded
+            if (!window.StoryLandAPI) {
+                console.error('StoryLandAPI not loaded!');
+                return;
+            }
+
+            document.getElementById('signupForm').addEventListener('submit', async function(e) {
+                e.preventDefault();
+                
+                const name = document.getElementById('name').value;
+                const email = document.getElementById('email').value;
+                const password = document.getElementById('password').value;
+                const confirmPassword = document.getElementById('confirmPassword').value;
+                
+                if (password !== confirmPassword) {
+                    alert('Passwords do not match!');
+                    return;
+                }
+
+                try {
+                    console.log('Attempting signup with:', { name, email });
+                    const result = await window.StoryLandAPI.signup(name, email, password);
+                    console.log('Signup result:', result);
+                    
+                    if (result.success) {
+                        alert('Signup successful! Please login.');
+                        window.location.href = 'login.html';
+                    } else {
+                        alert(result.message || 'Signup failed. Please try again.');
+                    }
+                } catch (error) {
+                    console.error('Signup error:', error);
+                    alert('An error occurred. Please try again.');
+                }
+            });
+        });
+    </script>
+</body>
+</html> 

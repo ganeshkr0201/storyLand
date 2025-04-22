@@ -1,0 +1,738 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Story Library - StoryLand</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Patrick+Hand&display=swap" rel="stylesheet">
+    <script src="js/stories.js"></script>
+    <style>
+        body {
+            font-family: 'Patrick Hand', cursive;
+        }
+        .comic-border {
+            border: 4px solid #000;
+            border-radius: 8px;
+        }
+        .dropdown {
+            position: relative;
+            display: inline-block;
+        }
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            right: 0;
+            background-color: #f9f9f9;
+            min-width: 160px;
+            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+            z-index: 1;
+            border-radius: 8px;
+        }
+        .dropdown-content a {
+            color: black;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+        }
+        .dropdown-content a:hover {
+            background-color: #f1f1f1;
+            border-radius: 8px;
+        }
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
+        /* Add styles for placeholder images */
+        .placeholder-image {
+            background-color: #f0f0f0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            color: #666;
+            border: 2px dashed #ccc;
+        }
+        /* Remove any styles that might affect visibility */
+        img {
+            display: block !important;
+            opacity: 1 !important;
+            visibility: visible !important;
+            mix-blend-mode: normal !important;
+        }
+        /* Add debug outline to see image containers */
+        .debug-outline {
+            border: 2px dashed red;
+            min-height: 50px;
+        }
+        /* Ensure background images don't interfere */
+        .bg-white\/90 {
+            background-color: rgba(255, 255, 255, 0.95) !important;
+        }
+        /* Force image display */
+        .story-image {
+            display: block !important;
+            width: 100% !important;
+            height: 200px !important;
+            object-fit: contain !important;
+            background-color: #f0f0f0;
+        }
+        /* Story card and image styles */
+        .story-card {
+            background: rgba(255, 255, 255, 0.95);
+            border: 4px solid #000;
+            border-radius: 12px;
+            transition: all 0.3s ease;
+            overflow: hidden;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+        .story-card:hover {
+            box-shadow: 0 15px 30px rgba(0,0,0,0.2);
+        }
+        .image-wrapper {
+            position: relative;
+            padding: 20px 20px 0 20px;
+            background: linear-gradient(to bottom, rgba(155, 93, 229, 0.1), rgba(255, 255, 255, 0));
+        }
+        .image-container {
+            position: relative;
+            width: 100%;
+            aspect-ratio: 4/3;
+            border-radius: 8px;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+            border: 2px solid rgba(255,255,255,0.3);
+        }
+        /* Vibrant thematic backgrounds for different genres */
+        .image-container.fantasy {
+            background: 
+                radial-gradient(circle at top right, rgba(147, 51, 234, 0.3), transparent 70%),
+                radial-gradient(circle at bottom left, rgba(236, 72, 153, 0.3), transparent 70%),
+                url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M30 5l5 10 10 5-10 5-5 10-5-10-10-5 10-5z' fill='%239333EA' fill-opacity='0.15'/%3E%3C/svg%3E"),
+                linear-gradient(45deg, #4F46E5, #7C3AED);
+        }
+        .image-container.adventure {
+            background: 
+                radial-gradient(circle at top left, rgba(251, 146, 60, 0.4), transparent 70%),
+                radial-gradient(circle at bottom right, rgba(234, 88, 12, 0.3), transparent 70%),
+                url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M30 5l2 30-2 20M5 30h50' stroke='%23FCD34D' stroke-opacity='0.2' fill='none' stroke-width='2'/%3E%3C/svg%3E"),
+                linear-gradient(45deg, #EA580C, #F97316);
+        }
+        .image-container.educational {
+            background: 
+                radial-gradient(circle at top right, rgba(6, 182, 212, 0.4), transparent 70%),
+                radial-gradient(circle at bottom left, rgba(59, 130, 246, 0.3), transparent 70%),
+                url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M15 5h30v50H15z' fill='%2306B6D4' fill-opacity='0.15'/%3E%3C/svg%3E"),
+                linear-gradient(45deg, #0EA5E9, #3B82F6);
+        }
+        .image-container.animals {
+            background: 
+                radial-gradient(circle at top left, rgba(34, 197, 94, 0.4), transparent 70%),
+                radial-gradient(circle at bottom right, rgba(234, 179, 8, 0.3), transparent 70%),
+                url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M30 30m-20 0a20 20 0 1 0 40 0a20 20 0 1 0 -40 0' fill='%2322C55E' fill-opacity='0.15'/%3E%3C/svg%3E"),
+                linear-gradient(45deg, #22C55E, #84CC16);
+        }
+        .image-container.fairy-tale {
+            background: 
+                radial-gradient(circle at top right, rgba(236, 72, 153, 0.4), transparent 70%),
+                radial-gradient(circle at bottom left, rgba(249, 168, 212, 0.3), transparent 70%),
+                url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M30 5l5 5-5 5-5-5zM5 30l5 5-5 5-5-5zM55 30l5 5-5 5-5-5z' fill='%23EC4899' fill-opacity='0.15'/%3E%3C/svg%3E"),
+                linear-gradient(45deg, #DB2777, #EC4899);
+        }
+        .image-container.folk-tale {
+            background: 
+                radial-gradient(circle at top left, rgba(245, 158, 11, 0.4), transparent 70%),
+                radial-gradient(circle at bottom right, rgba(217, 119, 6, 0.3), transparent 70%),
+                url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M15 15h30v30H15z' fill='%23F59E0B' fill-opacity='0.15'/%3E%3C/svg%3E"),
+                linear-gradient(45deg, #D97706, #F59E0B);
+        }
+        /* Enhanced sparkle effect */
+        @keyframes sparkle {
+            0%, 100% { opacity: 0; transform: scale(0.8); }
+            50% { opacity: 1; transform: scale(1.2); }
+        }
+        .image-container.fantasy::before,
+        .image-container.fairy-tale::before {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                radial-gradient(circle at 20% 20%, rgba(255, 255, 255, 0.8) 0%, transparent 8%),
+                radial-gradient(circle at 80% 30%, rgba(255, 255, 255, 0.8) 0%, transparent 8%),
+                radial-gradient(circle at 40% 50%, rgba(255, 255, 255, 0.8) 0%, transparent 8%),
+                radial-gradient(circle at 70% 70%, rgba(255, 255, 255, 0.8) 0%, transparent 8%);
+            animation: sparkle 3s infinite;
+            pointer-events: none;
+        }
+        /* Ensure images stand out against vibrant backgrounds */
+        .story-image {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            transition: transform 0.3s ease;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 6px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+        }
+        .story-card:hover .story-image {
+            transform: scale(1.03);
+        }
+        .story-content {
+            padding: 1.5rem;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        .tag {
+            display: inline-block;
+            padding: 0.25rem 1rem;
+            border-radius: 999px;
+            font-size: 0.875rem;
+            margin: 0 0.25rem 0.5rem 0;
+            background: rgba(155, 93, 229, 0.15);
+            color: #7C3AED;
+            border: 1px solid rgba(124, 58, 237, 0.3);
+            text-shadow: 0 1px 1px rgba(255,255,255,0.5);
+        }
+        .read-button {
+            width: 100%;
+            padding: 0.75rem;
+            background: #FEE440;
+            color: #9B5DE5;
+            border: 3px solid #000;
+            border-radius: 6px;
+            font-weight: bold;
+            transition: all 0.2s ease;
+            margin-top: auto;
+        }
+        .read-button:hover {
+            background: #FFE66D;
+            color: #7B4BC4;
+            transform: translateY(-2px);
+        }
+        /* Add floating animation to cards */
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
+        }
+        .story-card {
+            animation: float 6s ease-in-out infinite;
+            background: rgba(255, 255, 255, 0.98);
+        }
+        .story-card:hover {
+            box-shadow: 0 15px 30px rgba(0,0,0,0.2);
+        }
+        /* Story interaction buttons */
+        .story-actions {
+            display: flex;
+            gap: 0.5rem;
+            margin-left: auto;
+        }
+        .action-button {
+            background: rgba(255, 255, 255, 0.95);
+            border: 2px solid #000;
+            border-radius: 50%;
+            width: 2rem;
+            height: 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .action-button:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 3px 6px rgba(0,0,0,0.15);
+        }
+        .action-button svg {
+            width: 1.125rem;
+            height: 1.125rem;
+            transition: all 0.2s ease;
+        }
+        .action-button.liked {
+            background: #F15BB5;
+            color: white;
+            border-color: #000;
+        }
+        .action-button.saved {
+            background: #FEE440;
+            color: #9B5DE5;
+            border-color: #000;
+        }
+        .action-button.liked svg {
+            fill: white;
+        }
+        .action-button.saved svg {
+            fill: #9B5DE5;
+        }
+        @keyframes pop {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.15); }
+            100% { transform: scale(1); }
+        }
+        .action-button.animate {
+            animation: pop 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        .title-row {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.75rem;
+            margin-bottom: 1rem;
+        }
+        .story-title {
+            font-size: 1.25rem;
+            font-weight: bold;
+            color: #9B5DE5;
+            flex: 1;
+            line-height: 1.4;
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-b from-[#9B5DE5]/20 via-[#F15BB5]/20 to-[#00BBF9]/20 min-h-screen">
+    <!-- Navigation Bar -->
+    <nav class="bg-gradient-to-r from-[#9B5DE5] via-[#F15BB5] to-[#00BBF9] p-4 comic-border shadow-lg relative z-10">
+        <div class="container mx-auto flex justify-between items-center">
+            <a href="index.html" class="text-white text-2xl font-bold">StoryLand</a>
+            <div class="space-x-4 flex items-center">
+                <a href="index.html" class="text-white hover:text-[#FEE440]">Home</a>
+                <a href="library.html" class="text-white hover:text-[#FEE440]">Library</a>
+                <a href="about.html" class="text-white hover:text-[#FEE440]">About</a>
+                
+                <!-- Login/Signup buttons (shown when logged out) -->
+                <div id="loggedOutNav" class="inline-block">
+                    <a href="login.html" class="text-white hover:text-[#FEE440]">Login</a>
+                    <a href="signup.html" class="bg-[#FEE440] text-[#9B5DE5] px-4 py-2 rounded-md hover:bg-[#FFE66D] hover:text-[#7B4BC4] ml-4">Sign Up</a>
+                </div>
+                
+                <!-- User profile dropdown (shown when logged in) -->
+                <div id="loggedInNav" class="dropdown hidden">
+                    <button class="bg-[#FEE440] text-[#9B5DE5] px-4 py-2 rounded-md hover:bg-[#FFE66D] hover:text-[#7B4BC4] flex items-center">
+                        <span id="userName" class="mr-2">Welcome, </span>
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                        </svg>
+                    </button>
+                    <div class="dropdown-content">
+                        <a href="profile.html" class="hover:text-[#9B5DE5]">Profile</a>
+                        <a href="settings.html" class="hover:text-[#9B5DE5]">Settings</a>
+                        <a href="#" onclick="handleLogout()" class="hover:text-[#9B5DE5]">Logout</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Library Header -->
+    <div class="container mx-auto px-4 py-8 relative z-10">
+        <div class="flex items-center justify-center mb-8">
+            <h1 class="text-4xl font-bold text-[#9B5DE5] text-center">Story Library</h1>
+        </div>
+        
+        <!-- Filters -->
+        <div class="bg-white/90 p-6 comic-border mb-8 backdrop-blur-sm relative">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div>
+                    <label for="ageGroup" class="block text-[#9B5DE5] mb-2">
+                        <span>Age Group</span>
+                    </label>
+                    <select id="ageGroup" class="w-full px-4 py-2 comic-border focus:outline-none focus:ring-2 focus:ring-[#9B5DE5]">
+                        <option value="">All Ages</option>
+                        <option value="3-5">3-5 years</option>
+                        <option value="6-8">6-8 years</option>
+                        <option value="9-12">9-12 years</option>
+                    </select>
+                </div>
+                
+                <div>
+                    <label for="readingLevel" class="block text-[#9B5DE5] mb-2">
+                        <span>Reading Level</span>
+                    </label>
+                    <select id="readingLevel" class="w-full px-4 py-2 comic-border focus:outline-none focus:ring-2 focus:ring-[#9B5DE5]">
+                        <option value="">All Levels</option>
+                        <option value="beginner">Beginner</option>
+                        <option value="intermediate">Intermediate</option>
+                        <option value="advanced">Advanced</option>
+                    </select>
+                </div>
+                
+                <div>
+                    <label for="genre" class="block text-[#9B5DE5] mb-2">
+                        <span>Genre</span>
+                    </label>
+                    <select id="genre" class="w-full px-4 py-2 comic-border focus:outline-none focus:ring-2 focus:ring-[#9B5DE5]">
+                        <option value="">All Genres</option>
+                        <option value="adventure">Adventure</option>
+                        <option value="fantasy">Fantasy</option>
+                        <option value="educational">Educational</option>
+                        <option value="animals">Animals</option>
+                        <option value="fairy tale">Fairy Tale</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Story Grid -->
+        <div id="storyGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <!-- Stories will be dynamically loaded here -->
+        </div>
+
+        <!-- Category Icons -->
+        <div class="flex justify-between items-center mt-16 space-x-4">
+            <div class="text-center">
+                <div class="w-16 h-16 bg-gray-100 rounded-full mb-2 flex items-center justify-center">
+                    <span class="text-2xl">🗺️</span>
+                </div>
+                <span class="text-sm text-[#9B5DE5]">Adventure</span>
+            </div>
+            <div class="text-center">
+                <div class="w-16 h-16 bg-gray-100 rounded-full mb-2 flex items-center justify-center">
+                    <span class="text-2xl">🌟</span>
+                </div>
+                <span class="text-sm text-[#9B5DE5]">Fantasy</span>
+            </div>
+            <div class="text-center">
+                <div class="w-16 h-16 bg-gray-100 rounded-full mb-2 flex items-center justify-center">
+                    <span class="text-2xl">📚</span>
+                </div>
+                <span class="text-sm text-[#9B5DE5]">Educational</span>
+            </div>
+            <div class="text-center">
+                <div class="w-16 h-16 bg-gray-100 rounded-full mb-2 flex items-center justify-center">
+                    <span class="text-2xl">🐾</span>
+                </div>
+                <span class="text-sm text-[#9B5DE5]">Animals</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-gradient-to-r from-[#9B5DE5] via-[#F15BB5] to-[#00BBF9] text-white py-8 comic-border mt-16 relative z-10">
+        <div class="container mx-auto text-center">
+            <p>&copy; 2025 StoryLand. All rights reserved.</p>
+            <div class="mt-4 space-x-4">
+                <a href="#" class="hover:text-[#FEE440]">Privacy Policy</a>
+                <a href="#" class="hover:text-[#FEE440]">Terms of Service</a>
+                <a href="#" class="hover:text-[#FEE440]">Contact Us</a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Function to check if a story file exists
+        async function checkStoryExists(story) {
+            if (!story || !story.content) return false;
+            
+            try {
+                const response = await fetch(story.content);
+                return response.ok;
+            } catch (error) {
+                return false;
+            }
+        }
+
+        // Function to check if a story image exists
+        async function checkImageExists(imageUrl) {
+            if (!imageUrl) return false;
+            
+            try {
+                const response = await fetch(imageUrl);
+                return response.ok;
+            } catch (error) {
+                return false;
+            }
+        }
+
+        // Function to load stories
+        async function loadStories(filters = {}) {
+            let filteredStories = stories || [];
+
+            // Apply filters
+            if (filters.age_group) {
+                filteredStories = filteredStories.filter(story => story && story.age_group === filters.age_group);
+            }
+            if (filters.reading_level) {
+                filteredStories = filteredStories.filter(story => story && story.reading_level === filters.reading_level);
+            }
+            if (filters.genre) {
+                filteredStories = filteredStories.filter(story => story && story.genre === filters.genre);
+            }
+
+            // Check existence of story files
+            const validStories = [];
+            for (const story of filteredStories) {
+                const storyExists = await checkStoryExists(story);
+                
+                if (storyExists) {
+                    validStories.push(story);
+                }
+            }
+
+            const storyGrid = document.getElementById('storyGrid');
+            if (storyGrid) {
+                if (validStories.length === 0) {
+                    storyGrid.innerHTML = `
+                        <div class="col-span-full text-center py-8">
+                            <p class="text-xl text-[#9B5DE5]">No stories found matching your criteria.</p>
+                            <p class="text-gray-600 mt-2">Try adjusting your filters or check back later for new stories.</p>
+                        </div>
+                    `;
+                } else {
+                    storyGrid.innerHTML = validStories.map(createStoryCard).join('');
+                }
+            }
+        }
+
+        // Function to create story card
+        function createStoryCard(story) {
+            if (!story) return '';
+            
+            return `
+                <div class="story-card">
+                    <div class="image-wrapper">
+                        <div class="image-container ${story.genre.toLowerCase().replace(' ', '-')}">
+                            <picture>
+                                <source srcset="${story.cover}" type="image/webp">
+                                <source srcset="${story.cover.replace('.webp', '.jpg')}" type="image/jpeg">
+                                <source srcset="${story.cover.replace('.webp', '.avif')}" type="image/avif">
+                                <img src="${story.cover}" 
+                                     alt="${story.title}" 
+                                     class="story-image"
+                                     loading="lazy"
+                                     onerror="this.onerror=null; this.parentElement.innerHTML='<div class=\'w-full h-full flex items-center justify-center\'><span class=\'text-gray-400\'>Cover Image Coming Soon</span></div>'">
+                            </picture>
+                        </div>
+                    </div>
+                    <div class="story-content">
+                        <div class="title-row">
+                            <h3 class="story-title">${story.title}</h3>
+                            <div class="story-actions">
+                                <button class="action-button" onclick="toggleLike('${story.id}')" title="Like Story">
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                                    </svg>
+                                </button>
+                                <button class="action-button" onclick="toggleSave('${story.id}')" title="Save Story">
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z" />
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="flex flex-wrap mb-4">
+                            <span class="tag">
+                                ${story.age_group} years
+                            </span>
+                            <span class="tag" style="background: rgba(241, 91, 181, 0.1); color: #F15BB5">
+                                ${story.reading_level}
+                            </span>
+                            <span class="tag" style="background: rgba(0, 187, 249, 0.1); color: #00BBF9">
+                                ${story.genre}
+                            </span>
+                        </div>
+                        <p class="text-gray-600 mb-4">${story.description}</p>
+                        <button onclick="readStory('${story.content}')" 
+                                class="read-button">
+                            Read Now
+                        </button>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Function to read a story
+        function readStory(contentUrl) {
+            if (contentUrl) {
+                // Save scroll position before leaving
+                localStorage.setItem('libraryScrollPosition', window.scrollY);
+                // Add a timestamp to handle page refresh cases
+                localStorage.setItem('libraryScrollTimestamp', Date.now());
+                window.location.href = contentUrl;
+            }
+        }
+
+        // Add event listeners
+        document.querySelectorAll('select').forEach(select => {
+            select.addEventListener('change', () => {
+                const filters = {
+                    age_group: document.getElementById('ageGroup').value,
+                    reading_level: document.getElementById('readingLevel').value,
+                    genre: document.getElementById('genre').value
+                };
+                loadStories(filters);
+            });
+        });
+
+        // Function to check login status
+        async function checkLoginStatus() {
+            try {
+                const response = await fetch('check_session.php');
+                const data = await response.json();
+                
+                const loggedOutNav = document.getElementById('loggedOutNav');
+                const loggedInNav = document.getElementById('loggedInNav');
+                
+                if (data.loggedIn) {
+                    // User is logged in
+                    if (loggedOutNav) loggedOutNav.style.display = 'none';
+                    if (loggedInNav) {
+                        loggedInNav.style.display = 'inline-block';
+                        const userNameElement = document.getElementById('userName');
+                        if (userNameElement) {
+                            userNameElement.textContent = 'Welcome, ' + data.userName;
+                        }
+                    }
+                } else {
+                    // User is logged out
+                    if (loggedOutNav) loggedOutNav.style.display = 'inline-block';
+                    if (loggedInNav) loggedInNav.style.display = 'none';
+                }
+            } catch (error) {
+                console.error('Error checking login status:', error);
+            }
+        }
+
+        // Function to handle logout
+        async function handleLogout() {
+            try {
+                const response = await fetch('auth.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        action: 'logout'
+                    })
+                });
+
+                const result = await response.json();
+                if (result.success) {
+                    window.location.reload();
+                }
+            } catch (error) {
+                console.error('Logout error:', error);
+            }
+        }
+
+        // Load stories when page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            checkLoginStatus();
+            loadStories();
+            
+            // Restore scroll position if returning from a story
+            const savedScrollPosition = localStorage.getItem('libraryScrollPosition');
+            const savedTimestamp = localStorage.getItem('libraryScrollTimestamp');
+            
+            if (savedScrollPosition && savedTimestamp) {
+                const timeDiff = Date.now() - parseInt(savedTimestamp);
+                // Only restore if less than 5 minutes have passed
+                if (timeDiff < 300000) {
+                    // Wait for stories to load
+                    const checkStoriesLoaded = setInterval(() => {
+                        const storyGrid = document.getElementById('storyGrid');
+                        if (storyGrid && storyGrid.children.length > 0) {
+                            clearInterval(checkStoriesLoaded);
+                            // Use requestAnimationFrame to ensure smooth scrolling
+                            requestAnimationFrame(() => {
+                                window.scrollTo(0, parseInt(savedScrollPosition));
+                                localStorage.removeItem('libraryScrollPosition');
+                                localStorage.removeItem('libraryScrollTimestamp');
+                            });
+                        }
+                    }, 100);
+                } else {
+                    // Clear old scroll position data
+                    localStorage.removeItem('libraryScrollPosition');
+                    localStorage.removeItem('libraryScrollTimestamp');
+                }
+            }
+        });
+
+        // Check login status periodically (every 30 seconds)
+        setInterval(checkLoginStatus, 30000);
+
+        // Initialize liked and saved stories from localStorage
+        let likedStories = JSON.parse(localStorage.getItem('likedStories') || '[]');
+        let savedStories = JSON.parse(localStorage.getItem('savedStories') || '[]');
+
+        // Function to toggle like status
+        function toggleLike(storyId) {
+            const button = event.currentTarget;
+            const index = likedStories.indexOf(storyId);
+            
+            if (index === -1) {
+                likedStories.push(storyId);
+                button.classList.add('liked');
+            } else {
+                likedStories.splice(index, 1);
+                button.classList.remove('liked');
+            }
+            
+            button.classList.add('animate');
+            setTimeout(() => button.classList.remove('animate'), 300);
+            
+            localStorage.setItem('likedStories', JSON.stringify(likedStories));
+            updateLikeButton(storyId);
+        }
+
+        // Function to toggle save status
+        function toggleSave(storyId) {
+            const button = event.currentTarget;
+            const index = savedStories.indexOf(storyId);
+            
+            if (index === -1) {
+                savedStories.push(storyId);
+                button.classList.add('saved');
+            } else {
+                savedStories.splice(index, 1);
+                button.classList.remove('saved');
+            }
+            
+            button.classList.add('animate');
+            setTimeout(() => button.classList.remove('animate'), 300);
+            
+            localStorage.setItem('savedStories', JSON.stringify(savedStories));
+            updateSaveButton(storyId);
+        }
+
+        // Function to update like button state
+        function updateLikeButton(storyId) {
+            const button = document.querySelector(`button[onclick="toggleLike('${storyId}')"]`);
+            if (button) {
+                button.classList.toggle('liked', likedStories.includes(storyId));
+            }
+        }
+
+        // Function to update save button state
+        function updateSaveButton(storyId) {
+            const button = document.querySelector(`button[onclick="toggleSave('${storyId}')"]`);
+            if (button) {
+                button.classList.toggle('saved', savedStories.includes(storyId));
+            }
+        }
+
+        // Update all buttons when page loads
+        function updateAllButtons() {
+            stories.forEach(story => {
+                if (story && story.id) {
+                    updateLikeButton(story.id);
+                    updateSaveButton(story.id);
+                }
+            });
+        }
+
+        // Add event listener to update buttons after stories are loaded
+        document.addEventListener('DOMContentLoaded', () => {
+            loadStories().then(() => {
+                updateAllButtons();
+            });
+        });
+    </script>
+</body>
+</html> 

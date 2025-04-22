@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ali Baba and the Forty Thieves - StoryLand</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Scheherazade+New:wght@400;700&family=Amiri:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --desert-gold: #DAA520;
+            --sand: #F4D03F;
+            --night-blue: #1a237e;
+            --cave-brown: #8B4513;
+            --treasure-red: #B71C1C;
+            --oasis-green: #2E7D32;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            background: var(--night-blue);
+            font-family: 'Amiri', serif;
+            color: #333;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* Starry night effect */
+        .stars {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            background-image: 
+                radial-gradient(2px 2px at 20px 30px, #ffffff, rgba(0,0,0,0)),
+                radial-gradient(2px 2px at 40px 70px, #ffffff, rgba(0,0,0,0)),
+                radial-gradient(2px 2px at 50px 160px, #ffffff, rgba(0,0,0,0)),
+                radial-gradient(2px 2px at 90px 40px, #ffffff, rgba(0,0,0,0)),
+                radial-gradient(2px 2px at 130px 80px, #ffffff, rgba(0,0,0,0));
+            background-size: 200px 200px;
+            animation: twinkle 4s ease-in-out infinite;
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.8; }
+            50% { opacity: 0.5; }
+        }
+
+        .story-container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 2rem;
+            background: rgba(255, 248, 225, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 0 30px rgba(218, 165, 32, 0.3);
+            position: relative;
+            border: 4px solid var(--desert-gold);
+        }
+
+        .navigation-bar {
+            background: linear-gradient(to right, var(--desert-gold), var(--sand));
+            padding: 1rem;
+            border-radius: 15px;
+            margin-bottom: 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .back-button {
+            background: var(--night-blue);
+            color: var(--desert-gold);
+            padding: 0.75rem 1.5rem;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            border: 2px solid var(--desert-gold);
+            cursor: pointer;
+            font-family: 'Scheherazade New', serif;
+        }
+
+        .back-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .control-button {
+            background: var(--night-blue);
+            color: var(--desert-gold);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            border: 2px solid var(--desert-gold);
+            margin: 0 0.25rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .control-button:hover {
+            background: var(--desert-gold);
+            color: var(--night-blue);
+        }
+
+        .story-title {
+            font-family: 'Scheherazade New', serif;
+            font-size: 3.5rem;
+            color: var(--cave-brown);
+            text-align: center;
+            margin: 2rem 0;
+            position: relative;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .story-icon {
+            font-size: 2.5rem;
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        .icon-left { left: 10%; }
+        .icon-right { right: 10%; }
+
+        .cover-section {
+            position: relative;
+            margin: 2rem auto;
+            max-width: 800px;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        .cover-frame {
+            position: relative;
+            padding-top: 56.25%; /* 16:9 aspect ratio */
+            background: linear-gradient(45deg, var(--desert-gold), var(--sand));
+            border-radius: 15px;
+            overflow: hidden;
+        }
+
+        .cover-image {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        .cover-frame:hover .cover-image {
+            transform: scale(1.05);
+        }
+
+        .story-tags {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin: 2rem 0;
+            flex-wrap: wrap;
+        }
+
+        .story-tag {
+            background: rgba(218, 165, 32, 0.1);
+            color: var(--cave-brown);
+            padding: 0.5rem 1.5rem;
+            border-radius: 20px;
+            font-size: 1.1rem;
+            border: 2px solid var(--desert-gold);
+        }
+
+        .story-content {
+            font-size: 1.2rem;
+            line-height: 1.8;
+            color: var(--cave-brown);
+            padding: 2rem;
+            background: rgba(255, 255, 255, 0.7);
+            border-radius: 15px;
+            margin-top: 2rem;
+        }
+
+        .story-paragraph {
+            position: relative;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            border-left: 4px solid var(--desert-gold);
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 0 15px 15px 0;
+            transition: all 0.3s ease;
+        }
+
+        .story-paragraph:hover {
+            transform: translateX(10px);
+            box-shadow: 5px 5px 15px rgba(0,0,0,0.1);
+        }
+
+        /* Decorative elements */
+        .magical-decoration {
+            position: absolute;
+            font-size: 2rem;
+            opacity: 0.5;
+            pointer-events: none;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(5deg); }
+        }
+
+        .lamp { top: 50px; right: 50px; }
+        .palace { top: 100px; left: 50px; }
+        .ring { bottom: 100px; right: 100px; }
+        .cave { bottom: 150px; left: 100px; }
+        .genie { top: 200px; right: 150px; }
+
+        /* Dark mode */
+        @media (prefers-color-scheme: dark) {
+            .story-container {
+                background: rgba(26, 35, 126, 0.95);
+                color: #fff;
+            }
+            .story-content {
+                background: rgba(255, 255, 255, 0.1);
+                color: #fff;
+            }
+            .story-paragraph {
+                background: rgba(26, 35, 126, 0.8);
+                color: #fff;
+            }
+            .story-title {
+                color: var(--desert-gold);
+            }
+            .story-tag {
+                color: var(--desert-gold);
+                background: rgba(26, 35, 126, 0.8);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="stars"></div>
+    <div class="story-container">
+        <div class="content-wrapper">
+            <nav class="navigation-bar">
+                <button onclick="goBackToLibrary()" class="back-button">
+                    🏰 Back to Library
+                </button>
+                <div class="font-controls">
+                    <button class="control-button" onclick="changeFontSize('decrease')">A-</button>
+                    <button class="control-button" onclick="changeFontSize('increase')">A+</button>
+                </div>
+            </nav>
+
+            <h1 class="story-title">
+                <span class="story-icon icon-left">💰</span>
+                Ali Baba and the Forty Thieves
+                <span class="story-icon icon-right">⚔️</span>
+            </h1>
+
+            <div class="cover-section">
+                <div class="cover-frame">
+                    <picture>
+                        <img src="../images/library/covers/ali-baba.jpeg" 
+                            alt="Ali Baba discovering the secret cave of the forty thieves" 
+                            class="cover-image"
+                            onerror="handleImageError(this)">
+                    </picture>
+                </div>
+            </div>
+
+            <div class="story-tags">
+                <span class="story-tag">👑 6-12 years</span>
+                <span class="story-tag">📚 Intermediate</span>
+                <span class="story-tag">🎭 Folk tale</span>
+            </div>
+
+            <div class="story-content">
+                <div class="story-paragraph">
+                    In a small town in Persia, there lived two brothers. Cassim was rich and greedy, while Ali Baba was poor but kind. One day, while collecting wood in the forest, Ali Baba witnessed forty thieves opening a secret cave with magical words: "Open Sesame!"
+                </div>
+
+                <div class="story-paragraph">
+                    After the thieves left, Ali Baba approached the cave and spoke the magic words. To his amazement, the cave opened, revealing countless treasures - gold, jewels, and precious silks. He took only a small amount of gold coins and returned home, keeping his discovery a secret.
+                </div>
+
+                <div class="story-paragraph">
+                    But his brother Cassim grew suspicious of Ali Baba's sudden good fortune. When he learned of the cave, his greed led him there. However, he forgot the magic words to leave and was discovered by the thieves, who showed no mercy.
+                </div>
+
+                <div class="story-paragraph">
+                    Ali Baba found his brother and gave him a proper burial. The thieves, discovering someone else knew their secret, plotted revenge. They hid in oil jars, planning to sneak into Ali Baba's house at night.
+                </div>
+
+                <div class="story-paragraph">
+                    But Morgiana, Ali Baba's clever servant, discovered their plan. She poured boiling oil into each jar, defeating the thieves. The captain, disguised as a merchant, tried one final time to kill Ali Baba, but Morgiana outsmarted him too.
+                </div>
+
+                <div class="story-paragraph">
+                    Grateful for her loyalty and wisdom, Ali Baba gave Morgiana her freedom and his nephew's hand in marriage. From that day forward, they lived happily and prosperously, using the treasure wisely to help others in need.
+                </div>
+            </div>
+
+            <!-- Decorative elements -->
+            <div class="magical-decoration lamp">🪔</div>
+            <div class="magical-decoration palace">🏰</div>
+            <div class="magical-decoration ring">💍</div>
+            <div class="magical-decoration cave">🏔️</div>
+            <div class="magical-decoration genie">🧞</div>
+        </div>
+    </div>
+
+    <script>
+        let currentFontSize = 1.2;
+        const minFontSize = 1;
+        const maxFontSize = 1.6;
+        const stepSize = 0.1;
+
+        function changeFontSize(action) {
+            if (action === 'increase' && currentFontSize < maxFontSize) {
+                currentFontSize += stepSize;
+            } else if (action === 'decrease' && currentFontSize > minFontSize) {
+                currentFontSize -= stepSize;
+            }
+            document.querySelector('.story-content').style.fontSize = `${currentFontSize}rem`;
+            localStorage.setItem('preferredFontSize', currentFontSize);
+        }
+
+        function handleImageError(img) {
+            const container = img.parentElement;
+            container.innerHTML = `
+                <div class="w-full h-full flex flex-col items-center justify-center bg-gradient-to-r from-[var(--desert-gold)] to-[var(--sand)]">
+                    <span class="text-6xl mb-4">🏰 💰</span>
+                    <p class="text-xl text-[var(--night-blue)] text-center px-4">The Magical Cave Awaits...</p>
+                </div>
+            `;
+        }
+
+        function goBackToLibrary() {
+            window.location.href = '../library.html';
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            // Restore font size preference
+            const savedFontSize = localStorage.getItem('preferredFontSize');
+            if (savedFontSize) {
+                currentFontSize = parseFloat(savedFontSize);
+                document.querySelector('.story-content').style.fontSize = `${currentFontSize}rem`;
+            }
+        });
+    </script>
+</body>
+</html> 

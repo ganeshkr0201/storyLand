@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aladdin and the Magic Lamp - StoryLand</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Magic+School+One&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --royal-purple: #7B2CBF;
+            --desert-gold: #FFD700;
+            --night-blue: #1A1B41;
+            --sand: #F2D4AB;
+            --spice-red: #D65780;
+        }
+
+        body {
+            font-family: 'Amiri', serif;
+            background: var(--night-blue);
+            min-height: 100vh;
+            color: var(--sand);
+            background-image: 
+                radial-gradient(circle at 50% 50%, rgba(255, 215, 0, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 100% 0%, rgba(123, 44, 191, 0.1) 0%, transparent 50%);
+        }
+
+        .page-container {
+            max-width: 1000px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+            position: relative;
+        }
+
+        .story-container {
+            background: linear-gradient(135deg, rgba(26, 27, 65, 0.95) 0%, rgba(123, 44, 191, 0.95) 100%);
+            border: 2px solid var(--desert-gold);
+            border-radius: 24px;
+            box-shadow: 0 0 30px rgba(255, 215, 0, 0.2);
+            overflow: hidden;
+            position: relative;
+        }
+
+        .story-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M30 5c5 0 10 5 10 10s-5 10-10 10-10-5-10-10 5-10 10-10zM10 30c5 0 10 5 10 10s-5 10-10 10S0 45 0 40s5-10 10-10zm40 0c5 0 10 5 10 10s-5 10-10 10-10-5-10-10 5-10 10-10z' fill='%23FFD700' fill-opacity='0.1'/%3E%3C/svg%3E");
+            opacity: 0.1;
+            z-index: 0;
+        }
+
+        .story-header {
+            text-align: center;
+            padding: 2rem;
+            background: linear-gradient(135deg, var(--royal-purple) 0%, var(--spice-red) 100%);
+            border-bottom: 2px solid var(--desert-gold);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .story-title {
+            font-family: 'Magic School One', cursive;
+            font-size: 3.5rem;
+            color: var(--desert-gold);
+            text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+            margin-bottom: 1rem;
+            position: relative;
+        }
+
+        .cover-container {
+            position: relative;
+            padding: 2rem;
+            background: linear-gradient(to bottom, var(--royal-purple) 0%, var(--night-blue) 100%);
+            border-bottom: 2px solid var(--desert-gold);
+        }
+
+        .cover-frame {
+            position: relative;
+            max-width: 500px;
+            margin: 0 auto;
+            border: 4px solid var(--desert-gold);
+            border-radius: 16px;
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
+            overflow: hidden;
+            background: var(--night-blue);
+        }
+
+        .cover-frame::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent 45%, rgba(255, 215, 0, 0.1) 50%, transparent 55%);
+            animation: shimmer 3s infinite;
+        }
+
+        .cover-image {
+            width: 100%;
+            height: auto;
+            display: block;
+            object-fit: contain;
+            position: relative;
+            z-index: 1;
+        }
+
+        .story-tag {
+            display: inline-block;
+            padding: 0.5rem 1.5rem;
+            background: rgba(255, 215, 0, 0.1);
+            color: var(--desert-gold);
+            border: 1px solid var(--desert-gold);
+            border-radius: 999px;
+            margin: 0.25rem;
+            font-size: 0.9rem;
+            backdrop-filter: blur(5px);
+            animation: float 3s ease-in-out infinite;
+        }
+
+        .story-content {
+            padding: 2rem;
+            font-size: 1.2rem;
+            line-height: 1.8;
+            position: relative;
+            z-index: 1;
+        }
+
+        .story-paragraph {
+            position: relative;
+            margin-bottom: 1.5rem;
+            padding: 1.5rem;
+            background: rgba(255, 215, 0, 0.05);
+            border-left: 2px solid var(--desert-gold);
+            border-radius: 0 12px 12px 0;
+            transition: transform 0.3s ease;
+        }
+
+        .story-paragraph:hover {
+            transform: translateX(10px);
+            background: rgba(255, 215, 0, 0.08);
+        }
+
+        .magical-decoration {
+            position: absolute;
+            font-size: 2rem;
+            animation: float 6s ease-in-out infinite;
+            opacity: 0.5;
+            filter: drop-shadow(0 0 5px var(--desert-gold));
+        }
+
+        .lamp { top: 10%; right: 5%; }
+        .palace { top: 30%; left: 5%; }
+        .ring { top: 50%; right: 5%; }
+        .cave { top: 70%; left: 5%; }
+        .genie { top: 90%; right: 5%; }
+
+        .navigation-button {
+            position: fixed;
+            padding: 0.75rem 1.5rem;
+            background: linear-gradient(135deg, var(--royal-purple) 0%, var(--spice-red) 100%);
+            color: var(--desert-gold);
+            border: 2px solid var(--desert-gold);
+            border-radius: 12px;
+            font-size: 1.2rem;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            z-index: 100;
+            box-shadow: 0 0 15px rgba(255, 215, 0, 0.2);
+        }
+
+        .back-button {
+            top: 20px;
+            left: 20px;
+        }
+
+        .font-controls {
+            top: 20px;
+            right: 20px;
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .navigation-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.4);
+            background: var(--royal-purple);
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
+        }
+
+        @keyframes shimmer {
+            0% { transform: translateX(-100%) rotate(45deg); }
+            100% { transform: translateX(100%) rotate(45deg); }
+        }
+
+        .magical-sparkle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: var(--desert-gold);
+            border-radius: 50%;
+            animation: sparkle 2s infinite;
+        }
+
+        @keyframes sparkle {
+            0%, 100% { opacity: 0; transform: scale(0); }
+            50% { opacity: 1; transform: scale(1); }
+        }
+    </style>
+</head>
+<body>
+    <a href="../library.html" class="navigation-button back-button">
+        ← Back to Library
+    </a>
+
+    <div class="font-controls">
+        <button class="navigation-button" onclick="changeFontSize('decrease')">A-</button>
+        <button class="navigation-button" onclick="changeFontSize('increase')">A+</button>
+    </div>
+
+    <div class="page-container">
+        <div class="story-container">
+            <div class="magical-decoration lamp">🪔</div>
+            <div class="magical-decoration palace">🏰</div>
+            <div class="magical-decoration ring">💍</div>
+            <div class="magical-decoration cave">🏔️</div>
+            <div class="magical-decoration genie">🧞</div>
+
+            <div class="story-header">
+                <h1 class="story-title">Aladdin and the Magic Lamp</h1>
+                <div class="tags-container">
+                    <span class="story-tag">6-12 years</span>
+                    <span class="story-tag">intermediate</span>
+                    <span class="story-tag">folk tale</span>
+                </div>
+            </div>
+
+            <div class="cover-container">
+                <div class="cover-frame">
+                    <img src="../images/library/covers/aladdin.webp" 
+                         alt="Aladdin and the Magic Lamp" 
+                         class="cover-image"
+                         onerror="this.onerror=null; this.parentElement.innerHTML='<div style=\'padding: 2rem; text-align: center; color: var(--desert-gold);\'>Cover Image Coming Soon</div>'">
+                </div>
+            </div>
+
+            <div class="story-content">
+                <div class="story-paragraph">
+                    Once upon a time in a faraway land, there lived a poor boy named Aladdin. He spent his days playing in the streets 
+                    and helping his mother with their small home.
+                </div>
+
+                <div class="story-paragraph">
+                    One day, a mysterious stranger approached Aladdin. "I am your uncle," he said, "and I need your help to find a 
+                    special lamp in a hidden cave." The stranger was actually a wicked magician who wanted the lamp for himself.
+                </div>
+
+                <div class="story-paragraph">
+                    The magician led Aladdin to a secret cave and gave him a magic ring for protection. "Go inside and bring me the 
+                    old lamp you find there," he said. Aladdin entered the cave and found many treasures, including the lamp.
+                </div>
+
+                <div class="story-paragraph">
+                    When Aladdin tried to leave, the magician demanded the lamp first. Aladdin refused, and the angry magician sealed 
+                    the cave entrance, trapping Aladdin inside.
+                </div>
+
+                <div class="story-paragraph">
+                    As Aladdin rubbed his hands in fear, he accidentally rubbed the magic ring. A genie appeared! "I am the genie of the 
+                    ring," it said. "What is your wish?" Aladdin wished to go home, and in an instant, he was back with his mother.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function changeFontSize(action) {
+            const content = document.querySelector('.story-content');
+            const currentSize = parseFloat(window.getComputedStyle(content).fontSize);
+            
+            if (action === 'increase' && currentSize < 24) {
+                content.style.fontSize = (currentSize + 2) + 'px';
+            } else if (action === 'decrease' && currentSize > 14) {
+                content.style.fontSize = (currentSize - 2) + 'px';
+            }
+        }
+
+        // Add magical sparkles
+        function createSparkles() {
+            const container = document.querySelector('.story-container');
+            for (let i = 0; i < 20; i++) {
+                const sparkle = document.createElement('div');
+                sparkle.className = 'magical-sparkle';
+                sparkle.style.left = Math.random() * 100 + '%';
+                sparkle.style.top = Math.random() * 100 + '%';
+                sparkle.style.animationDelay = Math.random() * 2 + 's';
+                container.appendChild(sparkle);
+            }
+        }
+
+        createSparkles();
+    </script>
+</body>
+</html> 

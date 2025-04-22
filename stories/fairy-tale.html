@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Princess and the Dragon - StoryLand</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700&family=Princess+Sofia&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --royal-purple: #8A2BE2;
+            --dragon-red: #FF3366;
+            --magic-pink: #FFB7C5;
+            --castle-gold: #FFD700;
+            --sky-blue: #87CEEB;
+            --forest-green: #228B22;
+        }
+
+        body {
+            font-family: 'Nunito', sans-serif;
+            background: linear-gradient(135deg, var(--magic-pink) 0%, var(--sky-blue) 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .story-title {
+            font-family: 'Princess Sofia', cursive;
+            color: var(--royal-purple);
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+            font-size: 3.5rem;
+        }
+
+        .nav-bar {
+            background: linear-gradient(to right, var(--royal-purple), var(--dragon-red));
+            padding: 1rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .magic-btn {
+            background: var(--castle-gold);
+            color: var(--royal-purple);
+            padding: 0.75rem 1.5rem;
+            border-radius: 30px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            border: 2px solid var(--royal-purple);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .magic-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+            background: #FFF3B0;
+        }
+
+        .story-container {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            border: 3px solid var(--royal-purple);
+            position: relative;
+            overflow: hidden;
+            margin: 2rem auto;
+            max-width: 1000px;
+            padding: 2rem;
+        }
+
+        .cover-section {
+            position: relative;
+            margin: 2rem 0;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+        }
+
+        .cover-image {
+            width: 100%;
+            height: 400px;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        .cover-section:hover .cover-image {
+            transform: scale(1.05);
+        }
+
+        .story-tag {
+            display: inline-block;
+            padding: 0.5rem 1.5rem;
+            border-radius: 20px;
+            margin: 0.25rem;
+            font-size: 0.9rem;
+            font-weight: bold;
+            border: 2px solid currentColor;
+        }
+
+        .age-tag { 
+            color: var(--royal-purple);
+            background: rgba(138, 43, 226, 0.1); 
+        }
+
+        .level-tag { 
+            color: var(--dragon-red);
+            background: rgba(255, 51, 102, 0.1); 
+        }
+
+        .type-tag { 
+            color: var(--forest-green);
+            background: rgba(34, 139, 34, 0.1); 
+        }
+
+        .story-content {
+            font-size: 1.2rem;
+            line-height: 1.8;
+            padding: 2rem;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 15px;
+            margin-top: 2rem;
+        }
+
+        .story-paragraph {
+            margin-bottom: 1.5rem;
+            position: relative;
+            padding-left: 1.5rem;
+            border-left: 3px solid var(--magic-pink);
+            transition: all 0.3s ease;
+        }
+
+        .story-paragraph:hover {
+            border-left-color: var(--royal-purple);
+            transform: translateX(10px);
+        }
+
+        /* Floating decorations */
+        .floating-element {
+            position: absolute;
+            pointer-events: none;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(5deg); }
+        }
+
+        .dragon-decoration {
+            top: 20px;
+            right: 20px;
+            font-size: 3rem;
+        }
+
+        .crown-decoration {
+            top: 20px;
+            left: 20px;
+            font-size: 2rem;
+        }
+
+        .castle-decoration {
+            bottom: 20px;
+            right: 20px;
+            font-size: 2.5rem;
+        }
+
+        /* Dark mode */
+        @media (prefers-color-scheme: dark) {
+            body {
+                background: linear-gradient(135deg, #4A1D96 0%, #1E3A8A 100%);
+                color: #E5E7EB;
+            }
+
+            .story-container {
+                background: rgba(30, 41, 59, 0.95);
+            }
+
+            .story-content {
+                background: rgba(30, 41, 59, 0.8);
+                color: #E5E7EB;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="nav-bar">
+        <div class="container mx-auto flex justify-between items-center">
+            <button onclick="goBackToLibrary()" class="magic-btn">
+                <i class="fas fa-crown mr-2"></i>Back to Library
+            </button>
+            <div class="flex gap-4">
+                <button onclick="adjustFontSize('decrease')" class="magic-btn">
+                    <i class="fas fa-text-height"></i> A-
+                </button>
+                <button onclick="adjustFontSize('increase')" class="magic-btn">
+                    <i class="fas fa-text-height"></i> A+
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mx-auto px-4 py-8">
+        <div class="story-container">
+            <!-- Decorative elements -->
+            <div class="floating-element dragon-decoration">🐉</div>
+            <div class="floating-element crown-decoration">👑</div>
+            <div class="floating-element castle-decoration">🏰</div>
+
+            <h1 class="story-title text-center mb-8">The Princess and the Dragon</h1>
+            
+            <div class="cover-section">
+                <picture>
+                    <img src="../images/library/covers/princess.jpg" 
+                         alt="The Princess and the Dragon" 
+                         class="cover-image"
+                         onerror="handleImageError(this)">
+                </picture>
+            </div>
+
+            <div class="flex justify-center gap-4 flex-wrap my-6">
+                <span class="story-tag age-tag">
+                    <i class="fas fa-child mr-2"></i>6-8 years
+                </span>
+                <span class="story-tag level-tag">
+                    <i class="fas fa-book-reader mr-2"></i>Intermediate
+                </span>
+                <span class="story-tag type-tag">
+                    <i class="fas fa-dragon mr-2"></i>Fantasy
+                </span>
+            </div>
+
+            <div class="story-content">
+                <div class="story-paragraph">
+                    In a land where magic sparkled in the air like dust in sunlight, there lived a young girl named Rose. She had a special gift - she could see the magic that others couldn't. One day, while walking through the Enchanted Forest, she found a tiny door in the base of an old oak tree.
+                </div>
+
+                <div class="story-paragraph">
+                    When Rose opened the door, she discovered a whole world of fairies living inside the tree! There was Twinkle, who could make stars appear in daylight; Glimmer, who could turn ordinary objects into sparkling treasures; and Shimmer, who could make rainbows dance in the air.
+                </div>
+
+                <div class="story-paragraph">
+                    The fairies were in trouble. Their magic was fading because someone had stolen the Crystal of Dreams, which kept their world magical. "Will you help us find it?" asked Twinkle. Rose agreed, and together they set off on a magical quest.
+                </div>
+
+                <div class="story-paragraph">
+                    Their first stop was the Garden of Talking Flowers. The roses told them that the crystal had been taken by a mischievous pixie named Prank. "He lives in the Cloud Castle," whispered the daisies. "But be careful - he loves to play tricks!"
+                </div>
+
+                <div class="story-paragraph">
+                    To reach the Cloud Castle, they needed to ride on the backs of friendly cloud dragons. The dragons were soft and fluffy, and they carried Rose and the fairies high into the sky. As they flew, they passed through rainbows and played tag with shooting stars.
+                </div>
+
+                <div class="story-paragraph">
+                    When they reached the Cloud Castle, they found Prank playing with the Crystal of Dreams. "It's so pretty!" he said. "I just wanted to borrow it for a while." Rose explained how important the crystal was to the fairies' world. "Without it," she said, "the magic will disappear."
+                </div>
+
+                <div class="story-paragraph">
+                    Prank felt bad about taking the crystal. "I didn't mean to cause trouble," he said. "I just wanted to make things more fun." The fairies had an idea. "Why don't you come live with us?" suggested Glimmer. "You can help us create new kinds of magic!"
+                </div>
+
+                <div class="story-paragraph">
+                    Prank agreed, and together they returned the Crystal of Dreams to its rightful place in the fairy tree. As soon as it was back, the magic returned stronger than ever. Flowers bloomed in new colors, stars twinkled brighter, and even the air sparkled with joy.
+                </div>
+
+                <div class="story-paragraph">
+                    From that day on, Prank became the fairies' official Trickster, creating fun and laughter wherever he went. Rose visited often, bringing new ideas for magical adventures. And the Enchanted Forest became even more magical, proving that sometimes the best magic comes from working together and sharing our gifts with others.
+                </div>
+            </div>
+
+            <div class="mt-12 text-center">
+                <p class="text-3xl font-bold text-royal-purple mb-6" style="font-family: 'Princess Sofia', cursive;">
+                    ✨ The End ✨
+                </p>
+                <button onclick="goBackToLibrary()" class="magic-btn">
+                    <i class="fas fa-book-open mr-2"></i>More Magical Stories
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentFontSize = 1.2;
+        const minFontSize = 1;
+        const maxFontSize = 1.6;
+        const stepSize = 0.1;
+
+        function handleImageError(img) {
+            const container = img.parentElement;
+            container.innerHTML = `
+                <div class="w-full h-[400px] flex flex-col items-center justify-center bg-gradient-to-r from-[var(--magic-pink)] to-[var(--sky-blue)]">
+                    <span class="text-6xl mb-4">👸 🐉</span>
+                    <p class="text-xl text-white text-center px-4">Once upon a time in a magical kingdom...</p>
+                </div>
+            `;
+        }
+
+        function adjustFontSize(action) {
+            if (action === 'increase' && currentFontSize < maxFontSize) {
+                currentFontSize += stepSize;
+            } else if (action === 'decrease' && currentFontSize > minFontSize) {
+                currentFontSize -= stepSize;
+            }
+            document.querySelector('.story-content').style.fontSize = `${currentFontSize}rem`;
+            localStorage.setItem('preferredFontSize', currentFontSize);
+        }
+
+        function goBackToLibrary() {
+            window.location.href = '../library.html';
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            // Restore font size preference
+            const savedFontSize = localStorage.getItem('preferredFontSize');
+            if (savedFontSize) {
+                currentFontSize = parseFloat(savedFontSize);
+                document.querySelector('.story-content').style.fontSize = `${currentFontSize}rem`;
+            }
+        });
+    </script>
+</body>
+</html>

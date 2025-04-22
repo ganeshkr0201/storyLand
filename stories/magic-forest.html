@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Magic Forest - StoryLand</title>
+    <link href="https://fonts.googleapis.com/css2?family=Bubblegum+Sans&family=Quicksand:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --magical-purple: #9B6DFF;
+            --butterfly-blue: #64B5F6;
+            --leaf-green: #4CAF50;
+            --golden-vine: #FFD700;
+            --sunset-pink: #FF9E80;
+            --treehouse-brown: #8D6E63;
+            --sky-blue: #90CAF9;
+            --flower-pink: #F48FB1;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            font-family: 'Quicksand', sans-serif;
+            background: linear-gradient(135deg, var(--magical-purple) 0%, var(--sky-blue) 100%);
+            color: #333;
+            overflow-x: hidden;
+        }
+
+        .magical-container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+            position: relative;
+        }
+
+        .story-card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 30px;
+            box-shadow: 
+                0 0 30px rgba(155, 109, 255, 0.3),
+                0 0 60px rgba(255, 215, 0, 0.2);
+            overflow: hidden;
+            position: relative;
+            backdrop-filter: blur(10px);
+        }
+
+        .navigation-bar {
+            background: linear-gradient(to right, var(--magical-purple), var(--butterfly-blue));
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 3px solid var(--golden-vine);
+        }
+
+        .back-button {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: white;
+            text-decoration: none;
+            font-size: 1.2rem;
+            padding: 0.5rem 1.5rem;
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid var(--golden-vine);
+            border-radius: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .back-button:hover {
+            transform: translateX(-5px);
+            background: rgba(255, 255, 255, 0.2);
+            box-shadow: 0 0 20px var(--golden-vine);
+        }
+
+        .font-controls {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .font-button {
+            padding: 0.5rem 1rem;
+            border: 2px solid var(--golden-vine);
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .font-button:hover {
+            background: rgba(255, 255, 255, 0.2);
+            box-shadow: 0 0 15px var(--golden-vine);
+        }
+
+        .story-header {
+            text-align: center;
+            padding: 2rem;
+            background: linear-gradient(to bottom right, var(--magical-purple), var(--butterfly-blue));
+            position: relative;
+            overflow: hidden;
+        }
+
+        .story-title {
+            font-family: 'Bubblegum Sans', cursive;
+            font-size: 3.5rem;
+            color: white;
+            margin: 0;
+            text-shadow: 
+                2px 2px 4px rgba(0, 0, 0, 0.2),
+                0 0 20px var(--golden-vine);
+        }
+
+        .cover-container {
+            position: relative;
+            padding: 2rem;
+            background: linear-gradient(to bottom, var(--sky-blue), var(--magical-purple));
+        }
+
+        .cover-frame {
+            position: relative;
+            max-width: 800px;
+            margin: 0 auto;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 
+                0 0 30px rgba(155, 109, 255, 0.4),
+                0 0 60px rgba(255, 215, 0, 0.3);
+        }
+
+        .cover-image {
+            width: 100%;
+            height: auto;
+            display: block;
+            transition: transform 0.5s ease;
+        }
+
+        .cover-frame:hover .cover-image {
+            transform: scale(1.05);
+        }
+
+        .story-tags {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .story-tag {
+            padding: 0.5rem 1.5rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        .tag-age {
+            background: rgba(155, 109, 255, 0.2);
+            border: 2px solid var(--magical-purple);
+            color: white;
+        }
+
+        .tag-level {
+            background: rgba(244, 143, 177, 0.2);
+            border: 2px solid var(--flower-pink);
+            color: white;
+        }
+
+        .tag-genre {
+            background: rgba(100, 181, 246, 0.2);
+            border: 2px solid var(--butterfly-blue);
+            color: white;
+        }
+
+        .story-content {
+            padding: 2rem;
+            font-size: 1.2rem;
+            line-height: 1.8;
+            position: relative;
+        }
+
+        .story-paragraph {
+            background: rgba(255, 255, 255, 0.8);
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            border-radius: 15px;
+            border-left: 4px solid var(--magical-purple);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .story-paragraph:hover {
+            transform: translateX(10px);
+            background: rgba(255, 255, 255, 0.9);
+            box-shadow: 
+                0 5px 15px rgba(155, 109, 255, 0.2),
+                0 0 30px rgba(255, 215, 0, 0.1);
+        }
+
+        .magical-decoration {
+            position: absolute;
+            pointer-events: none;
+            animation: float 6s ease-in-out infinite;
+            z-index: 1;
+        }
+
+        .butterfly {
+            font-size: 1.5rem;
+            color: var(--butterfly-blue);
+            filter: drop-shadow(0 0 5px rgba(100, 181, 246, 0.5));
+        }
+
+        .vine {
+            width: 30px;
+            height: 80px;
+            background: var(--leaf-green);
+            mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12,2A10,10 0 0,1 22,12A10,10 0 0,1 12,22A10,10 0 0,1 2,12A10,10 0 0,1 12,2M12,4A8,8 0 0,0 4,12A8,8 0 0,0 12,20A8,8 0 0,0 20,12A8,8 0 0,0 12,4Z'/%3E%3C/svg%3E") center/contain no-repeat;
+            opacity: 0.6;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-10px) rotate(5deg); }
+        }
+
+        .sparkle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: var(--golden-vine);
+            border-radius: 50%;
+            animation: sparkle 2s ease-in-out infinite;
+            opacity: 0;
+        }
+
+        @keyframes sparkle {
+            0% { transform: scale(0); opacity: 0; }
+            50% { transform: scale(1); opacity: 1; }
+            100% { transform: scale(0); opacity: 0; }
+        }
+    </style>
+</head>
+<body>
+    <div class="magical-container">
+        <div class="story-card">
+            <nav class="navigation-bar">
+                <a href="../library.html" class="back-button">
+                    ← Back to Library
+                </a>
+                <div class="font-controls">
+                    <button class="font-button" onclick="changeFontSize('decrease')">A-</button>
+                    <button class="font-button" onclick="changeFontSize('increase')">A+</button>
+                </div>
+            </nav>
+
+            <header class="story-header">
+                <h1 class="story-title">The Magic Forest</h1>
+                <div class="story-tags">
+                    <span class="story-tag tag-age">3-5 years</span>
+                    <span class="story-tag tag-level">beginner</span>
+                    <span class="story-tag tag-genre">fantasy</span>
+                </div>
+            </header>
+
+            <div class="cover-container">
+                <div class="cover-frame">
+                    <img src="../images/library/covers/magic-forest.jpg" 
+                         alt="Timmy's Enchanted Journey" 
+                         class="cover-image"
+                         onerror="this.parentElement.innerHTML='<div style=\'padding: 4rem; text-align: center; background: var(--sky-blue); color: white;\'><span style=\'font-size: 4rem;\'>🌳</span><br>Magical Forest Scene Coming Soon</div>';">
+                </div>
+            </div>
+
+            <div class="story-content">
+                <div class="story-paragraph">
+                    One sunny morning, little Timmy found a magical door in his backyard. It was covered in sparkling vines and had a 
+                    golden handle shaped like a leaf. When he touched it, the door opened with a soft whoosh!
+                </div>
+
+                <div class="story-paragraph">
+                    "Hello, Timmy!" said a tiny voice. A small blue butterfly with wings that sparkled like stars fluttered in front of 
+                    him. "I'm Luna, and I've been waiting for you to visit our magical forest!"
+                </div>
+
+                <div class="story-paragraph">
+                    Timmy stepped through the door and gasped. The forest was alive with colors he had never seen before! Trees 
+                    whispered secrets to each other, and flowers sang sweet songs. A friendly squirrel named Nutty showed Timmy how 
+                    to climb trees using magic vines.
+                </div>
+
+                <div class="story-paragraph">
+                    "Watch this!" Nutty said, jumping onto a vine. The vine grew longer and longer, carrying Nutty up to the treetops. 
+                    Timmy tried it too, and soon he was swinging through the trees like a real forest explorer!
+                </div>
+
+                <div class="story-paragraph">
+                    In a clearing, they met a family of talking mushrooms who were having a tea party. "Would you like some magic tea?" asked the biggest mushroom. "It makes you float!" Timmy took a tiny sip and felt himself floating up, up, up into the air!
+                </div>
+
+                <div class="story-paragraph">
+                    As the sun began to set, the forest came alive with twinkling lights. Fireflies danced in patterns, creating beautiful pictures in the sky. Luna the butterfly led Timmy to a special tree that could tell stories. Its leaves rustled and whispered tales of magical creatures and brave adventures.
+                </div>
+
+                <div class="story-paragraph">
+                    "It's time to go home, Timmy," Luna said gently. "But don't worry, the magic door will always be here when you want to visit again."
+                </div>
+
+                <div class="story-paragraph">
+                    Timmy waved goodbye to all his new friends and stepped back through the door. When he turned around, the door had disappeared, but he knew it would return whenever he needed a little magic in his life.
+                </div>
+
+                <div class="story-paragraph">
+                    That night, as Timmy lay in bed, he could still hear the forest's gentle whispers and see the sparkles of magic in his dreams. He couldn't wait for his next adventure in the enchanted forest!
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function changeFontSize(action) {
+            const content = document.querySelector('.story-content');
+            const currentSize = parseFloat(window.getComputedStyle(content).fontSize);
+            
+            if (action === 'increase' && currentSize < 24) {
+                content.style.fontSize = (currentSize + 2) + 'px';
+            } else if (action === 'decrease' && currentSize > 14) {
+                content.style.fontSize = (currentSize - 2) + 'px';
+            }
+        }
+
+        function createSparkles() {
+            const container = document.querySelector('.story-card');
+            for (let i = 0; i < 30; i++) {
+                const sparkle = document.createElement('div');
+                sparkle.className = 'sparkle';
+                sparkle.style.left = Math.random() * 100 + '%';
+                sparkle.style.top = Math.random() * 100 + '%';
+                sparkle.style.animationDelay = Math.random() * 2 + 's';
+                container.appendChild(sparkle);
+            }
+        }
+
+        function createMagicalDecorations() {
+            const container = document.querySelector('.story-card');
+            const decorations = [
+                { type: 'butterfly', emoji: '🦋', positions: [
+                    { top: '10%', right: '5%' },
+                    { top: '30%', left: '5%' },
+                    { top: '50%', right: '8%' },
+                    { top: '70%', left: '7%' }
+                ]},
+                { type: 'vine', positions: [
+                    { top: '20%', right: '10%' },
+                    { top: '40%', left: '10%' },
+                    { top: '60%', right: '12%' },
+                    { top: '80%', left: '8%' }
+                ]}
+            ];
+
+            decorations.forEach(decor => {
+                decor.positions.forEach(pos => {
+                    const element = document.createElement('div');
+                    element.className = `magical-decoration ${decor.type}`;
+                    if (decor.emoji) element.textContent = decor.emoji;
+                    Object.assign(element.style, pos);
+                    container.appendChild(element);
+                });
+            });
+        }
+
+        createSparkles();
+        createMagicalDecorations();
+    </script>
+</body>
+</html> 

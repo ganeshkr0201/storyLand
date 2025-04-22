@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{STORY_TITLE}} - StoryLand</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600&family=Montserrat:wght@700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #2196F3;    /* Blue */
+            --secondary: #FF4081;   /* Pink */
+            --accent: #00BCD4;      /* Cyan */
+            --text: #212121;        /* Dark Gray */
+            --bg: #FAFAFA;          /* Light Gray */
+        }
+
+        body {
+            font-family: 'Quicksand', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            background-image: 
+                url('data:image/svg+xml;utf8,<svg width="30" height="30" viewBox="0 0 30 30" xmlns="http://www.w3.org/2000/svg"><circle cx="15" cy="15" r="10" fill="%232196F3" fill-opacity="0.1"/></svg>'),
+                linear-gradient(135deg, rgba(33, 150, 243, 0.1) 0%, transparent 50%),
+                linear-gradient(45deg, rgba(0, 188, 212, 0.1) 0%, transparent 50%);
+            background-size: 60px 60px, 100% 100%, 100% 100%;
+        }
+
+        .edu-title {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 3.5rem;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            color: transparent;
+            position: relative;
+            animation: slideIn 1s ease-out;
+        }
+
+        .story-container {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 
+                0 10px 30px rgba(33, 150, 243, 0.1),
+                0 1px 5px rgba(0, 0, 0, 0.05);
+            position: relative;
+            overflow: hidden;
+            border: 1px solid rgba(33, 150, 243, 0.1);
+        }
+
+        .story-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary), var(--accent));
+        }
+
+        .nav-bar {
+            background: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(33, 150, 243, 0.1);
+        }
+
+        .edu-btn {
+            background: var(--primary);
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .edu-btn::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: 0.5s;
+        }
+
+        .edu-btn:hover::after {
+            left: 100%;
+        }
+
+        .story-content {
+            font-size: 1.2rem;
+            line-height: 1.8;
+            position: relative;
+        }
+
+        .story-content p {
+            margin-bottom: 1.5rem;
+            padding: 1.5rem;
+            border-radius: 10px;
+            background: rgba(33, 150, 243, 0.05);
+            border-left: 4px solid var(--primary);
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .story-content p::before {
+            content: '📚';
+            position: absolute;
+            left: -2rem;
+            opacity: 0;
+            transition: all 0.3s ease;
+        }
+
+        .story-content p:hover {
+            background: rgba(33, 150, 243, 0.1);
+            transform: translateX(1rem);
+        }
+
+        .story-content p:hover::before {
+            opacity: 1;
+            left: -1.5rem;
+        }
+
+        .edu-tag {
+            background: rgba(33, 150, 243, 0.1);
+            color: var(--primary);
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .edu-tag:hover {
+            background: rgba(33, 150, 243, 0.2);
+            transform: translateY(-2px);
+        }
+
+        .floating-bulb {
+            position: fixed;
+            right: 2rem;
+            bottom: 2rem;
+            font-size: 2rem;
+            animation: pulse 2s ease-in-out infinite;
+            cursor: pointer;
+            z-index: 100;
+            filter: drop-shadow(0 0 10px rgba(33, 150, 243, 0.3));
+        }
+
+        .knowledge-spark {
+            position: absolute;
+            pointer-events: none;
+            font-size: 1.2rem;
+            animation: sparkFly 1.5s ease-out forwards;
+        }
+
+        @keyframes slideIn {
+            from { 
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to { 
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes pulse {
+            0%, 100% { 
+                transform: scale(1);
+                filter: drop-shadow(0 0 10px rgba(33, 150, 243, 0.3));
+            }
+            50% { 
+                transform: scale(1.1);
+                filter: drop-shadow(0 0 15px rgba(33, 150, 243, 0.5));
+            }
+        }
+
+        @keyframes sparkFly {
+            0% { 
+                transform: translate(0, 0) scale(1);
+                opacity: 1;
+            }
+            100% { 
+                transform: translate(var(--tx), var(--ty)) scale(0);
+                opacity: 0;
+            }
+        }
+
+        /* Dark mode */
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --bg: #121212;
+                --text: #FAFAFA;
+            }
+
+            .story-container {
+                background: rgba(18, 18, 18, 0.95);
+            }
+
+            .nav-bar {
+                background: rgba(18, 18, 18, 0.98);
+            }
+
+            .story-content p {
+                background: rgba(33, 150, 243, 0.1);
+            }
+
+            .story-content p:hover {
+                background: rgba(33, 150, 243, 0.15);
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="nav-bar sticky top-0 z-50 p-4">
+        <div class="container mx-auto flex justify-between items-center">
+            <a href="../library.html" class="edu-btn">
+                <i class="fas fa-graduation-cap mr-2"></i>Back to Library
+            </a>
+            <div class="flex gap-4">
+                <button onclick="adjustFontSize('decrease')" class="edu-btn">
+                    <i class="fas fa-text-height"></i> A-
+                </button>
+                <button onclick="adjustFontSize('increase')" class="edu-btn">
+                    <i class="fas fa-text-height"></i> A+
+                </button>
+                <button onclick="toggleDarkMode()" class="edu-btn">
+                    <i class="fas fa-moon"></i>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Story Content -->
+    <div class="container mx-auto px-4 py-8">
+        <div class="story-container p-8 max-w-4xl mx-auto">
+            <h1 class="edu-title text-center mb-8">{{STORY_TITLE}}</h1>
+            
+            <img src="../images/library/covers/{{STORY_IMAGE}}" 
+                 alt="{{STORY_TITLE}}" 
+                 class="w-full max-w-2xl mx-auto h-80 object-cover rounded-lg mb-8 shadow-lg">
+
+            <!-- Story metadata -->
+            <div class="flex justify-center gap-4 mb-8 flex-wrap">
+                <span class="edu-tag">
+                    <i class="fas fa-child"></i> {{AGE_RANGE}}
+                </span>
+                <span class="edu-tag">
+                    <i class="fas fa-book-reader"></i> {{READING_LEVEL}}
+                </span>
+                <span class="edu-tag">
+                    <i class="fas fa-brain"></i> {{STORY_TYPE}}
+                </span>
+            </div>
+
+            <!-- Story content -->
+            <div class="story-content" id="storyContent">
+                {{STORY_CONTENT}}
+            </div>
+
+            <div class="mt-12 text-center">
+                <p class="edu-title text-3xl mb-6">Learning Complete!</p>
+                <a href="../library.html" class="edu-btn inline-block">
+                    <i class="fas fa-book mr-2"></i>More to Learn
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Floating Light Bulb -->
+    <div class="floating-bulb" onclick="createSparks(event)">💡</div>
+
+    <script>
+        function adjustFontSize(action) {
+            const content = document.getElementById('storyContent');
+            const currentSize = parseFloat(window.getComputedStyle(content).fontSize);
+            const newSize = action === 'increase' ? currentSize * 1.1 : currentSize * 0.9;
+            content.style.fontSize = `${newSize}px`;
+            localStorage.setItem('preferredFontSize', newSize);
+        }
+
+        function toggleDarkMode() {
+            document.body.classList.toggle('dark-mode');
+            localStorage.setItem('darkMode', document.body.classList.contains('dark-mode'));
+        }
+
+        function createSparks(event) {
+            const sparks = ['💡', '⚡', '✨', '🎯', '🔍'];
+            for (let i = 0; i < 8; i++) {
+                const spark = document.createElement('div');
+                spark.className = 'knowledge-spark';
+                spark.textContent = sparks[Math.floor(Math.random() * sparks.length)];
+                spark.style.left = `${event.clientX}px`;
+                spark.style.top = `${event.clientY}px`;
+                
+                // Random direction
+                const angle = (Math.random() * Math.PI * 2);
+                const distance = 100 + Math.random() * 100;
+                const tx = Math.cos(angle) * distance;
+                const ty = Math.sin(angle) * distance;
+                
+                spark.style.setProperty('--tx', `${tx}px`);
+                spark.style.setProperty('--ty', `${ty}px`);
+                
+                document.body.appendChild(spark);
+                setTimeout(() => spark.remove(), 1500);
+            }
+        }
+
+        // Add spark effect to paragraphs
+        document.querySelectorAll('.story-content p').forEach(p => {
+            p.addEventListener('mouseover', () => {
+                const rect = p.getBoundingClientRect();
+                createSparks({
+                    clientX: rect.left + rect.width / 2,
+                    clientY: rect.top + rect.height / 2
+                });
+            });
+        });
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            // Restore font size preference
+            const savedFontSize = localStorage.getItem('preferredFontSize');
+            if (savedFontSize) {
+                document.getElementById('storyContent').style.fontSize = `${savedFontSize}px`;
+            }
+
+            // Restore dark mode preference
+            if (localStorage.getItem('darkMode') === 'true') {
+                document.body.classList.add('dark-mode');
+            }
+        });
+    </script>
+</body>
+</html> 

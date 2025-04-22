@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dinosaur Discovery - StoryLand</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Jurassic+Park&family=Quicksand:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --jungle-green: #2E7D32;
+            --fossil-brown: #8D6E63;
+            --amber-gold: #FFB300;
+            --rock-gray: #546E7A;
+            --leaf-green: #81C784;
+            --sky-blue: #4FC3F7;
+            --dirt-brown: #795548;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            background: linear-gradient(135deg, var(--jungle-green) 0%, var(--fossil-brown) 100%);
+            font-family: 'Quicksand', sans-serif;
+            color: #fff;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* Leaf particles effect */
+        .leaves {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .leaf {
+            position: absolute;
+            font-size: 1.5rem;
+            animation: falling 10s linear infinite;
+            opacity: 0.6;
+        }
+
+        @keyframes falling {
+            0% {
+                transform: translateY(-100%) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.6;
+            }
+            90% {
+                opacity: 0.6;
+            }
+            100% {
+                transform: translateY(100vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        .story-container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 2rem;
+            background: rgba(46, 125, 50, 0.95);
+            border-radius: 30px;
+            box-shadow: 0 0 40px rgba(141, 110, 99, 0.3);
+            position: relative;
+            z-index: 1;
+            border: 4px solid var(--amber-gold);
+            backdrop-filter: blur(10px);
+        }
+
+        .navigation-bar {
+            background: linear-gradient(to right, var(--fossil-brown), var(--dirt-brown));
+            padding: 1rem;
+            border-radius: 20px;
+            margin-bottom: 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 15px rgba(121, 85, 72, 0.3);
+        }
+
+        .back-button {
+            background: rgba(255, 255, 255, 0.1);
+            color: #fff;
+            padding: 0.75rem 1.5rem;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            border: 2px solid var(--amber-gold);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .back-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255, 179, 0, 0.3);
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .control-button {
+            background: rgba(255, 255, 255, 0.1);
+            color: #fff;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            border: 2px solid var(--amber-gold);
+            margin: 0 0.25rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .control-button:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+        }
+
+        .story-title {
+            font-family: 'Jurassic Park', sans-serif;
+            font-size: 4.5rem;
+            color: var(--amber-gold);
+            text-align: center;
+            margin: 2rem 0;
+            position: relative;
+            text-shadow: 0 0 10px rgba(255, 179, 0, 0.5);
+            letter-spacing: 2px;
+        }
+
+        .cover-section {
+            position: relative;
+            margin: 2rem auto;
+            max-width: 800px;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(121, 85, 72, 0.3);
+        }
+
+        .cover-frame {
+            position: relative;
+            padding-top: 50%;
+            background: linear-gradient(45deg, var(--fossil-brown), var(--dirt-brown));
+            border-radius: 20px;
+            overflow: hidden;
+            border: 5px solid var(--amber-gold);
+        }
+
+        .cover-image {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        .cover-frame:hover .cover-image {
+            transform: scale(1.05);
+        }
+
+        .story-tags {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin: 2rem 0;
+            flex-wrap: wrap;
+        }
+
+        .story-tag {
+            background: rgba(141, 110, 99, 0.2);
+            color: var(--amber-gold);
+            padding: 0.5rem 1.5rem;
+            border-radius: 20px;
+            font-size: 1.1rem;
+            border: 2px solid var(--amber-gold);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .story-content {
+            font-size: 1.2rem;
+            line-height: 1.8;
+            color: #fff;
+            padding: 2rem;
+            background: rgba(46, 125, 50, 0.8);
+            border-radius: 20px;
+            margin-top: 2rem;
+        }
+
+        .story-paragraph {
+            position: relative;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            border-left: 4px solid var(--amber-gold);
+            background: rgba(84, 110, 122, 0.2);
+            border-radius: 0 20px 20px 0;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .story-paragraph:hover {
+            transform: translateX(10px);
+            box-shadow: 5px 5px 15px rgba(141, 110, 99, 0.2);
+            border-left-color: var(--leaf-green);
+        }
+
+        /* Dinosaur decorations */
+        .dino-decoration {
+            position: absolute;
+            font-size: 2.5rem;
+            opacity: 0.7;
+            pointer-events: none;
+            animation: float 6s ease-in-out infinite;
+            filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.5));
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-15px) rotate(5deg); }
+        }
+
+        .t-rex { top: 50px; right: 50px; }
+        .stegosaurus { top: 150px; left: 50px; }
+        .fossil { bottom: 100px; right: 100px; }
+        .palm-tree { bottom: 150px; left: 100px; }
+        .volcano { top: 200px; right: 150px; }
+
+        /* Footprint trail */
+        .footprint-trail {
+            position: absolute;
+            bottom: 20px;
+            left: 0;
+            width: 100%;
+            height: 40px;
+            display: flex;
+            justify-content: space-around;
+            opacity: 0.3;
+        }
+
+        .footprint {
+            font-size: 1.5rem;
+            transform: rotate(45deg);
+        }
+    </style>
+</head>
+<body>
+    <div class="leaves" id="leaves"></div>
+    <div class="story-container">
+        <nav class="navigation-bar">
+            <button onclick="goBackToLibrary()" class="back-button">
+                <i class="fas fa-arrow-left"></i> Back to Library
+            </button>
+            <div class="font-controls">
+                <button class="control-button" onclick="changeFontSize('decrease')">A-</button>
+                <button class="control-button" onclick="changeFontSize('increase')">A+</button>
+            </div>
+        </nav>
+
+        <h1 class="story-title">Dinosaur Discovery</h1>
+
+        <div class="cover-section">
+            <div class="cover-frame">
+                <picture>
+                    <img src="../images/library/covers/dinosaur-discovery.webp" 
+                         alt="Young explorer discovering dinosaurs" 
+                         class="cover-image"
+                         onerror="handleImageError(this)">
+                </picture>
+            </div>
+        </div>
+
+        <div class="story-tags">
+            <span class="story-tag"><i class="fas fa-child"></i> 6-8 years</span>
+            <span class="story-tag"><i class="fas fa-book-reader"></i> Intermediate</span>
+            <span class="story-tag"><i class="fas fa-graduation-cap"></i> Educational</span>
+        </div>
+
+        <div class="story-content">
+            <div class="story-paragraph" onclick="animateParagraph(this)">
+                In a small town near the Badlands, there lived a young girl named Emma who loved dinosaurs more than anything in the world. She had dinosaur books, dinosaur toys, and even dinosaur-shaped cookies. But what she really wanted was to find a real dinosaur fossil.
+            </div>
+
+            <div class="story-paragraph" onclick="animateParagraph(this)">
+                One summer, Emma's parents took her to a special dinosaur dig site where paleontologists were working. Dr. Stone, the lead scientist, showed Emma how to use the special tools. "Finding fossils is like solving a mystery," he told her.
+            </div>
+
+            <div class="story-paragraph" onclick="animateParagraph(this)">
+                As Emma carefully brushed away dirt from a promising spot, she noticed something unusual. A small piece of bone was peeking through the earth! Dr. Stone helped her carefully uncover more of the fossil, explaining how to protect it from damage.
+            </div>
+
+            <div class="story-paragraph" onclick="animateParagraph(this)">
+                To Emma's amazement, they had discovered part of a new dinosaur species! The scientists named it after her: Emmasaurus. From that day on, Emma knew she would become a paleontologist when she grew up, uncovering the mysteries of the ancient world.
+            </div>
+        </div>
+
+        <!-- Dinosaur decorations -->
+        <div class="dino-decoration t-rex">🦖</div>
+        <div class="dino-decoration stegosaurus">🦕</div>
+        <div class="dino-decoration fossil">🦴</div>
+        <div class="dino-decoration palm-tree">🌴</div>
+        <div class="dino-decoration volcano">🌋</div>
+
+        <!-- Footprint trail -->
+        <div class="footprint-trail">
+            <span class="footprint">🦶</span>
+            <span class="footprint">🦶</span>
+            <span class="footprint">🦶</span>
+            <span class="footprint">🦶</span>
+            <span class="footprint">🦶</span>
+        </div>
+    </div>
+
+    <script>
+        let currentFontSize = 1.2;
+        const minFontSize = 1;
+        const maxFontSize = 1.6;
+        const stepSize = 0.1;
+
+        function createLeaves() {
+            const leavesContainer = document.getElementById('leaves');
+            const leafCount = 20;
+            const leafTypes = ['🌿', '🍃', '🌴'];
+
+            for (let i = 0; i < leafCount; i++) {
+                const leaf = document.createElement('div');
+                leaf.className = 'leaf';
+                leaf.textContent = leafTypes[Math.floor(Math.random() * leafTypes.length)];
+                
+                // Random position and delay
+                leaf.style.left = `${Math.random() * 100}%`;
+                leaf.style.animationDelay = `${Math.random() * 10}s`;
+                
+                leavesContainer.appendChild(leaf);
+            }
+        }
+
+        function changeFontSize(action) {
+            if (action === 'increase' && currentFontSize < maxFontSize) {
+                currentFontSize += stepSize;
+            } else if (action === 'decrease' && currentFontSize > minFontSize) {
+                currentFontSize -= stepSize;
+            }
+            document.querySelector('.story-content').style.fontSize = `${currentFontSize}rem`;
+            localStorage.setItem('preferredFontSize', currentFontSize);
+        }
+
+        function handleImageError(img) {
+            const container = img.parentElement;
+            container.innerHTML = `
+                <div class="w-full h-full flex flex-col items-center justify-center bg-gradient-to-r from-[var(--fossil-brown)] to-[var(--dirt-brown)]">
+                    <span class="text-6xl mb-4">🦖 🦕</span>
+                    <p class="text-xl text-white text-center px-4">Embark on a Prehistoric Adventure!</p>
+                </div>
+            `;
+        }
+
+        function animateParagraph(element) {
+            element.style.transform = 'translateX(20px)';
+            setTimeout(() => {
+                element.style.transform = 'translateX(10px)';
+            }, 200);
+        }
+
+        function goBackToLibrary() {
+            window.location.href = '../library.html';
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            createLeaves();
+            
+            // Restore font size preference
+            const savedFontSize = localStorage.getItem('preferredFontSize');
+            if (savedFontSize) {
+                currentFontSize = parseFloat(savedFontSize);
+                document.querySelector('.story-content').style.fontSize = `${currentFontSize}rem`;
+            }
+        });
+    </script>
+</body>
+</html> 

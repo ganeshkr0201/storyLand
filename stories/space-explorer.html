@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Space Explorer - StoryLand</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Space+Grotesk:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --space-dark: #0B1026;
+            --space-blue: #1B2559;
+            --cosmic-purple: #6B4BFF;
+            --star-yellow: #FFD700;
+            --nebula-pink: #FF69B4;
+            --meteor-orange: #FF4500;
+            --planet-green: #50C878;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            background: linear-gradient(135deg, var(--space-dark) 0%, var(--space-blue) 100%);
+            font-family: 'Space Grotesk', sans-serif;
+            color: #fff;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* Star field effect */
+        .stars {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .star {
+            position: absolute;
+            background: #fff;
+            border-radius: 50%;
+            animation: twinkle 2s infinite;
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+
+        .story-container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 2rem;
+            background: rgba(27, 37, 89, 0.95);
+            border-radius: 30px;
+            box-shadow: 0 0 40px rgba(107, 75, 255, 0.3);
+            position: relative;
+            z-index: 1;
+            border: 4px solid var(--cosmic-purple);
+            backdrop-filter: blur(10px);
+        }
+
+        .navigation-bar {
+            background: linear-gradient(to right, var(--cosmic-purple), var(--nebula-pink));
+            padding: 1rem;
+            border-radius: 20px;
+            margin-bottom: 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 15px rgba(107, 75, 255, 0.3);
+        }
+
+        .back-button {
+            background: rgba(255, 255, 255, 0.1);
+            color: #fff;
+            padding: 0.75rem 1.5rem;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            border: 2px solid var(--star-yellow);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .back-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255, 215, 0, 0.3);
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .control-button {
+            background: rgba(255, 255, 255, 0.1);
+            color: #fff;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            border: 2px solid var(--star-yellow);
+            margin: 0 0.25rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .control-button:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+        }
+
+        .story-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 4rem;
+            color: var(--star-yellow);
+            text-align: center;
+            margin: 2rem 0;
+            position: relative;
+            text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+            letter-spacing: 2px;
+        }
+
+        .cover-section {
+            position: relative;
+            margin: 2rem auto;
+            max-width: 800px;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(107, 75, 255, 0.3);
+        }
+
+        .cover-frame {
+            position: relative;
+            padding-top: 40%;
+            background: linear-gradient(45deg, var(--space-blue), var(--cosmic-purple));
+            border-radius: 20px;
+            overflow: hidden;
+            border: 5px solid var(--star-yellow);
+        }
+
+        .cover-image {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        .cover-frame:hover .cover-image {
+            transform: scale(1.05);
+        }
+
+        .story-tags {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin: 2rem 0;
+            flex-wrap: wrap;
+        }
+
+        .story-tag {
+            background: rgba(107, 75, 255, 0.2);
+            color: var(--star-yellow);
+            padding: 0.5rem 1.5rem;
+            border-radius: 20px;
+            font-size: 1.1rem;
+            border: 2px solid var(--nebula-pink);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .story-content {
+            font-size: 1.2rem;
+            line-height: 1.8;
+            color: #fff;
+            padding: 2rem;
+            background: rgba(11, 16, 38, 0.8);
+            border-radius: 20px;
+            margin-top: 2rem;
+        }
+
+        .story-paragraph {
+            position: relative;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            border-left: 4px solid var(--cosmic-purple);
+            background: rgba(27, 37, 89, 0.9);
+            border-radius: 0 20px 20px 0;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .story-paragraph:hover {
+            transform: translateX(10px);
+            box-shadow: 5px 5px 15px rgba(107, 75, 255, 0.2);
+            border-left-color: var(--nebula-pink);
+        }
+
+        /* Space decorations */
+        .space-decoration {
+            position: absolute;
+            font-size: 2rem;
+            opacity: 0.6;
+            pointer-events: none;
+            animation: float 6s ease-in-out infinite;
+            filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.5));
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-15px) rotate(5deg); }
+        }
+
+        .rocket { top: 50px; right: 50px; }
+        .planet { top: 100px; left: 50px; }
+        .astronaut { bottom: 100px; right: 100px; }
+        .satellite { bottom: 150px; left: 100px; }
+        .ufo { top: 200px; right: 150px; }
+    </style>
+</head>
+<body>
+    <div class="stars" id="stars"></div>
+    <div class="story-container">
+        <nav class="navigation-bar">
+            <button onclick="goBackToLibrary()" class="back-button">
+                <i class="fas fa-rocket"></i> Back to Library
+            </button>
+            <div class="font-controls">
+                <button class="control-button" onclick="changeFontSize('decrease')">A-</button>
+                <button class="control-button" onclick="changeFontSize('increase')">A+</button>
+            </div>
+        </nav>
+
+        <h1 class="story-title">Space Explorer</h1>
+
+        <div class="cover-section">
+            <div class="cover-frame">
+                <picture>
+                    <img src="../images/library/covers/space-explorer.jpeg" 
+                         alt="Young astronaut exploring space" 
+                         class="cover-image"
+                         onerror="handleImageError(this)">
+                </picture>
+            </div>
+        </div>
+
+        <div class="story-tags">
+            <span class="story-tag"><i class="fas fa-user-astronaut"></i> 9-12 years</span>
+            <span class="story-tag"><i class="fas fa-graduation-cap"></i> Advanced</span>
+            <span class="story-tag"><i class="fas fa-rocket"></i> Educational</span>
+        </div>
+
+        <div class="story-content">
+            <div class="story-paragraph" onclick="animateParagraph(this)">
+                In the year 2150, a young astronaut named Maya was preparing for her first mission to explore the solar system. She had spent years training at the Space Academy, learning about planets, stars, and the mysteries of space. Now, she was about to embark on the adventure of a lifetime aboard the spaceship Starlight.
+            </div>
+
+            <div class="story-paragraph" onclick="animateParagraph(this)">
+                As the Starlight launched from Earth, Maya watched her home planet grow smaller through the window. "First stop: Mars!" announced Captain Nova. The red planet was being transformed into a new home for humans, with domed cities and terraforming stations dotting its surface.
+            </div>
+
+            <div class="story-paragraph" onclick="animateParagraph(this)">
+                Their journey would take them past the asteroid belt, where mining operations collected precious resources, and on to the moons of Jupiter, where research stations studied the gas giant's powerful storms.
+            </div>
+
+            <div class="story-paragraph" onclick="animateParagraph(this)">
+                Maya's mission was to document new discoveries and help establish connections between the various space colonies. With her advanced AI companion STAR-7, she would face challenges that would test her courage, knowledge, and problem-solving skills.
+            </div>
+        </div>
+
+        <!-- Space decorations -->
+        <div class="space-decoration rocket">🚀</div>
+        <div class="space-decoration planet">🪐</div>
+        <div class="space-decoration astronaut">👨‍🚀</div>
+        <div class="space-decoration satellite">📡</div>
+        <div class="space-decoration ufo">🛸</div>
+    </div>
+
+    <script>
+        let currentFontSize = 1.2;
+        const minFontSize = 1;
+        const maxFontSize = 1.6;
+        const stepSize = 0.1;
+
+        function createStarfield() {
+            const starsContainer = document.getElementById('stars');
+            const starCount = 100;
+
+            for (let i = 0; i < starCount; i++) {
+                const star = document.createElement('div');
+                star.className = 'star';
+                
+                // Random size between 1 and 3 pixels
+                const size = Math.random() * 2 + 1;
+                star.style.width = `${size}px`;
+                star.style.height = `${size}px`;
+                
+                // Random position
+                star.style.left = `${Math.random() * 100}%`;
+                star.style.top = `${Math.random() * 100}%`;
+                
+                // Random animation delay
+                star.style.animationDelay = `${Math.random() * 2}s`;
+                
+                starsContainer.appendChild(star);
+            }
+        }
+
+        function changeFontSize(action) {
+            if (action === 'increase' && currentFontSize < maxFontSize) {
+                currentFontSize += stepSize;
+            } else if (action === 'decrease' && currentFontSize > minFontSize) {
+                currentFontSize -= stepSize;
+            }
+            document.querySelector('.story-content').style.fontSize = `${currentFontSize}rem`;
+            localStorage.setItem('preferredFontSize', currentFontSize);
+        }
+
+        function handleImageError(img) {
+            const container = img.parentElement;
+            container.innerHTML = `
+                <div class="w-full h-full flex flex-col items-center justify-center bg-gradient-to-r from-[var(--space-blue)] to-[var(--cosmic-purple)]">
+                    <span class="text-6xl mb-4">🚀 🌟</span>
+                    <p class="text-xl text-white text-center px-4">Embark on a Space Adventure!</p>
+                </div>
+            `;
+        }
+
+        function animateParagraph(element) {
+            element.style.transform = 'translateX(20px)';
+            setTimeout(() => {
+                element.style.transform = 'translateX(10px)';
+            }, 200);
+        }
+
+        function goBackToLibrary() {
+            window.location.href = '../library.html';
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            createStarfield();
+            
+            // Restore font size preference
+            const savedFontSize = localStorage.getItem('preferredFontSize');
+            if (savedFontSize) {
+                currentFontSize = parseFloat(savedFontSize);
+                document.querySelector('.story-content').style.fontSize = `${currentFontSize}rem`;
+            }
+        });
+    </script>
+</body>
+</html> 

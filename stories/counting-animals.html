@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Counting Animals - StoryLand</title>
+    <link href="https://fonts.googleapis.com/css2?family=Bubblegum+Sans&family=Comic+Neue:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --meadow-green: #90D587;
+            --sunny-yellow: #FFD93D;
+            --sky-blue: #87CEEB;
+            --flower-pink: #FF9ECD;
+            --tree-brown: #8B4513;
+            --cloud-white: #FFFFFF;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            background: linear-gradient(180deg, var(--sky-blue) 0%, var(--meadow-green) 100%);
+            font-family: 'Comic Neue', cursive;
+            color: #333;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        .floating-clouds {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .cloud {
+            position: absolute;
+            background: var(--cloud-white);
+            border-radius: 50px;
+            animation: float-cloud linear infinite;
+            opacity: 0.8;
+        }
+
+        @keyframes float-cloud {
+            from { transform: translateX(-100%); }
+            to { transform: translateX(100vw); }
+        }
+
+        .story-container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 2rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        .content-wrapper {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 30px;
+            box-shadow: 
+                0 10px 30px rgba(0, 0, 0, 0.1),
+                0 0 0 15px rgba(255, 255, 255, 0.2);
+            overflow: hidden;
+            position: relative;
+            border: 6px solid var(--sunny-yellow);
+        }
+
+        .navigation-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 2rem;
+            background: linear-gradient(to right, var(--flower-pink), var(--sunny-yellow));
+            position: relative;
+            overflow: hidden;
+        }
+
+        .back-button {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #333;
+            text-decoration: none;
+            font-family: 'Bubblegum Sans', cursive;
+            font-size: 1.4rem;
+            padding: 0.8rem 1.5rem;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 25px;
+            transition: all 0.3s ease;
+            border: 3px solid rgba(0, 0, 0, 0.1);
+        }
+
+        .back-button:hover {
+            transform: scale(1.05) translateX(-5px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .font-controls {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .control-button {
+            font-family: 'Bubblegum Sans', cursive;
+            color: #333;
+            background: rgba(255, 255, 255, 0.9);
+            border: 3px solid rgba(0, 0, 0, 0.1);
+            padding: 0.8rem 1.2rem;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1.2rem;
+        }
+
+        .control-button:hover {
+            transform: scale(1.1);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .story-title {
+            font-family: 'Bubblegum Sans', cursive;
+            font-size: 4rem;
+            text-align: center;
+            color: var(--tree-brown);
+            margin: 2rem 0;
+            position: relative;
+            text-shadow: 
+                3px 3px 0 var(--sunny-yellow),
+                6px 6px 0 rgba(0, 0, 0, 0.1);
+        }
+
+        .title-decoration {
+            position: absolute;
+            font-size: 3rem;
+            animation: bounce 2s ease-in-out infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-15px); }
+        }
+
+        .cover-section {
+            position: relative;
+            max-width: 800px;
+            margin: 2rem auto;
+            padding: 1rem;
+        }
+
+        .cover-frame {
+            position: relative;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 
+                0 10px 30px rgba(0, 0, 0, 0.2),
+                0 0 0 10px var(--sunny-yellow);
+            background: linear-gradient(45deg, var(--meadow-green), var(--sunny-yellow));
+            padding: 10px;
+        }
+
+        .cover-image {
+            width: 100%;
+            height: auto;
+            display: block;
+            border-radius: 10px;
+            transition: transform 0.5s ease;
+        }
+
+        .cover-frame:hover .cover-image {
+            transform: scale(1.05);
+        }
+
+        .story-tags {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .story-tag {
+            font-family: 'Bubblegum Sans', cursive;
+            padding: 0.6rem 1.5rem;
+            border-radius: 20px;
+            font-size: 1.2rem;
+            background: rgba(255, 255, 255, 0.9);
+            color: #333;
+            border: 3px solid var(--sunny-yellow);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .story-tag:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .story-content {
+            padding: 2rem;
+            font-size: 1.3rem;
+            line-height: 1.8;
+            position: relative;
+        }
+
+        .story-paragraph {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            border-radius: 15px;
+            border: 3px solid var(--meadow-green);
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .story-paragraph:hover {
+            transform: translateX(10px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .story-paragraph::before {
+            content: '🦊';
+            position: absolute;
+            left: -40px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 2rem;
+        }
+
+        .counting-game {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 2rem;
+            margin: 2rem auto;
+            border-radius: 20px;
+            border: 3px solid var(--sunny-yellow);
+            max-width: 600px;
+            text-align: center;
+        }
+
+        .game-title {
+            font-family: 'Bubblegum Sans', cursive;
+            font-size: 2rem;
+            color: var(--tree-brown);
+            margin-bottom: 1rem;
+        }
+
+        .animal-counter {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin: 1rem 0;
+            font-size: 2rem;
+        }
+
+        .count-button {
+            font-family: 'Bubblegum Sans', cursive;
+            font-size: 1.5rem;
+            padding: 0.5rem 1rem;
+            border: none;
+            background: var(--sunny-yellow);
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .count-button:hover {
+            transform: scale(1.1);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .floating-animal {
+            position: fixed;
+            pointer-events: none;
+            font-size: 2rem;
+            animation: float-animal 15s linear infinite;
+            z-index: 1;
+        }
+
+        @keyframes float-animal {
+            0% { transform: translateX(-100%) translateY(0) rotate(0deg); }
+            50% { transform: translateX(50vw) translateY(-100px) rotate(180deg); }
+            100% { transform: translateX(100vw) translateY(0) rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="floating-clouds"></div>
+    <div class="story-container">
+        <div class="content-wrapper">
+            <nav class="navigation-bar">
+                <a href="../library.html" class="back-button">
+                    🏡 Back to Library
+                </a>
+                <div class="font-controls">
+                    <button class="control-button" onclick="changeFontSize('decrease')">A-</button>
+                    <button class="control-button" onclick="changeFontSize('increase')">A+</button>
+                </div>
+            </nav>
+
+            <h1 class="story-title">
+                <span class="title-decoration" style="left: 10%;">🦁</span>
+                Counting Animals
+                <span class="title-decoration" style="right: 10%;">🐸</span>
+            </h1>
+
+            <div class="cover-section">
+                <div class="cover-frame">
+                    <picture>
+                        <img 
+                            src="../images/library/covers/counting-animals.jpg" 
+                            alt="Cute animals helping children learn to count" 
+                            class="cover-image"
+                            onerror="handleImageError(this)"
+                        >
+                    </picture>
+                </div>
+            </div>
+
+            <div class="story-tags">
+                <span class="story-tag">🎯 3-5 years</span>
+                <span class="story-tag">📚 Beginner</span>
+                <span class="story-tag">🎓 Educational</span>
+            </div>
+
+            <div class="story-content">
+                <div class="story-paragraph">
+                    In a sunny meadow, a group of animal friends gathered for their daily counting lesson. Mr. Owl, the wisest of them all, was their teacher. "Today," he said, "we'll learn to count from one to ten using things we find in nature!"
+                </div>
+
+                <div class="story-paragraph">
+                    "Let's start with one!" said Mr. Owl. "One bright yellow sunflower stands tall in the field." The animals all looked at the single sunflower and counted together: "One!"
+                </div>
+
+                <div class="story-paragraph">
+                    "Now, let's find two!" called out Mrs. Rabbit. She pointed to two butterflies dancing in the air. "One, two!" counted the animals, watching the butterflies flutter by.
+                </div>
+
+                <div class="counting-game">
+                    <h3 class="game-title">Let's Count Together! 🎯</h3>
+                    <div class="animal-counter">
+                        <button class="count-button" onclick="updateAnimalCount('subtract')">-</button>
+                        <span id="animal-display">🦊</span>
+                        <span id="count-display">1</span>
+                        <button class="count-button" onclick="updateAnimalCount('add')">+</button>
+                    </div>
+                    <p>Click the buttons to count animals!</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function changeFontSize(action) {
+            const content = document.querySelector('.story-content');
+            const currentSize = parseFloat(window.getComputedStyle(content).fontSize);
+            
+            if (action === 'increase' && currentSize < 24) {
+                content.style.fontSize = (currentSize + 2) + 'px';
+            } else if (action === 'decrease' && currentSize > 14) {
+                content.style.fontSize = (currentSize - 2) + 'px';
+            }
+        }
+
+        function handleImageError(element) {
+            const errorMessage = `
+                <div style="
+                    padding: 4rem;
+                    text-align: center;
+                    background: linear-gradient(45deg, var(--meadow-green), var(--sunny-yellow));
+                    color: #333;
+                    border-radius: 15px;
+                    min-height: 300px;
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: center;
+                    align-items: center;
+                    position: relative;
+                    overflow: hidden;
+                ">
+                    <div style="font-size: 4rem; margin-bottom: 1rem;">🦁 🐸 🐒</div>
+                    <div style="
+                        font-family: 'Bubblegum Sans', cursive;
+                        font-size: 2rem;
+                        margin-bottom: 1rem;
+                        text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+                    ">Time to Count!</div>
+                    <div style="
+                        font-family: 'Comic Neue', cursive;
+                        font-size: 1.2rem;
+                        max-width: 80%;
+                        line-height: 1.6;
+                    ">
+                        Join our animal friends as they learn to count in their magical meadow...
+                    </div>
+                </div>
+            `;
+            element.parentElement.parentElement.innerHTML = errorMessage;
+        }
+
+        function createClouds() {
+            const cloudContainer = document.querySelector('.floating-clouds');
+            const cloudCount = 5;
+
+            for (let i = 0; i < cloudCount; i++) {
+                const cloud = document.createElement('div');
+                cloud.className = 'cloud';
+                cloud.style.top = `${Math.random() * 50}%`;
+                cloud.style.width = `${Math.random() * 100 + 100}px`;
+                cloud.style.height = `${Math.random() * 30 + 20}px`;
+                cloud.style.animationDuration = `${Math.random() * 30 + 30}s`;
+                cloud.style.animationDelay = `${Math.random() * -30}s`;
+                cloudContainer.appendChild(cloud);
+            }
+        }
+
+        function createFloatingAnimals() {
+            const animals = ['🦁', '🐸', '🐒', '🐯', '🦊'];
+            setInterval(() => {
+                const animal = document.createElement('div');
+                animal.className = 'floating-animal';
+                animal.textContent = animals[Math.floor(Math.random() * animals.length)];
+                animal.style.top = `${Math.random() * 70 + 20}vh`;
+                document.body.appendChild(animal);
+                
+                setTimeout(() => {
+                    animal.remove();
+                }, 15000);
+            }, 3000);
+        }
+
+        let animalCount = 1;
+        const animals = ['🦊', '🦁', '🐸', '🐒', '🐯'];
+        
+        function updateAnimalCount(action) {
+            if (action === 'add' && animalCount < 10) {
+                animalCount++;
+            } else if (action === 'subtract' && animalCount > 1) {
+                animalCount--;
+            }
+            
+            const display = document.getElementById('animal-display');
+            const countDisplay = document.getElementById('count-display');
+            
+            display.textContent = animals[animalCount % animals.length];
+            countDisplay.textContent = animalCount;
+        }
+
+        createClouds();
+        createFloatingAnimals();
+    </script>
+</body>
+</html>

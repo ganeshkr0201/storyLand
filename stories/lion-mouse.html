@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Lion and the Mouse - StoryLand</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Architects+Daughter&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --jungle-green: #2E7D32;
+            --leaf-light: #81C784;
+            --earth-brown: #795548;
+            --sunlight-yellow: #FDD835;
+            --forest-dark: #1B5E20;
+            --mouse-gray: #9E9E9E;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            background: linear-gradient(135deg, var(--forest-dark) 0%, var(--jungle-green) 100%);
+            font-family: 'Poppins', sans-serif;
+            color: #333;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* Leaf falling effect */
+        .leaves {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .leaf {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background: var(--leaf-light);
+            clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
+            opacity: 0.4;
+            animation: falling 10s infinite linear;
+        }
+
+        @keyframes falling {
+            0% { transform: translateY(-100vh) rotate(0deg); opacity: 0; }
+            10% { opacity: 0.4; }
+            90% { opacity: 0.4; }
+            100% { transform: translateY(100vh) rotate(360deg); opacity: 0; }
+        }
+
+        .story-container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 2rem;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 30px;
+            box-shadow: 0 0 40px rgba(46, 125, 50, 0.3);
+            position: relative;
+            z-index: 1;
+            border: 4px solid var(--earth-brown);
+            background-image: 
+                linear-gradient(rgba(255, 255, 255, 0.95), rgba(255, 255, 255, 0.95)),
+                url('data:image/svg+xml,<svg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M0 0h20v20H0z" fill="%232E7D32" fill-opacity="0.1"/></svg>');
+        }
+
+        .navigation-bar {
+            background: linear-gradient(to right, var(--jungle-green), var(--leaf-light));
+            padding: 1rem;
+            border-radius: 20px;
+            margin-bottom: 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .back-button {
+            background: rgba(255, 255, 255, 0.2);
+            color: #fff;
+            padding: 0.75rem 1.5rem;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            border: 2px solid var(--earth-brown);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .back-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .control-button {
+            background: rgba(255, 255, 255, 0.2);
+            color: #fff;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            border: 2px solid var(--earth-brown);
+            margin: 0 0.25rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .control-button:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .story-title {
+            font-family: 'Architects Daughter', cursive;
+            font-size: 4rem;
+            color: var(--jungle-green);
+            text-align: center;
+            margin: 2rem 0;
+            position: relative;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+            letter-spacing: 2px;
+        }
+
+        .cover-section {
+            position: relative;
+            margin: 2rem auto;
+            max-width: 800px;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        .cover-frame {
+            position: relative;
+            padding-top: 40%;
+            background: linear-gradient(45deg, var(--jungle-green), var(--leaf-light));
+            border-radius: 20px;
+            overflow: hidden;
+            border: 5px solid var(--earth-brown);
+        }
+
+        .cover-image {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            transition: transform 0.5s ease;
+            background-color: rgba(255, 255, 255, 0.9);
+            padding: 10px;
+        }
+
+        .cover-frame:hover .cover-image {
+            transform: scale(1.05);
+        }
+
+        .story-tags {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin: 2rem 0;
+            flex-wrap: wrap;
+        }
+
+        .story-tag {
+            background: rgba(46, 125, 50, 0.1);
+            color: var(--jungle-green);
+            padding: 0.5rem 1.5rem;
+            border-radius: 20px;
+            font-size: 1.1rem;
+            border: 2px solid var(--earth-brown);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .story-content {
+            font-size: 1.2rem;
+            line-height: 1.8;
+            color: #2C3E50;
+            padding: 2rem;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 20px;
+            margin-top: 2rem;
+        }
+
+        .story-paragraph {
+            position: relative;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            border-left: 4px solid var(--jungle-green);
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 0 20px 20px 0;
+            transition: all 0.3s ease;
+        }
+
+        .story-paragraph:hover {
+            transform: translateX(10px);
+            box-shadow: 5px 5px 15px rgba(0,0,0,0.1);
+            border-left-color: var(--earth-brown);
+        }
+
+        /* Jungle decorations */
+        .jungle-decoration {
+            position: absolute;
+            font-size: 2rem;
+            opacity: 0.6;
+            pointer-events: none;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-15px) rotate(5deg); }
+        }
+
+        .lion { top: 50px; right: 50px; }
+        .mouse { top: 100px; left: 50px; }
+        .tree { bottom: 100px; right: 100px; }
+        .leaf-icon { bottom: 150px; left: 100px; }
+        .paw { top: 200px; right: 150px; }
+
+        /* Dark mode */
+        @media (prefers-color-scheme: dark) {
+            .story-container {
+                background: rgba(27, 94, 32, 0.95);
+                color: #fff;
+            }
+            .story-content {
+                background: rgba(255, 255, 255, 0.1);
+                color: #fff;
+            }
+            .story-paragraph {
+                background: rgba(27, 94, 32, 0.8);
+                color: #fff;
+            }
+            .story-title {
+                color: var(--leaf-light);
+            }
+            .story-tag {
+                color: var(--leaf-light);
+                background: rgba(27, 94, 32, 0.8);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="leaves" id="leaves"></div>
+    <div class="story-container">
+        <nav class="navigation-bar">
+            <button onclick="goBackToLibrary()" class="back-button">
+                <i class="fas fa-leaf"></i> Back to Library
+            </button>
+            <div class="font-controls">
+                <button class="control-button" onclick="changeFontSize('decrease')">A-</button>
+                <button class="control-button" onclick="changeFontSize('increase')">A+</button>
+            </div>
+        </nav>
+
+        <h1 class="story-title">The Lion and the Mouse</h1>
+
+        <div class="cover-section">
+            <div class="cover-frame">
+                <picture>
+                    <img src="../images/library/covers/lion-mouse.avif" 
+                         alt="The Lion and the Mouse" 
+                         class="cover-image"
+                         onerror="handleImageError(this)">
+                </picture>
+            </div>
+        </div>
+
+        <div class="story-tags">
+            <span class="story-tag"><i class="fas fa-child"></i> 3-8 years</span>
+            <span class="story-tag"><i class="fas fa-book-reader"></i> Beginner</span>
+            <span class="story-tag"><i class="fas fa-paw"></i> Animal Story</span>
+        </div>
+
+        <div class="story-content">
+            <div class="story-paragraph">
+                One day, a mighty lion was taking a nap in the jungle. A tiny mouse, not seeing the lion, ran across his nose and woke him up.
+            </div>
+
+            <div class="story-paragraph">
+                The lion was very angry. He caught the mouse in his big paw and roared, "How dare you wake me up! I should eat you right now!"
+            </div>
+
+            <div class="story-paragraph">
+                The mouse was very scared. "Please, mighty lion," he squeaked, "if you let me go, I promise I will help you someday!"
+            </div>
+
+            <div class="story-paragraph">
+                The lion laughed. "You? Help me? How could a tiny mouse like you ever help a mighty lion?" But he was amused and let the mouse go.
+            </div>
+
+            <div class="story-paragraph">
+                A few days later, the lion was caught in a hunter's net. He roared and struggled but couldn't break free. The mouse heard his roars and came running.
+            </div>
+
+            <div class="story-paragraph">
+                The mouse began gnawing through the ropes with his sharp teeth. Soon, the lion was free! "Thank you, little friend," said the lion. "I was wrong to laugh at you. Even the smallest friend can be a great help."
+            </div>
+        </div>
+
+        <!-- Jungle decorations -->
+        <div class="jungle-decoration lion">🦁</div>
+        <div class="jungle-decoration mouse">🐭</div>
+        <div class="jungle-decoration tree">🌳</div>
+        <div class="jungle-decoration leaf-icon">🍃</div>
+        <div class="jungle-decoration paw">🐾</div>
+    </div>
+
+    <script>
+        let currentFontSize = 1.2;
+        const minFontSize = 1;
+        const maxFontSize = 1.6;
+        const stepSize = 0.1;
+
+        function createLeaves() {
+            const leavesContainer = document.getElementById('leaves');
+            const leafCount = 30;
+
+            for (let i = 0; i < leafCount; i++) {
+                const leaf = document.createElement('div');
+                leaf.className = 'leaf';
+                
+                // Random position and delay
+                leaf.style.left = `${Math.random() * 100}%`;
+                leaf.style.animationDelay = `${Math.random() * 10}s`;
+                
+                leavesContainer.appendChild(leaf);
+            }
+        }
+
+        function changeFontSize(action) {
+            if (action === 'increase' && currentFontSize < maxFontSize) {
+                currentFontSize += stepSize;
+            } else if (action === 'decrease' && currentFontSize > minFontSize) {
+                currentFontSize -= stepSize;
+            }
+            document.querySelector('.story-content').style.fontSize = `${currentFontSize}rem`;
+            localStorage.setItem('preferredFontSize', currentFontSize);
+        }
+
+        function handleImageError(img) {
+            const container = img.parentElement;
+            container.innerHTML = `
+                <div class="w-full h-full flex flex-col items-center justify-center bg-gradient-to-r from-[var(--jungle-green)] to-[var(--leaf-light)]">
+                    <span class="text-6xl mb-4">🦁 🐭</span>
+                    <p class="text-xl text-white text-center px-4">A Tale of Friendship in the Jungle...</p>
+                </div>
+            `;
+        }
+
+        function goBackToLibrary() {
+            window.location.href = '../library.html';
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            createLeaves();
+            
+            // Restore font size preference
+            const savedFontSize = localStorage.getItem('preferredFontSize');
+            if (savedFontSize) {
+                currentFontSize = parseFloat(savedFontSize);
+                document.querySelector('.story-content').style.fontSize = `${currentFontSize}rem`;
+            }
+        });
+    </script>
+</body>
+</html> 

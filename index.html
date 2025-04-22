@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StoryLand - Interactive Children's Storybook</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Patrick+Hand&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Patrick Hand', cursive;
+        }
+        .comic-border {
+            border: 4px solid #000;
+            border-radius: 8px;
+        }
+        .floating {
+            animation: float 6s ease-in-out infinite;
+        }
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+            100% { transform: translateY(0px); }
+        }
+        .rotating {
+            animation: rotate 10s linear infinite;
+        }
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        .bouncing {
+            animation: bounce 2s ease infinite;
+        }
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+        .sparkling {
+            animation: sparkle 1.5s ease-in-out infinite;
+        }
+        @keyframes sparkle {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+        .dropdown {
+            position: relative;
+            display: inline-block;
+        }
+        .dropdown-content {
+            display: none;
+            position: fixed;
+            right: auto;
+            background-color: #f9f9f9;
+            min-width: 180px;
+            transform: translateY(8px);
+            border: 3px solid #FF1E1E;
+            background: linear-gradient(to bottom right, #FFFFFF, #FFF9C9);
+            z-index: 1000;
+            border-radius: 8px;
+            margin-top: 5px;
+        }
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
+        .dropdown-content a {
+            color: black;
+            padding: 12px 20px;
+            text-decoration: none;
+            display: block;
+            transition: all 0.3s ease;
+        }
+        .dropdown-content a:first-child {
+            border-top-left-radius: 8px;
+            border-top-right-radius: 8px;
+        }
+        .dropdown-content a:last-child {
+            border-bottom-left-radius: 8px;
+            border-bottom-right-radius: 8px;
+        }
+        .dropdown-content a:hover {
+            background-color: #f1f1f1;
+            border-radius: 8px;
+        }
+        .blend-image {
+            opacity: 0.85;
+            mix-blend-mode: multiply;
+        }
+        
+        .blend-image:hover {
+            opacity: 1;
+            mix-blend-mode: normal;
+            transition: all 0.3s ease;
+        }
+    </style>
+</head>
+<body class="bg-white">
+    <!-- Navigation Bar -->
+    <nav class="bg-gradient-to-r from-[#9B5DE5] via-[#F15BB5] to-[#00BBF9] p-4 comic-border shadow-lg">
+        <div class="container mx-auto flex justify-between items-center">
+            <a href="index.html" class="text-white text-3xl font-bold tracking-wider transform hover:scale-105 transition-transform duration-300 flex items-center">
+                <span class="bg-[#FEE440] text-[#9B5DE5] px-4 py-2 rounded-full comic-border shadow-md hover:bg-[#FFE66D] hover:text-[#7B4BC4] transition-all duration-300">StoryLand</span>
+            </a>
+            <div class="space-x-6 flex items-center">
+                <a href="index.html" class="text-white text-lg hover:text-[#FEE440] transform hover:scale-110 transition-all duration-300 font-semibold">Home</a>
+                <a href="library.php" class="text-white text-lg hover:text-[#FEE440] transform hover:scale-110 transition-all duration-300 font-semibold">Library</a>
+                <a href="about.html" class="text-white text-lg hover:text-[#FEE440] transform hover:scale-110 transition-all duration-300 font-semibold">About</a>
+                
+                <!-- Login/Signup buttons (shown when logged out) -->
+                <div id="loggedOutNav" class="inline-block">
+                    <a href="login.html" class="text-white text-lg hover:text-[#FEE440] transform hover:scale-110 transition-all duration-300 font-semibold">Login</a>
+                    <a href="signup.html" class="bg-[#FEE440] text-[#9B5DE5] px-6 py-2 rounded-full hover:bg-[#FFE66D] hover:text-[#7B4BC4] font-bold ml-4 transform hover:scale-105 transition-all duration-300 comic-border shadow-md">Sign Up</a>
+                </div>
+                
+                <!-- User profile dropdown (shown when logged in) -->
+                <!-- <div id="loggedInNav" class="dropdown hidden">
+                    <button class="bg-[#FEE440] text-[#9B5DE5] px-6 py-2 rounded-full hover:bg-[#FFE66D] hover:text-[#7B4BC4] font-bold flex items-center transform hover:scale-105 transition-all duration-300 comic-border shadow-md">
+                        <span id="userName" class="mr-2">Welcome, </span>
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                        </svg>
+                    </button>
+                    <div class="dropdown-content bg-white rounded-xl comic-border shadow-xl">
+                        <a href="profile.html" class="text-[#9B5DE5] hover:bg-[#FEE440] hover:text-[#7B4BC4] rounded-t-lg font-semibold">Profile</a>
+                        <a href="settings.html" class="text-[#9B5DE5] hover:bg-[#FEE440] hover:text-[#7B4BC4] font-semibold">Settings</a>
+                        <a href="#" onclick="handleLogout()" class="text-[#9B5DE5] hover:bg-[#FEE440] hover:text-[#7B4BC4] rounded-b-lg font-semibold">Logout</a>
+                    </div>
+                </div> -->
+                <div id="loggedInNav" class="hidden relative">
+                    <button onclick="toggleDropdown()" class="bg-[#FEE440] text-[#9B5DE5] px-6 py-2 rounded-full hover:bg-white hover:text-[#9B5DE5] font-bold flex items-center space-x-2 transform hover:scale-105 transition-all duration-300 comic-border shadow-md">
+                        <span id="userName">Welcome</span>
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 transition-transform duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                        </svg>
+                    </button>
+                    <div id="dropdownMenu" class="hidden absolute right-0 mt-2 w-48 bg-white rounded-xl comic-border shadow-xl z-50">
+                        <a href="profile.html" class="block px-4 py-2 text-[#9B5DE5] hover:bg-[#FEE440] rounded-t-lg font-semibold">Profile</a>
+                        <a href="settings.html" class="block px-4 py-2 text-[#9B5DE5] hover:bg-[#FEE440] font-semibold">Settings</a>
+                        <a href="#" onclick="handleLogout()" class="block px-4 py-2 text-[#9B5DE5] hover:bg-[#FEE440] rounded-b-lg font-semibold">Logout</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="min-h-[600px] bg-gradient-to-br from-[#FFD6E8] via-[#F1E4FF] to-[#E4F1FF] relative overflow-hidden">
+        <!-- Magical Sparkles Background -->
+        <div class="absolute inset-0 opacity-20">
+            <div class="absolute top-10 left-10 w-20 h-20 animate-pulse">✨</div>
+            <div class="absolute top-20 right-20 w-20 h-20 animate-pulse delay-100">✨</div>
+            <div class="absolute bottom-20 left-1/4 w-20 h-20 animate-pulse delay-200">✨</div>
+            <div class="absolute bottom-10 right-1/4 w-20 h-20 animate-pulse delay-300">✨</div>
+        </div>
+
+        <div class="container mx-auto px-4 py-8 relative">
+            <!-- Main Content Container -->
+            <div class="max-w-6xl mx-auto">
+                <!-- Title Section -->
+                <div class="text-center mb-6">
+                    <h1 class="text-6xl font-bold mb-2 font-['Patrick_Hand']
+                             bg-gradient-to-r from-[#FF6B9C] via-[#9D7BFF] to-[#7B66FF]
+                             text-transparent bg-clip-text">
+                        StoryLand
+                    </h1>
+                    <p class="text-2xl text-[#FF6B9C] font-['Patrick_Hand']">
+                        Where Magic Begins!
+                    </p>
+                </div>
+
+                <!-- Main Content Grid -->
+                <div class="grid grid-cols-12 gap-6 items-center">
+                    <!-- Left Decorative Elements -->
+                    <div class="col-span-3 space-y-6">
+                        <div class="bg-white/40 rounded-2xl p-4 transform hover:scale-105 transition-all duration-300 shadow-lg">
+                            <img src="images/features/butterfly.jpg" 
+                                 alt="Magical Butterflies"
+                                 class="w-full h-auto rounded-xl floating">
+                        </div>
+                        <div class="bg-white/40 rounded-2xl p-4 transform hover:scale-105 transition-all duration-300 shadow-lg">
+                            <img src="images/hero/fairy.jpg" 
+                                 alt="Fairy"
+                                 class="w-full h-auto rounded-xl bouncing">
+                        </div>
+                    </div>
+
+                    <!-- Center Dragon Section -->
+                    <div class="col-span-6">
+                        <div class="relative">
+                            <!-- Magical Circle -->
+                            <div class="aspect-square relative mx-auto max-w-[400px]">
+                                <!-- Outer Glow -->
+                                <div class="absolute inset-0 rounded-full bg-gradient-to-r from-[#FF6B9C] via-[#9D7BFF] to-[#7B66FF] opacity-75 blur-md animate-pulse"></div>
+                                
+                                <!-- Main Circle -->
+                                <div class="absolute inset-[3px] rounded-full bg-white shadow-2xl flex items-center justify-center overflow-hidden">
+                                    <!-- Dragon Image -->
+                                    <img src="images/hero/reading-dragon.png"
+                                         alt="Reading Dragon"
+                                         class="w-[85%] h-[85%] object-contain transform hover:scale-105 transition-all duration-500"
+                                         onerror="this.onerror=null; this.parentElement.innerHTML='<div class=\'text-center p-8\'><span class=\'text-6xl\'>🐉</span><p class=\'text-xl mt-4 text-purple-600\'>Loading your magical friend...</p></div>';">
+                                </div>
+                            </div>
+
+                            <!-- Description Text -->
+                            <p class="text-center text-[#7B66FF] text-lg mt-6 max-w-md mx-auto font-['Patrick_Hand']">
+                                Embark on an enchanting journey through magical realms, where every story brings new adventures!
+                            </p>
+
+                            <!-- Start Reading Button -->
+                            <div class="text-center mt-6">
+                                <button onclick="handleReadNow()"
+                                       class="inline-block px-10 py-3 text-xl font-bold text-white
+                                              bg-gradient-to-r from-[#FF6B9C] to-[#9D7BFF]
+                                              rounded-full transform hover:scale-105 transition-all duration-300
+                                              shadow-lg hover:shadow-xl border-2 border-white">
+                                    Start Reading
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Right Decorative Elements -->
+                    <div class="col-span-3 space-y-6">
+                        <div class="bg-white/40 rounded-2xl p-4 transform hover:scale-105 transition-all duration-300 shadow-lg">
+                            <img src="images/hero/reading-owl.avif"
+                                 alt="Reading Owl"
+                                 class="w-full h-auto rounded-xl floating">
+                        </div>
+                        <div class="bg-white/40 rounded-2xl p-4 transform hover:scale-105 transition-all duration-300 shadow-lg">
+                            <img src="images/features/unicorn-rainbow.webp"
+                                 alt="Unicorn"
+                                 class="w-full h-auto rounded-xl bouncing"
+                                 onerror="this.onerror=null; this.src='images/hero/unicorn.avif';">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Bottom Rainbow -->
+                
+            </div>
+        </div>
+    </section>
+
+    <!-- Featured Stories -->
+    <section class="py-12 bg-gradient-to-r from-yellow-100 via-green-100 to-blue-100">
+        <div class="container mx-auto px-4">
+            <div class="flex items-center justify-between mb-8">
+                <img src="images/hero/magic-book.jpg" 
+                     alt="Magic Book" 
+                     class="w-32 h-32 object-contain rotating">
+                <div class="text-center">
+                    <h2 class="text-3xl font-bold text-[#1D70B8] mb-2">Featured Stories</h2>
+                    <p class="text-lg text-purple-700">Discover our most beloved tales!</p>
+                </div>
+                <img src="images/hero/star.jpg" 
+                     alt="Star" 
+                     class="w-32 h-32 object-contain sparkling">
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- Story Card 1 -->
+                <div class="comic-border p-6 bg-white shadow-lg transform hover:scale-105 transition-transform">
+                    <img src="images/stories/magic-forest.jpg" 
+                         alt="Magic Forest Story" 
+                         class="w-full h-[380px] object-cover mb-4 comic-border">
+                    <h3 class="text-xl font-bold text-[#1D70B8] mb-2">The Magic Forest</h3>
+                    <p class="text-gray-600 mb-4">Join Timmy on his magical adventure through the enchanted forest!</p>
+                    <button onclick="handleReadNow()" 
+                           class="block w-full bg-[#1D70B8] text-white px-4 py-2 rounded-md hover:bg-blue-700 comic-border text-center transition-colors duration-300">
+                        Read Now
+                    </button>
+                </div>
+                <!-- Story Card 2 -->
+                <div class="comic-border p-6 bg-white shadow-lg transform hover:scale-105 transition-transform">
+                    <img src="images/stories/space-adventure.jpg" 
+                         alt="Space Adventure" 
+                         class="w-full h-[380px] object-cover mb-4 comic-border">
+                    <h3 class="text-xl font-bold text-[#1D70B8] mb-2">Space Adventure</h3>
+                    <p class="text-gray-600 mb-4">Blast off into space with Captain Luna and her crew!</p>
+                    <button onclick="handleReadNow()" 
+                           class="block w-full bg-[#1D70B8] text-white px-4 py-2 rounded-md hover:bg-blue-700 comic-border text-center transition-colors duration-300">
+                        Read Now
+                    </button>
+                </div>
+                <!-- Story Card 3 -->
+                <div class="comic-border p-6 bg-white shadow-lg transform hover:scale-105 transition-transform">
+                    <img src="images/stories/underwater-world.avif" 
+                         alt="Underwater World" 
+                         class="w-full h-[380px] object-cover mb-4 comic-border">
+                    <h3 class="text-xl font-bold text-[#1D70B8] mb-2">Underwater World</h3>
+                    <p class="text-gray-600 mb-4">Dive deep into the ocean with Sammy the Seahorse!</p>
+                    <button onclick="handleReadNow()" 
+                           class="block w-full bg-[#1D70B8] text-white px-4 py-2 rounded-md hover:bg-blue-700 comic-border text-center transition-colors duration-300">
+                        Read Now
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="py-12 bg-gradient-to-br from-pink-100 via-purple-100 to-blue-100">
+        <div class="container mx-auto px-4">
+            <div class="flex items-center justify-between mb-8">
+                <img src="images/features/stars.png" 
+                     alt="Stars" 
+                     class="w-32 h-32 object-contain sparkling">
+                <div class="text-center">
+                    <h2 class="text-3xl font-bold text-[#1D70B8] mb-2">Why Choose StoryLand?</h2>
+                    <p class="text-lg text-purple-700">Experience the magic of interactive storytelling!</p>
+                </div>
+                <img src="images/features/magic-sparkles.png" 
+                     alt="Magic Sparkles" 
+                     class="w-32 h-32 object-contain rotating">
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="comic-border p-6 bg-white shadow-lg transform hover:scale-105 transition-transform">
+                    <img src="images/features/animation.jpg" 
+                         alt="Interactive Animation" 
+                         class="w-40 h-40 mx-auto mb-4 object-contain">
+                    <h3 class="text-xl font-bold text-[#1D70B8] mb-2">Interactive Animations</h3>
+                    <p class="text-gray-600">Stories come to life with fun animations and effects!</p>
+                    <img src="images/features/butterfly.jpg" 
+                         alt="Butterfly" 
+                         class="w-16 h-16 object-contain mt-4 ml-auto">
+                </div>
+                <div class="comic-border p-6 bg-white shadow-lg transform hover:scale-105 transition-transform">
+                    <img src="images/features/education.webp" 
+                         alt="Educational Content" 
+                         class="w-40 h-40 mx-auto mb-4 object-contain">
+                    <h3 class="text-xl font-bold text-[#1D70B8] mb-2">Educational Content</h3>
+                    <p class="text-gray-600">Learn while having fun with our educational stories!</p>
+                    <img src="images/features/flowers.webp" 
+                         alt="Flowers" 
+                         class="w-16 h-16 object-contain mt-4 ml-auto">
+                </div>
+                <div class="comic-border p-6 bg-white shadow-lg transform hover:scale-105 transition-transform">
+                    <img src="images/features/sound.png" 
+                         alt="Sound Effects" 
+                         class="w-40 h-40 mx-auto mb-4 object-contain">
+                    <h3 class="text-xl font-bold text-[#1D70B8] mb-2">Sound Effects</h3>
+                    <p class="text-gray-600">Immerse yourself in stories with fun sound effects!</p>
+                    <img src="images/features/heart.webp" 
+                         alt="Heart" 
+                         class="w-16 h-16 object-contain mt-4 ml-auto">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Reading Statistics -->
+    <section class="py-12 bg-gradient-to-r from-blue-100 via-green-100 to-yellow-100">
+        <div class="container mx-auto px-4">
+            <div class="flex items-center justify-between mb-8">
+                <img src="images/features/confetti.avif" 
+                     alt="Confetti" 
+                     class="w-32 h-32 object-contain bouncing">
+                <div class="text-center">
+                    <h2 class="text-3xl font-bold text-[#1D70B8] mb-2">Our Impact</h2>
+                    <p class="text-lg text-purple-700">Making learning fun for children worldwide!</p>
+                </div>
+                <img src="images/features/achievement.jpeg" 
+                     alt="Achievement" 
+                     class="w-32 h-32 object-contain floating">
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div class="comic-border p-6 bg-white shadow-lg transform hover:scale-105 transition-transform">
+                    <img src="images/features/readers.png" 
+                         alt="Happy Readers" 
+                         class="w-32 h-32 mx-auto mb-4 object-contain">
+                    <div class="text-4xl font-bold text-[#E63946] mb-2">1000+</div>
+                    <p class="text-gray-600">Happy Readers</p>
+                </div>
+                <div class="comic-border p-6 bg-white shadow-lg transform hover:scale-105 transition-transform">
+                    <img src="images/features/stories.png" 
+                         alt="Stories Icon" 
+                         class="w-32 h-32 mx-auto mb-4 object-contain">
+                    <div class="text-4xl font-bold text-[#E63946] mb-2">500+</div>
+                    <p class="text-gray-600">Interactive Stories</p>
+                </div>
+                <div class="comic-border p-6 bg-white shadow-lg transform hover:scale-105 transition-transform">
+                    <img src="images/features/topics.jpg" 
+                         alt="Educational Topics" 
+                         class="w-32 h-32 mx-auto mb-4 object-contain">
+                    <div class="text-4xl font-bold text-[#E63946] mb-2">50+</div>
+                    <p class="text-gray-600">Educational Topics</p>
+                </div>
+                <div class="comic-border p-6 bg-white shadow-lg transform hover:scale-105 transition-transform">
+                    <img src="images/features/rating.jpg" 
+                         alt="Star Rating" 
+                         class="w-32 h-32 mx-auto mb-4 object-contain">
+                    <div class="text-4xl font-bold text-[#E63946] mb-2">4.9⭐</div>
+                    <p class="text-gray-600">Average Rating</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials -->
+    <!-- <section class="py-12 bg-gradient-to-br from-purple-100 via-pink-100 to-yellow-100">
+        <div class="container mx-auto px-4">
+            <div class="flex items-center justify-between mb-8">
+                <img src="images/features/smiley.jpg" 
+                     alt="Smiley" 
+                     class="w-32 h-32 object-contain bouncing">
+                <div class="text-center">
+                    <h2 class="text-3xl font-bold text-[#1D70B8] mb-2">What Parents Say</h2>
+                    <p class="text-lg text-purple-700">Join thousands of happy families!</p>
+                </div>
+                <img src="images/features/sun.avif" 
+                     alt="Sun" 
+                     class="w-32 h-32 object-contain rotating">
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="comic-border p-6 bg-white shadow-lg">
+                    <div class="text-[#E63946] text-2xl mb-4">★★★★★</div>
+                    <p class="text-gray-600 mb-4">"My daughter's reading skills have improved significantly since we started using StoryLand. The interactive elements keep her engaged for hours!"</p>
+                    <p class="font-bold text-[#1D70B8]">- Sarah M., Parent</p>
+                </div>
+                <div class="comic-border p-6 bg-white shadow-lg">
+                    <div class="text-[#E63946] text-2xl mb-4">★★★★★</div>
+                    <p class="text-gray-600 mb-4">"The educational content is fantastic! My son learns something new with every story, and he doesn't even realize he's learning!"</p>
+                    <p class="font-bold text-[#1D70B8]">- Michael R., Parent</p>
+                </div>
+                <div class="comic-border p-6 bg-white shadow-lg">
+                    <div class="text-[#E63946] text-2xl mb-4">★★★★★</div>
+                    <p class="text-gray-600 mb-4">"The variety of stories and reading levels makes it perfect for both my 5-year-old and 8-year-old. They both love it!"</p>
+                    <p class="font-bold text-[#1D70B8]">- Emily T., Parent</p>
+                </div>
+            </div>
+        </div>
+    </section> -->
+
+    <!-- Join Our Magical Community -->
+    <section class="py-16 bg-gradient-to-br from-pink-100 via-purple-100 to-blue-100">
+        <div class="container mx-auto px-4">
+            <div class="max-w-4xl mx-auto">
+                <div class="comic-border p-8 bg-white shadow-lg">
+                    <h2 class="text-3xl font-bold text-[#1D70B8] mb-6 text-center">Join Our Magical Community</h2>
+                    <p class="text-gray-700 mb-8 text-center text-lg">
+                        Be part of our growing community of young readers and their families. Together, we can make reading magical!
+                    </p>
+                    <div class="flex justify-center space-x-6">
+                        <button onclick="handleReadNow()" 
+                                class="bg-[#FEE440] text-[#9B5DE5] px-10 py-4 rounded-full hover:bg-[#FFE66D] hover:text-[#7B4BC4] font-bold transform hover:scale-105 transition-all duration-300 comic-border shadow-md text-lg">
+                            Start Reading
+                        </button>
+                        <a href="contact.html" class="bg-[#9B5DE5] text-white px-10 py-4 rounded-full hover:bg-[#7B4BC4] font-bold transform hover:scale-105 transition-all duration-300 comic-border shadow-md text-lg">
+                            Contact Us
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Newsletter Signup -->
+    <section class="py-12 bg-gradient-to-r from-blue-100 via-purple-100 to-pink-100">
+        <div class="container mx-auto px-4 max-w-2xl">
+            <div class="comic-border p-8 bg-white shadow-lg">
+                <div class="flex items-center justify-between mb-6">
+                    <img src="images/features/envelope.webp" 
+                         alt="Envelope" 
+                         class="w-24 h-24 object-contain floating">
+                    <div class="text-center">
+                        <h2 class="text-3xl font-bold text-[#1D70B8] mb-2">Stay Updated!</h2>
+                        <p class="text-lg text-purple-700">Get magical stories delivered to your inbox!</p>
+                    </div>
+                    <img src="images/features/pencil.webp" 
+                         alt="Pencil" 
+                         class="w-24 h-24 object-contain rotating">
+                </div>
+                <p class="text-gray-600 mb-6 text-center">Subscribe to our newsletter for new stories, features, and reading tips!</p>
+                <form id="newsletterForm" class="flex flex-col md:flex-row gap-4">
+                    <input type="email" 
+                           placeholder="Enter your email" 
+                           class="flex-grow px-4 py-2 comic-border focus:outline-none focus:ring-2 focus:ring-[#1D70B8]"
+                           required>
+                    <button type="submit" 
+                            class="bg-[#E63946] text-white px-6 py-2 rounded-md hover:bg-red-600 comic-border">
+                        Subscribe
+                    </button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-[#1D70B8] text-white py-8 comic-border">
+        <div class="container mx-auto text-center">
+            <p>&copy; 2024 StoryLand. All rights reserved.</p>
+            <div class="mt-4 space-x-4">
+                <a href="#" class="hover:text-[#E63946]">Privacy Policy</a>
+                <a href="#" class="hover:text-[#E63946]">Terms of Service</a>
+                <a href="#" class="hover:text-[#E63946]">Contact Us</a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Function to check login status
+        async function checkLoginStatus() {
+            try {
+                const response = await fetch('check_session.php');
+                const data = await response.json();
+                
+                const loggedOutNav = document.getElementById('loggedOutNav');
+                const loggedInNav = document.getElementById('loggedInNav');
+                
+                if (data.loggedIn) {
+                    // User is logged in
+                    if (loggedOutNav) loggedOutNav.style.display = 'none';
+                    if (loggedInNav) {
+                        loggedInNav.style.display = 'inline-block';
+                        const userNameElement = document.getElementById('userName');
+                        if (userNameElement) {
+                            userNameElement.textContent = 'Welcome, ' + data.userName;
+                        }
+                    }
+                } else {
+                    // User is logged out
+                    if (loggedOutNav) loggedOutNav.style.display = 'inline-block';
+                    if (loggedInNav) loggedInNav.style.display = 'none';
+                }
+                return data.loggedIn;
+            } catch (error) {
+                console.error('Error checking login status:', error);
+                return false;
+            }
+        }
+
+        // Function to handle Read Now button clicks
+        async function handleReadNow() {
+            const isLoggedIn = await checkLoginStatus();
+            if (isLoggedIn) {
+                window.location.href = 'library.php';
+            } else {
+                window.location.href = 'signup.html';
+            }
+        }
+
+        function toggleDropdown() {
+            const dropdownMenu = document.getElementById('dropdownMenu');
+            const dropdownButton = document.querySelector('#loggedInNav button svg');
+            dropdownMenu.classList.toggle('hidden');
+            dropdownButton.classList.toggle('rotate-180');
+        }
+
+        // Function to handle logout
+        async function handleLogout() {
+            try {
+                const response = await fetch('auth.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        action: 'logout'
+                    })
+                });
+
+                const result = await response.json();
+                if (result.success) {
+                    window.location.reload();
+                }
+            } catch (error) {
+                console.error('Logout error:', error);
+            }
+        }
+
+        // Check login status when page loads
+        document.addEventListener('DOMContentLoaded', checkLoginStatus);
+
+        // Check login status periodically (every 30 seconds)
+        setInterval(checkLoginStatus, 30000);
+
+        // Newsletter form submission
+        document.getElementById('newsletterForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            // Add newsletter subscription logic here
+            alert('Thank you for subscribing to our newsletter!');
+            this.reset();
+        });
+    </script>
+
+    <style>
+        @keyframes orbit {
+            from { transform: rotate(0deg) translateX(150px) rotate(0deg); }
+            to { transform: rotate(360deg) translateX(150px) rotate(-360deg); }
+        }
+        
+        .animate-orbit {
+            animation: orbit 8s linear infinite;
+        }
+        
+        .animate-spin-slow {
+            animation: spin 8s linear infinite;
+        }
+        
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</body>
+</html> 

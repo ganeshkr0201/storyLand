@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{STORY_TITLE}} - StoryLand</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600&family=Comic+Neue:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #FF6B6B;    /* Coral Red */
+            --secondary-color: #4ECDC4;   /* Turquoise */
+            --accent-color: #FFE66D;      /* Yellow */
+            --text-color: #2C3E50;        /* Dark Blue */
+            --background-color: #F7F9FC;  /* Light Gray */
+        }
+
+        body {
+            font-family: 'Comic Neue', cursive;
+            color: var(--text-color);
+            background: var(--background-color);
+        }
+
+        h1, h2, h3 {
+            font-family: 'Fredoka', sans-serif;
+        }
+
+        .story-title {
+            font-size: 3rem;
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            -webkit-background-clip: text;
+            color: transparent;
+            animation: titleFloat 3s ease-in-out infinite;
+        }
+
+        .story-content {
+            line-height: 2;
+            font-size: 1.25rem;
+        }
+
+        .story-content p {
+            margin-bottom: 1.8rem;
+            transition: transform 0.3s ease;
+        }
+
+        .story-content p:hover {
+            transform: translateX(10px);
+        }
+
+        .progress-bar {
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 100;
+        }
+
+        .bookmark-btn {
+            position: fixed;
+            right: 2rem;
+            bottom: 2rem;
+            background: var(--primary-color);
+            color: white;
+            padding: 1rem;
+            border-radius: 50%;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .bookmark-btn:hover {
+            transform: scale(1.1);
+        }
+
+        .nav-button {
+            background: white;
+            color: var(--primary-color);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+        }
+
+        .nav-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+
+        .story-card {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .story-card:hover {
+            transform: translateY(-5px);
+        }
+
+        @keyframes titleFloat {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .metadata-tag {
+            font-family: 'Fredoka', sans-serif;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            transition: transform 0.3s ease;
+        }
+
+        .metadata-tag:hover {
+            transform: scale(1.1);
+        }
+
+        @media (min-width: 768px) {
+            .story-content {
+                font-size: 1.35rem;
+            }
+        }
+
+        /* Dark mode styles */
+        @media (prefers-color-scheme: dark) {
+            body {
+                background: #1a1a1a;
+                color: #f0f0f0;
+            }
+
+            .story-card {
+                background: #2d2d2d;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Progress Bar -->
+    <div class="progress-bar" id="readingProgress"></div>
+
+    <!-- Navigation -->
+    <nav class="bg-white/95 backdrop-blur-md p-4 sticky top-0 z-50 shadow-lg">
+        <div class="container mx-auto flex justify-between items-center">
+            <button onclick="goBackToLibrary()" class="nav-button">
+                <i class="fas fa-arrow-left mr-2"></i>Back to Library
+            </button>
+            <div class="flex gap-4">
+                <button onclick="toggleFontSize('decrease')" class="nav-button">
+                    <i class="fas fa-text-height"></i> A-
+                </button>
+                <button onclick="toggleFontSize('increase')" class="nav-button">
+                    <i class="fas fa-text-height"></i> A+
+                </button>
+                <button onclick="toggleDarkMode()" class="nav-button">
+                    <i class="fas fa-moon"></i>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Story Content -->
+    <div class="container mx-auto px-4 py-8">
+        <div class="story-card p-8 max-w-4xl mx-auto">
+            <h1 class="story-title text-center mb-8">{{STORY_TITLE}}</h1>
+            
+            <img src="../images/library/covers/{{STORY_IMAGE}}" 
+                 alt="{{STORY_TITLE}}" 
+                 class="w-full max-w-2xl mx-auto h-80 object-cover rounded-2xl mb-8 shadow-lg">
+
+            <!-- Story metadata -->
+            <div class="flex justify-center gap-4 mb-8 flex-wrap">
+                <span class="metadata-tag bg-[#FF6B6B]/10 text-[#FF6B6B]">{{AGE_RANGE}}</span>
+                <span class="metadata-tag bg-[#4ECDC4]/10 text-[#4ECDC4]">{{READING_LEVEL}}</span>
+                <span class="metadata-tag bg-[#FFE66D]/10 text-[#2C3E50]">{{STORY_TYPE}}</span>
+            </div>
+
+            <!-- Story content -->
+            <div class="story-content prose max-w-none" id="storyContent">
+                {{STORY_CONTENT}}
+            </div>
+
+            <div class="mt-12 text-center">
+                <p class="text-2xl font-bold text-[#FF6B6B] mb-6">The End</p>
+                <button onclick="goBackToLibrary()" 
+                   class="nav-button inline-block">
+                    <i class="fas fa-books mr-2"></i>More Stories
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bookmark Button -->
+    <button class="bookmark-btn" id="bookmarkBtn" onclick="toggleBookmark()">
+        <i class="fas fa-bookmark"></i>
+    </button>
+
+    <script>
+        // Reading Progress
+        function updateReadingProgress() {
+            const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+            const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            const scrolled = (winScroll / height) * 100;
+            document.querySelector('.progress-bar').style.width = scrolled + '%';
+        }
+        window.addEventListener('scroll', updateReadingProgress);
+
+        // Font size adjustment
+        let currentFontSize = 1.25;
+        const minFontSize = 1;
+        const maxFontSize = 1.75;
+        const stepSize = 0.125;
+
+        function toggleFontSize(action) {
+            if (action === 'increase' && currentFontSize < maxFontSize) {
+                currentFontSize += stepSize;
+            } else if (action === 'decrease' && currentFontSize > minFontSize) {
+                currentFontSize -= stepSize;
+            }
+            document.querySelector('.story-content').style.fontSize = `${currentFontSize}rem`;
+            localStorage.setItem('preferredFontSize', currentFontSize);
+        }
+
+        // Dark mode toggle
+        function toggleDarkMode() {
+            document.body.classList.toggle('dark');
+            const isDark = document.body.classList.contains('dark');
+            localStorage.setItem('darkMode', isDark);
+        }
+
+        // Bookmark functionality
+        function toggleBookmark() {
+            const btn = document.getElementById('bookmarkBtn');
+            const isBookmarked = btn.classList.toggle('active');
+            const storyTitle = document.title;
+            const scrollPos = window.scrollY;
+            
+            if (isBookmarked) {
+                localStorage.setItem(`bookmark_${storyTitle}`, scrollPos);
+                btn.style.color = '#FFE66D';
+            } else {
+                localStorage.removeItem(`bookmark_${storyTitle}`);
+                btn.style.color = 'white';
+            }
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            // Restore font size preference
+            const savedFontSize = localStorage.getItem('preferredFontSize');
+            if (savedFontSize) {
+                currentFontSize = parseFloat(savedFontSize);
+                document.querySelector('.story-content').style.fontSize = `${currentFontSize}rem`;
+            }
+
+            // Restore dark mode preference
+            const darkMode = localStorage.getItem('darkMode');
+            if (darkMode === 'true') {
+                document.body.classList.add('dark');
+            }
+
+            // Check for bookmark
+            const storyTitle = document.title;
+            const bookmarkPos = localStorage.getItem(`bookmark_${storyTitle}`);
+            if (bookmarkPos) {
+                document.getElementById('bookmarkBtn').style.color = '#FFE66D';
+                window.scrollTo(0, parseInt(bookmarkPos));
+            }
+        });
+
+        // Add this function to handle back navigation
+        function goBackToLibrary() {
+            // Save the current story's scroll position for bookmarking
+            const storyTitle = document.title;
+            const scrollPos = window.scrollY;
+            localStorage.setItem(`bookmark_${storyTitle}`, scrollPos);
+            
+            // Navigate back to library
+            window.location.href = '../library.html';
+        }
+    </script>
+</body>
+</html> 

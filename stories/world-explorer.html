@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>World Explorer - StoryLand</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Patrick+Hand&family=Indie+Flower&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Patrick Hand', cursive;
+            background: #F6EEE0;
+            background-image: 
+                radial-gradient(#D4C5A9 1px, transparent 1px),
+                radial-gradient(#D4C5A9 1px, transparent 1px);
+            background-size: 20px 20px;
+            background-position: 0 0, 10px 10px;
+            min-height: 100vh;
+            color: #5C4033;
+        }
+
+        .page-container {
+            max-width: 1000px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+            position: relative;
+        }
+
+        .story-container {
+            background: #FFF9F0;
+            border: 4px solid #8B4513;
+            border-radius: 24px;
+            box-shadow: 0 8px 32px rgba(139, 69, 19, 0.15);
+            overflow: hidden;
+            position: relative;
+        }
+
+        .story-header {
+            background: #E1B486;
+            padding: 2rem;
+            text-align: center;
+            border-bottom: 4px solid #8B4513;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .story-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M50 50l20-20M30 70l20-20M70 30l-20 20' stroke='%23C49A6C' stroke-width='2'/%3E%3C/svg%3E");
+            opacity: 0.3;
+        }
+
+        .story-title {
+            font-size: 3rem;
+            color: #8B4513;
+            text-shadow: 2px 2px 0 #FFF9F0;
+            margin-bottom: 1rem;
+            position: relative;
+        }
+
+        .cover-container {
+            position: relative;
+            padding: 20px;
+            background: #E1B486;
+            border-bottom: 4px solid #8B4513;
+        }
+
+        .cover-frame {
+            position: relative;
+            max-width: 600px;
+            margin: 0 auto;
+            border: 8px solid #8B4513;
+            border-radius: 16px;
+            box-shadow: 0 4px 15px rgba(139, 69, 19, 0.2);
+            overflow: hidden;
+            background: #FFF9F0;
+        }
+
+        .cover-image {
+            width: 100%;
+            height: auto;
+            display: block;
+            object-fit: contain;
+        }
+
+        .story-tag {
+            display: inline-block;
+            padding: 0.5rem 1.5rem;
+            background: #FFF9F0;
+            color: #8B4513;
+            border: 2px solid #8B4513;
+            border-radius: 999px;
+            margin: 0.25rem;
+            font-size: 1rem;
+            animation: float 3s ease-in-out infinite;
+            box-shadow: 0 2px 4px rgba(139, 69, 19, 0.1);
+        }
+
+        .story-content {
+            padding: 2rem;
+            font-size: 1.2rem;
+            line-height: 1.8;
+            background: #FFF9F0;
+        }
+
+        .location-section {
+            position: relative;
+            margin-bottom: 2rem;
+            padding: 1.5rem;
+            border-left: 4px solid #E1B486;
+            background: rgba(225, 180, 134, 0.1);
+            border-radius: 0 12px 12px 0;
+            transition: transform 0.3s ease;
+        }
+
+        .location-section:hover {
+            transform: translateX(10px);
+        }
+
+        .location-title {
+            color: #8B4513;
+            font-size: 1.4rem;
+            font-weight: bold;
+            margin-bottom: 1rem;
+            font-family: 'Indie Flower', cursive;
+        }
+
+        .cultural-icon {
+            display: inline-block;
+            margin: 0 4px;
+            font-size: 1.2rem;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        .stamp {
+            position: absolute;
+            width: 100px;
+            height: 100px;
+            background: #E76F51;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 2.5rem;
+            opacity: 0.1;
+            transform: rotate(-15deg);
+        }
+
+        .stamp-1 { top: 10%; right: -50px; }
+        .stamp-2 { top: 40%; left: -50px; }
+        .stamp-3 { bottom: 20%; right: -50px; }
+
+        .navigation-button {
+            position: fixed;
+            padding: 0.75rem 1.5rem;
+            background: #E1B486;
+            color: #8B4513;
+            border: 3px solid #8B4513;
+            border-radius: 12px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            z-index: 100;
+            box-shadow: 0 4px 8px rgba(139, 69, 19, 0.2);
+        }
+
+        .back-button {
+            top: 20px;
+            left: 20px;
+        }
+
+        .font-controls {
+            top: 20px;
+            right: 20px;
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .navigation-button:hover {
+            transform: translateY(-2px);
+            background: #8B4513;
+            color: #FFF9F0;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
+        }
+
+        .travel-icon {
+            position: absolute;
+            font-size: 1.5rem;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .japan { top: 20%; right: 10%; }
+        .kenya { top: 40%; left: 10%; }
+        .brazil { top: 60%; right: 10%; }
+        .india { top: 80%; left: 10%; }
+        .australia { bottom: 10%; right: 10%; }
+    </style>
+</head>
+<body>
+    <a href="../library.html" class="navigation-button back-button">
+        ← Back to Library
+    </a>
+
+    <div class="font-controls">
+        <button class="navigation-button" onclick="changeFontSize('decrease')">A-</button>
+        <button class="navigation-button" onclick="changeFontSize('increase')">A+</button>
+    </div>
+
+    <div class="page-container">
+        <div class="story-container">
+            <div class="stamp stamp-1">✈️</div>
+            <div class="stamp stamp-2">🌏</div>
+            <div class="stamp stamp-3">📍</div>
+
+            <div class="story-header">
+                <h1 class="story-title">World Explorer</h1>
+                <div class="tags-container">
+                    <span class="story-tag">9-12 years</span>
+                    <span class="story-tag">advanced</span>
+                    <span class="story-tag">educational</span>
+                </div>
+            </div>
+
+            <div class="cover-container">
+                <div class="cover-frame">
+                    <img src="../images/library/covers/world-explorer.webp" 
+                         alt="World Explorer Story" 
+                         class="cover-image"
+                         onerror="this.onerror=null; this.parentElement.innerHTML='<div style=\'padding: 2rem; text-align: center; color: #8B4513;\'>Cover Image Coming Soon</div>'">
+                </div>
+            </div>
+
+            <div class="story-content">
+                <div class="location-section">
+                    <h2 class="location-title">The Magical Gift</h2>
+                    <p>
+                        On her twelfth birthday, Maya received a special gift from her grandmother – a magical passport 
+                        <span class="cultural-icon">🎁</span> that could transport her anywhere in the world. "This passport has been in our 
+                        family for generations," her grandmother explained. "It will help you learn about different cultures and make 
+                        new friends around the world." <span class="cultural-icon">✨</span>
+                    </p>
+                </div>
+
+                <div class="location-section">
+                    <h2 class="location-title">Tokyo, Japan <span class="cultural-icon">🗼</span></h2>
+                    <p>
+                        Excited for her first adventure, Maya opened the passport and found herself in Tokyo. The city was alive 
+                        with bright lights and bustling streets. She met a girl named Hana who taught her how to make origami cranes 
+                        <span class="cultural-icon">🎎</span> and explained the importance of family traditions. Together, they visited 
+                        a beautiful temple where Maya learned about Japanese customs and the art of tea ceremony <span class="cultural-icon">🍵</span>.
+                    </p>
+                </div>
+
+                <div class="location-section">
+                    <h2 class="location-title">Kenya <span class="cultural-icon">🦁</span></h2>
+                    <p>
+                        With a flip of her passport, Maya found herself in the savannas of Kenya. There, she met a boy named Juma 
+                        who introduced her to his Maasai community. She learned how to make traditional beaded jewelry 
+                        <span class="cultural-icon">📿</span> and listened to stories told around the campfire 
+                        <span class="cultural-icon">🔥</span>. Juma showed her how his people lived in harmony with nature.
+                    </p>
+                </div>
+
+                <div class="location-section">
+                    <h2 class="location-title">Brazil <span class="cultural-icon">🌴</span></h2>
+                    <p>
+                        Next, Maya traveled to Brazil, where she met Sofia in the Amazon rainforest. Sofia's family were guardians 
+                        of the forest, teaching Maya about protecting nature. They explored together, learning about medicinal plants 
+                        <span class="cultural-icon">🌿</span> and the incredible biodiversity of the Amazon.
+                    </p>
+                </div>
+
+                <div class="location-section">
+                    <h2 class="location-title">India <span class="cultural-icon">🕉️</span></h2>
+                    <p>
+                        In India, Maya met Raj who showed her the vibrant colors and traditions of his country. They celebrated 
+                        Diwali together, lighting lamps <span class="cultural-icon">🪔</span> and sharing sweets. They visited a 
+                        school where children from different backgrounds learned together.
+                    </p>
+                </div>
+
+                <div class="location-section">
+                    <h2 class="location-title">Australia <span class="cultural-icon">🦘</span></h2>
+                    <p>
+                        Her final stop was in Australia, where she met Lila from the Aboriginal community. Lila shared stories of 
+                        the Dreamtime and taught Maya about the connection between people and the land 
+                        <span class="cultural-icon">🎨</span>. They painted together using traditional techniques.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function changeFontSize(action) {
+            const content = document.querySelector('.story-content');
+            const currentSize = parseFloat(window.getComputedStyle(content).fontSize);
+            
+            if (action === 'increase' && currentSize < 24) {
+                content.style.fontSize = (currentSize + 2) + 'px';
+            } else if (action === 'decrease' && currentSize > 14) {
+                content.style.fontSize = (currentSize - 2) + 'px';
+            }
+        }
+    </script>
+</body>
+</html> 

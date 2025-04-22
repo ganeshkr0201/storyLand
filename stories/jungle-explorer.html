@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jungle Explorer's Diary - StoryLand</title>
+    <link href="https://fonts.googleapis.com/css2?family=Architects+Daughter&family=Short+Stack&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --jungle-green: #2E7D32;
+            --leaf-light: #81C784;
+            --bark-brown: #795548;
+            --sunlight-yellow: #FFD54F;
+            --water-blue: #4FC3F7;
+            --flower-pink: #F06292;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            background: 
+                linear-gradient(rgba(46, 125, 50, 0.95), rgba(46, 125, 50, 0.95)),
+                url('data:image/svg+xml,<svg width="100" height="100" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><path d="M30,50 Q50,20 70,50 T90,50" fill="none" stroke="%2381C784" stroke-width="2"/></svg>');
+            font-family: 'Short Stack', cursive;
+            color: #333;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        .jungle-vines {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+            opacity: 0.1;
+        }
+
+        .vine {
+            position: absolute;
+            width: 4px;
+            background: var(--leaf-light);
+            transform-origin: top;
+            animation: swingVine 10s ease-in-out infinite;
+        }
+
+        @keyframes swingVine {
+            0%, 100% { transform: rotate(5deg); }
+            50% { transform: rotate(-5deg); }
+        }
+
+        .story-container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 2rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        .content-wrapper {
+            background: #FFF9C4;
+            border-radius: 20px;
+            box-shadow: 
+                0 10px 30px rgba(0, 0, 0, 0.2),
+                0 0 0 15px rgba(255, 255, 255, 0.1);
+            overflow: hidden;
+            position: relative;
+            border: 8px solid var(--bark-brown);
+            background-image: 
+                linear-gradient(rgba(255, 249, 196, 0.9), rgba(255, 249, 196, 0.9)),
+                url('data:image/svg+xml,<svg width="20" height="20" xmlns="http://www.w3.org/2000/svg"><path d="M0,0 L20,20 M20,0 L0,20" stroke="%23795548" stroke-width="0.5" opacity="0.1"/></svg>');
+        }
+
+        .navigation-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 2rem;
+            background: linear-gradient(to right, var(--jungle-green), var(--leaf-light));
+            position: relative;
+            overflow: hidden;
+        }
+
+        .back-button {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #FFF9C4;
+            text-decoration: none;
+            font-family: 'Architects Daughter', cursive;
+            font-size: 1.4rem;
+            padding: 0.8rem 1.5rem;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 25px;
+            transition: all 0.3s ease;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .back-button:hover {
+            transform: scale(1.05) translateX(-5px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .font-controls {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .control-button {
+            font-family: 'Architects Daughter', cursive;
+            color: #FFF9C4;
+            background: rgba(0, 0, 0, 0.2);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            padding: 0.8rem 1.2rem;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1.2rem;
+        }
+
+        .control-button:hover {
+            transform: scale(1.1);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .story-title {
+            font-family: 'Architects Daughter', cursive;
+            font-size: 4rem;
+            text-align: center;
+            color: var(--bark-brown);
+            margin: 2rem 0;
+            position: relative;
+            text-shadow: 
+                3px 3px 0 var(--sunlight-yellow),
+                6px 6px 0 rgba(0, 0, 0, 0.1);
+        }
+
+        .title-decoration {
+            position: absolute;
+            font-size: 3rem;
+            animation: bounce 2s ease-in-out infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-15px); }
+        }
+
+        .cover-section {
+            position: relative;
+            max-width: 800px;
+            margin: 2rem auto;
+            padding: 1rem;
+        }
+
+        .cover-frame {
+            position: relative;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 
+                0 10px 30px rgba(0, 0, 0, 0.2),
+                0 0 0 10px var(--bark-brown);
+            background: linear-gradient(45deg, var(--jungle-green), var(--leaf-light));
+            padding: 10px;
+        }
+
+        .cover-frame::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                linear-gradient(45deg, 
+                    transparent 45%, 
+                    rgba(255, 255, 255, 0.1) 50%,
+                    transparent 55%
+                );
+            background-size: 20px 20px;
+            animation: slide 20s linear infinite;
+        }
+
+        @keyframes slide {
+            0% { background-position: 0 0; }
+            100% { background-position: 40px 40px; }
+        }
+
+        .cover-image {
+            width: 100%;
+            height: auto;
+            display: block;
+            border-radius: 10px;
+            transition: transform 0.5s ease;
+        }
+
+        .cover-frame:hover .cover-image {
+            transform: scale(1.05);
+        }
+
+        .story-tags {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .story-tag {
+            font-family: 'Architects Daughter', cursive;
+            padding: 0.6rem 1.5rem;
+            border-radius: 20px;
+            font-size: 1.2rem;
+            background: rgba(255, 255, 255, 0.9);
+            color: var(--jungle-green);
+            border: 3px solid var(--jungle-green);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .story-tag:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .story-content {
+            padding: 2rem;
+            font-size: 1.3rem;
+            line-height: 1.8;
+            position: relative;
+        }
+
+        .diary-entry {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            border-radius: 15px;
+            border: 3px solid var(--bark-brown);
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .diary-entry:hover {
+            transform: translateX(10px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .diary-entry::before {
+            content: '🌿';
+            position: absolute;
+            left: -40px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 2rem;
+        }
+
+        .diary-date {
+            font-family: 'Architects Daughter', cursive;
+            font-size: 1.5rem;
+            color: var(--jungle-green);
+            margin-bottom: 1rem;
+            border-bottom: 2px dashed var(--jungle-green);
+            padding-bottom: 0.5rem;
+        }
+
+        .floating-element {
+            position: fixed;
+            pointer-events: none;
+            font-size: 2rem;
+            animation: float-element 15s linear infinite;
+            z-index: 1;
+        }
+
+        @keyframes float-element {
+            0% { transform: translateX(-100%) translateY(0) rotate(0deg); }
+            50% { transform: translateX(50vw) translateY(-100px) rotate(180deg); }
+            100% { transform: translateX(100vw) translateY(0) rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="jungle-vines"></div>
+    <div class="story-container">
+        <div class="content-wrapper">
+            <nav class="navigation-bar">
+                <a href="../library.html" class="back-button">
+                    🗺️ Back to Library
+                </a>
+                <div class="font-controls">
+                    <button class="control-button" onclick="changeFontSize('decrease')">A-</button>
+                    <button class="control-button" onclick="changeFontSize('increase')">A+</button>
+        </div>
+    </nav>
+
+            <h1 class="story-title">
+                <span class="title-decoration" style="left: 10%;">🦁</span>
+                Jungle Explorer's Diary
+                <span class="title-decoration" style="right: 10%;">🌴</span>
+            </h1>
+
+            <div class="cover-section">
+                <div class="cover-frame">
+                    <picture class="cover-image">
+                        <source srcset="../images/library/covers/jungle-explorer.webp" type="image/webp">
+                        <img src="../images/library/covers/default-cover.jpg" alt="A young explorer discovering jungle wildlife" class="story-cover" onerror="handleImageError(this, 'jungle')">
+                    </picture>
+                </div>
+            </div>
+
+            <div class="story-tags">
+                <span class="story-tag">🎯 6-8 years</span>
+                <span class="story-tag">📚 Intermediate</span>
+                <span class="story-tag">🌴 Adventure</span>
+            </div>
+
+            <div class="story-content">
+                <div class="diary-entry">
+                    <div class="diary-date">Day 1: 🌅</div>
+                    My name is Emma, and I'm writing this diary from deep in the Amazon rainforest! I'm here with my scientist parents who are studying the amazing plants and animals. Today, I saw my first toucan - its beak was so colorful, like a rainbow!
+                </div>
+
+                <div class="diary-entry">
+                    <div class="diary-date">Day 2: 🐒</div>
+                    Something incredible happened today! While exploring near our camp, I found a tiny monkey caught in a vine. I carefully helped it free, and guess what? It didn't run away! Instead, it climbed onto my shoulder and started grooming my hair. I named it Tico.
+                </div>
+
+                <div class="diary-entry">
+                    <div class="diary-date">Day 3: 🦋</div>
+                    Tico showed me the most amazing things today! He took me to a secret waterfall where butterflies of every color were drinking water. Then we found a tree with fruit that glows in the dark! I collected some seeds to show my parents.
+                </div>
+
+                <div class="diary-entry">
+                    <div class="diary-date">Day 4: 🌳</div>
+                    Today was scary but exciting! Tico and I got lost when we followed a beautiful blue butterfly too far. But Tico knew exactly what to do - he led us to a tree with special markings that my parents had shown us. We followed the markings back to camp.
+                </div>
+
+                <div class="diary-entry">
+                    <div class="diary-date">Day 5: 🐾</div>
+                    I made a new friend today - a sloth named Luna! She moves so slowly, but she's the best tree climber I've ever seen. She showed me how to spot the best leaves to eat and how to hang upside down from branches (though I'm not very good at it yet!).
+                </div>
+
+                <div class="diary-entry">
+                    <div class="diary-date">Day 6: 🌟</div>
+                    The most amazing thing happened! Tico and Luna took me to meet their other animal friends. We had a jungle party with parrots, frogs, and even a friendly jaguar cub! We played games and shared fruit. The jaguar cub showed us how to stalk through the grass without making a sound.
+                </div>
+
+                <div class="diary-entry">
+                    <div class="diary-date">Day 7: 🌞</div>
+                    Today was our last day in the jungle. I'm sad to leave, but I know I'll come back someday. Tico and Luna gave me special gifts - a feather from a macaw and a seed from the glowing fruit tree. I'll plant it in my garden at home and remember my jungle friends every time I see it grow.
+                </div>
+
+                <div class="diary-entry">
+                    <div class="diary-date">Final Entry: 🌟</div>
+                    This has been the most amazing adventure of my life! I learned that the jungle is full of surprises and that even the smallest creatures can be the best teachers. Most of all, I learned that friendship can be found in the most unexpected places. I can't wait to come back and see what new adventures await!
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function changeFontSize(action) {
+            const content = document.querySelector('.story-content');
+            const currentSize = parseFloat(window.getComputedStyle(content).fontSize);
+            
+            if (action === 'increase' && currentSize < 24) {
+                content.style.fontSize = (currentSize + 2) + 'px';
+            } else if (action === 'decrease' && currentSize > 14) {
+                content.style.fontSize = (currentSize - 2) + 'px';
+            }
+        }
+
+        function handleImageError(element, type) {
+            const errorMessage = `
+                <div style="
+                    padding: 4rem;
+                    text-align: center;
+                    background: linear-gradient(45deg, var(--jungle-green), var(--leaf-light));
+                    color: #FFF9C4;
+                    border-radius: 15px;
+                    min-height: 300px;
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: center;
+                    align-items: center;
+                    position: relative;
+                    overflow: hidden;
+                ">
+                    <div style="font-size: 4rem; margin-bottom: 1rem;">🌴 🦁 🌿</div>
+                    <div style="
+                        font-family: 'Architects Daughter', cursive;
+                        font-size: 2rem;
+                        margin-bottom: 1rem;
+                        text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+                    ">Adventure Awaits!</div>
+                    <div style="
+                        font-family: 'Short Stack', cursive;
+                        font-size: 1.2rem;
+                        max-width: 80%;
+                        line-height: 1.6;
+                    ">
+                        Join Emma on her exciting journey through the Amazon rainforest...
+                    </div>
+                </div>
+            `;
+            element.parentElement.parentElement.innerHTML = errorMessage;
+        }
+
+        function createVines() {
+            const vineContainer = document.querySelector('.jungle-vines');
+            const vineCount = 8;
+
+            for (let i = 0; i < vineCount; i++) {
+                const vine = document.createElement('div');
+                vine.className = 'vine';
+                vine.style.left = `${(i / vineCount) * 100}%`;
+                vine.style.height = `${Math.random() * 50 + 50}%`;
+                vine.style.animationDelay = `${Math.random() * -10}s`;
+                vineContainer.appendChild(vine);
+            }
+        }
+
+        function createFloatingElements() {
+            const elements = ['🦋', '🌺', '🦜', '🌿', '🍃'];
+            setInterval(() => {
+                const element = document.createElement('div');
+                element.className = 'floating-element';
+                element.textContent = elements[Math.floor(Math.random() * elements.length)];
+                element.style.top = `${Math.random() * 70 + 20}vh`;
+                document.body.appendChild(element);
+                
+                setTimeout(() => {
+                    element.remove();
+                }, 15000);
+            }, 3000);
+        }
+
+        createVines();
+        createFloatingElements();
+    </script>
+</body>
+</html>

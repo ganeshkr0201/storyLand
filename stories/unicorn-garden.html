@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Unicorn Garden - StoryLand</title>
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600&family=Comfortaa:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --unicorn-pink: #FF9ECD;
+            --unicorn-purple: #B388FF;
+            --fairy-blue: #88DDFF;
+            --rainbow-yellow: #FFE082;
+            --magic-sparkle: #FFE5FF;
+            --garden-green: #98FB98;
+            --butterfly-orange: #FFB74D;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            background: linear-gradient(135deg, var(--unicorn-pink) 0%, var(--fairy-blue) 100%);
+            font-family: 'Quicksand', sans-serif;
+            color: #4A4A4A;
+        }
+
+        .story-container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 2rem;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 30px;
+            box-shadow: 
+                0 0 30px rgba(179, 136, 255, 0.3),
+                0 0 60px rgba(136, 221, 255, 0.2);
+            position: relative;
+            overflow: hidden;
+            backdrop-filter: blur(10px);
+        }
+
+        .navigation-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 2rem;
+            background: linear-gradient(to right, var(--unicorn-purple), var(--fairy-blue));
+            border-radius: 20px;
+            margin-bottom: 2rem;
+        }
+
+        .back-button {
+            color: white;
+            text-decoration: none;
+            font-family: 'Comfortaa', cursive;
+            font-size: 1.2rem;
+            padding: 0.8rem 1.5rem;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 25px;
+            transition: all 0.3s ease;
+            border: 2px solid rgba(255, 255, 255, 0.4);
+        }
+
+        .back-button:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .font-controls {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .font-button {
+            font-family: 'Comfortaa', cursive;
+            color: white;
+            background: rgba(255, 255, 255, 0.2);
+            border: 2px solid rgba(255, 255, 255, 0.4);
+            padding: 0.8rem 1.2rem;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .font-button:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .story-title {
+            font-family: 'Comfortaa', cursive;
+            font-size: 3.5rem;
+            text-align: center;
+            color: var(--unicorn-purple);
+            margin: 2rem 0;
+            text-shadow: 2px 2px 4px rgba(179, 136, 255, 0.3);
+            background: linear-gradient(45deg, var(--unicorn-purple), var(--fairy-blue));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .cover-container {
+            position: relative;
+            max-width: 900px;
+            margin: 0 auto 3rem;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 
+                0 10px 30px rgba(179, 136, 255, 0.3),
+                0 0 60px rgba(136, 221, 255, 0.2);
+        }
+
+        .cover-image {
+            width: 100%;
+            height: auto;
+            display: block;
+            border-radius: 20px;
+            transition: transform 0.5s ease;
+        }
+
+        .cover-container:hover .cover-image {
+            transform: scale(1.02);
+        }
+
+        .cover-frame {
+            position: relative;
+            padding: 20px;
+            background: linear-gradient(45deg, var(--unicorn-pink), var(--fairy-blue));
+            border-radius: 25px;
+        }
+
+        .cover-frame::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, 
+                rgba(255, 158, 205, 0.5),
+                rgba(136, 221, 255, 0.5)
+            );
+            border-radius: 25px;
+            z-index: 1;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .cover-frame:hover::before {
+            opacity: 1;
+        }
+
+        .story-tags {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .story-tag {
+            font-family: 'Comfortaa', cursive;
+            padding: 0.6rem 1.5rem;
+            border-radius: 20px;
+            font-size: 1rem;
+            background: rgba(255, 255, 255, 0.9);
+            color: var(--unicorn-purple);
+            border: 2px solid var(--unicorn-purple);
+            transition: all 0.3s ease;
+        }
+
+        .story-tag:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(179, 136, 255, 0.2);
+        }
+
+        .story-content {
+            font-size: 1.2rem;
+            line-height: 1.8;
+            padding: 2rem;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            position: relative;
+        }
+
+        .story-paragraph {
+            margin-bottom: 1.5rem;
+            padding: 1.5rem;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 15px;
+            border: 2px solid rgba(179, 136, 255, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .story-paragraph:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(179, 136, 255, 0.1);
+            border-color: var(--unicorn-purple);
+        }
+
+        .magical-element {
+            position: absolute;
+            pointer-events: none;
+            z-index: 2;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(5deg); }
+        }
+
+        .sparkle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: white;
+            border-radius: 50%;
+            animation: sparkle 1.5s ease-in-out infinite;
+        }
+
+        @keyframes sparkle {
+            0%, 100% { transform: scale(0); opacity: 0; }
+            50% { transform: scale(1); opacity: 1; }
+        }
+
+        .rainbow {
+            position: absolute;
+            width: 150px;
+            height: 75px;
+            border-radius: 75px 75px 0 0;
+            background: linear-gradient(
+                180deg,
+                var(--unicorn-pink),
+                var(--rainbow-yellow),
+                var(--garden-green),
+                var(--fairy-blue),
+                var(--unicorn-purple)
+            );
+            opacity: 0.3;
+            filter: blur(5px);
+        }
+
+        .butterfly {
+            font-size: 1.5rem;
+            animation: flutter 8s ease-in-out infinite;
+        }
+
+        @keyframes flutter {
+            0%, 100% { transform: translateX(0) translateY(0) rotate(0deg); }
+            25% { transform: translateX(20px) translateY(-10px) rotate(10deg); }
+            50% { transform: translateX(0) translateY(-20px) rotate(0deg); }
+            75% { transform: translateX(-20px) translateY(-10px) rotate(-10deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="story-container">
+        <nav class="navigation-bar">
+            <a href="../library.html" class="back-button">← Back to Library</a>
+            <div class="font-controls">
+                <button class="font-button" onclick="changeFontSize('decrease')">A-</button>
+                <button class="font-button" onclick="changeFontSize('increase')">A+</button>
+            </div>
+        </nav>
+
+        <h1 class="story-title">Unicorn Garden</h1>
+
+        <div class="cover-container">
+            <div class="cover-frame">
+                <picture>
+                    <source srcset="../images/library/covers/unicorn-garden.webp" type="image/webp">
+                    <img 
+                        src="../images/library/covers/unicorn-garden.webp" 
+                        alt="A magical scene with a young girl meeting a beautiful unicorn in an enchanted garden filled with butterflies and flowers" 
+                        class="cover-image"
+                        onerror="handleImageError(this)"
+                    >
+                </picture>
+            </div>
+        </div>
+
+        <div class="story-tags">
+            <span class="story-tag">3-5 years</span>
+            <span class="story-tag">beginner</span>
+            <span class="story-tag">fantasy</span>
+        </div>
+
+        <div class="story-content">
+            <div class="story-paragraph">
+                In a hidden valley where rainbows touched the ground, there was a magical garden where unicorns lived. The garden was filled with flowers that sparkled like stars and trees that grew candy instead of fruit. The most special thing about this garden was that it was invisible to most people - only those who truly believed in magic could see it.
+            </div>
+
+            <div class="story-paragraph">
+                One day, a little girl named Lily was playing in her backyard when she saw a rainbow that seemed to lead right into the ground. Curious, she followed it and found herself in the most beautiful garden she had ever seen. There, she met a friendly unicorn with a shimmering mane and sparkling hooves.
+            </div>
+
+            <div class="story-paragraph">
+                Starlight had a silver mane that sparkled like the night sky and a horn that glowed with rainbow colors. "Welcome to our garden!" she said. "Would you like to meet my friends?" Lily nodded excitedly, and Starlight led her to meet the other unicorns.
+            </div>
+
+            <div class="story-paragraph">
+                There was Rainbow, who could make colors dance in the air; Moonbeam, who could make flowers bloom with a touch of her horn; and Sunshine, who could make the garden glow with golden light. Each unicorn had a special magic that helped the garden grow and stay beautiful.
+            </div>
+
+            <div class="story-paragraph">
+                The unicorns showed Lily around their magical home. They visited the Crystal Pond, where the water was so clear you could see your dreams reflected in it. They played in the Cloud Meadow, where the grass was as soft as cotton candy. They even had a snack in the Candy Tree Grove, where the trees grew lollipops and chocolate flowers.
+            </div>
+
+            <div class="story-paragraph">
+                But the unicorns were worried. The garden's magic was starting to fade because fewer and fewer children believed in magic. "Without belief," said Moonbeam, "our garden might disappear forever." Lily had an idea. "What if we show other children that magic is real?"
+            </div>
+
+            <div class="story-paragraph">
+                Together, they created a special show. Rainbow made colors dance in the sky, Moonbeam made flowers bloom in impossible colors, and Sunshine made the whole garden glow. Starlight used her magic to create a path of rainbows leading to the garden.
+            </div>
+
+            <div class="story-paragraph">
+                Soon, other children began to see the rainbows and follow them to the garden. As more children believed in magic, the garden grew even more beautiful. The flowers sparkled brighter, the trees grew taller, and the unicorns' magic grew stronger.
+            </div>
+
+            <div class="story-paragraph">
+                From that day on, the Unicorn Garden became a special place where children could visit and experience magic. The unicorns taught them that magic is everywhere - you just have to believe in it. And Lily became the garden's special friend, helping to keep the magic alive by sharing her belief with others.
+            </div>
+        </div>
+
+        <div class="mt-8 text-center">
+            <p class="text-xl text-[#9B5DE5]">The End</p>
+            <a href="../library.html" 
+               class="inline-block mt-4 px-6 py-2 bg-[#FEE440] text-[#9B5DE5] rounded-md hover:bg-[#FFE66D] hover:text-[#7B4BC4] transition-colors comic-border">
+                Back to Library
+            </a>
+        </div>
+    </div>
+
+    <script>
+        function changeFontSize(action) {
+            const content = document.querySelector('.story-content');
+            const currentSize = parseFloat(window.getComputedStyle(content).fontSize);
+            
+            if (action === 'increase' && currentSize < 24) {
+                content.style.fontSize = (currentSize + 2) + 'px';
+            } else if (action === 'decrease' && currentSize > 14) {
+                content.style.fontSize = (currentSize - 2) + 'px';
+            }
+        }
+
+        function handleImageError(element) {
+            const errorMessage = `
+                <div style="padding: 4rem; text-align: center; background: linear-gradient(45deg, var(--unicorn-pink), var(--fairy-blue)); color: white; border-radius: 20px;">
+                    <div style="font-size: 4rem; margin-bottom: 1rem;">🦄 🌈 ✨</div>
+                    <div style="font-family: 'Comfortaa', cursive; font-size: 1.5rem; margin-bottom: 1rem;">Oh, the Magic is Gathering!</div>
+                    <div style="font-family: 'Quicksand', sans-serif; font-size: 1rem;">Our unicorn friends are preparing something special...</div>
+                </div>
+            `;
+            element.parentElement.parentElement.innerHTML = errorMessage;
+        }
+
+        function createMagicalElements() {
+            const container = document.querySelector('.story-container');
+            
+            // Add butterflies
+            const butterflies = ['🦋', '🌺', '✨', '🌟'];
+            for (let i = 0; i < 8; i++) {
+                const butterfly = document.createElement('div');
+                butterfly.className = 'magical-element butterfly';
+                butterfly.textContent = butterflies[Math.floor(Math.random() * butterflies.length)];
+                butterfly.style.left = `${Math.random() * 90 + 5}%`;
+                butterfly.style.top = `${Math.random() * 90 + 5}%`;
+                butterfly.style.animationDelay = `${Math.random() * 2}s`;
+                container.appendChild(butterfly);
+            }
+
+            // Add sparkles
+            for (let i = 0; i < 20; i++) {
+                const sparkle = document.createElement('div');
+                sparkle.className = 'sparkle';
+                sparkle.style.left = `${Math.random() * 100}%`;
+                sparkle.style.top = `${Math.random() * 100}%`;
+                sparkle.style.animationDelay = `${Math.random() * 2}s`;
+                container.appendChild(sparkle);
+            }
+
+            // Add rainbows
+            for (let i = 0; i < 3; i++) {
+                const rainbow = document.createElement('div');
+                rainbow.className = 'rainbow';
+                rainbow.style.left = `${Math.random() * 80}%`;
+                rainbow.style.top = `${Math.random() * 80}%`;
+                rainbow.style.transform = `rotate(${Math.random() * 360}deg) scale(${0.5 + Math.random()})`;
+                container.appendChild(rainbow);
+            }
+        }
+
+        createMagicalElements();
+    </script>
+</body>
+</html>

@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Beauty and the Beast - StoryLand</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Great+Vibes&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --royal-gold: #FFD700;
+            --enchanted-blue: #4169E1;
+            --rose-red: #FF1744;
+            --castle-stone: #708090;
+            --parchment: #FFF8DC;
+            --forest-green: #228B22;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213E 100%);
+            font-family: 'Playfair Display', serif;
+            color: #333;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* Magical sparkles effect */
+        .sparkles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .sparkle {
+            position: absolute;
+            width: 3px;
+            height: 3px;
+            background: var(--royal-gold);
+            border-radius: 50%;
+            animation: twinkle 2s infinite;
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 0; transform: scale(0.5); }
+            50% { opacity: 1; transform: scale(1); }
+        }
+
+        .story-container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 2rem;
+            background: rgba(255, 248, 220, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 0 40px rgba(255, 215, 0, 0.2);
+            position: relative;
+            z-index: 1;
+            border: 4px solid var(--royal-gold);
+            background-image: 
+                linear-gradient(rgba(255, 248, 220, 0.95), rgba(255, 248, 220, 0.95)),
+                url('data:image/svg+xml,<svg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M0 0h20v20H0V0zm10 10l5-5h5v5l-5 5-5-5zm0 0l-5 5H0v-5l5-5 5 5z" fill="%23FFD700" fill-opacity="0.1"/></svg>');
+        }
+
+        .navigation-bar {
+            background: linear-gradient(to right, var(--enchanted-blue), var(--royal-gold));
+            padding: 1rem;
+            border-radius: 15px;
+            margin-bottom: 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .back-button {
+            background: rgba(0, 0, 0, 0.3);
+            color: var(--parchment);
+            padding: 0.75rem 1.5rem;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            border: 2px solid var(--royal-gold);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .back-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255, 215, 0, 0.3);
+            background: rgba(0, 0, 0, 0.5);
+        }
+
+        .control-button {
+            background: rgba(0, 0, 0, 0.3);
+            color: var(--parchment);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            border: 2px solid var(--royal-gold);
+            margin: 0 0.25rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .control-button:hover {
+            background: rgba(0, 0, 0, 0.5);
+            transform: translateY(-2px);
+        }
+
+        .story-title {
+            font-family: 'Great Vibes', cursive;
+            font-size: 4rem;
+            color: var(--enchanted-blue);
+            text-align: center;
+            margin: 2rem 0;
+            position: relative;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .cover-section {
+            position: relative;
+            margin: 2rem auto;
+            max-width: 800px;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .cover-frame {
+            position: relative;
+            padding-top: 56.25%; /* 16:9 aspect ratio */
+            background: linear-gradient(45deg, var(--enchanted-blue), var(--royal-gold));
+            border-radius: 20px;
+            overflow: hidden;
+            border: 5px solid var(--royal-gold);
+        }
+
+        .cover-image {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        .cover-frame:hover .cover-image {
+            transform: scale(1.05);
+        }
+
+        .story-tags {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin: 2rem 0;
+            flex-wrap: wrap;
+        }
+
+        .story-tag {
+            background: rgba(65, 105, 225, 0.1);
+            color: var(--enchanted-blue);
+            padding: 0.5rem 1.5rem;
+            border-radius: 20px;
+            font-size: 1.1rem;
+            border: 2px solid var(--royal-gold);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .story-content {
+            font-size: 1.2rem;
+            line-height: 1.8;
+            color: #2C3E50;
+            padding: 2rem;
+            background: rgba(255, 255, 255, 0.7);
+            border-radius: 20px;
+            margin-top: 2rem;
+        }
+
+        .story-paragraph {
+            position: relative;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            border-left: 4px solid var(--rose-red);
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 0 20px 20px 0;
+            transition: all 0.3s ease;
+        }
+
+        .story-paragraph:hover {
+            transform: translateX(10px);
+            box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.1);
+            border-left-color: var(--enchanted-blue);
+        }
+
+        /* Castle decorations */
+        .castle-decoration {
+            position: absolute;
+            font-size: 2rem;
+            opacity: 0.6;
+            pointer-events: none;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-15px) rotate(5deg); }
+        }
+
+        .rose { top: 50px; right: 50px; }
+        .castle { top: 100px; left: 50px; }
+        .book { bottom: 100px; right: 100px; }
+        .candle { bottom: 150px; left: 100px; }
+        .mirror { top: 200px; right: 150px; }
+
+        /* Dark mode */
+        @media (prefers-color-scheme: dark) {
+            .story-container {
+                background: rgba(26, 26, 46, 0.95);
+                color: var(--parchment);
+            }
+            .story-content {
+                background: rgba(255, 255, 255, 0.1);
+                color: var(--parchment);
+            }
+            .story-paragraph {
+                background: rgba(26, 26, 46, 0.8);
+                color: var(--parchment);
+            }
+            .story-title {
+                color: var(--royal-gold);
+            }
+            .story-tag {
+                color: var(--royal-gold);
+                background: rgba(26, 26, 46, 0.8);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="sparkles" id="sparkles"></div>
+    <div class="story-container">
+        <nav class="navigation-bar">
+            <button onclick="goBackToLibrary()" class="back-button">
+                <i class="fas fa-castle"></i> Back to Library
+            </button>
+            <div class="font-controls">
+                <button class="control-button" onclick="changeFontSize('decrease')">A-</button>
+                <button class="control-button" onclick="changeFontSize('increase')">A+</button>
+            </div>
+        </nav>
+
+        <h1 class="story-title">Beauty and the Beast</h1>
+
+        <div class="cover-section">
+            <div class="cover-frame">
+                <picture>
+                    <img src="../images/library/covers/beauty-beast.jpg" 
+                         alt="Beauty and the Beast dancing in the grand ballroom" 
+                         class="cover-image"
+                         onerror="handleImageError(this)">
+                </picture>
+            </div>
+        </div>
+
+        <div class="story-tags">
+            <span class="story-tag"><i class="fas fa-child"></i> 5-10 years</span>
+            <span class="story-tag"><i class="fas fa-book-reader"></i> Intermediate</span>
+            <span class="story-tag"><i class="fas fa-crown"></i> Fairy tale</span>
+        </div>
+
+        <div class="story-content">
+            <div class="story-paragraph">
+                Once upon a time, a merchant got lost in a storm and found shelter in a beautiful castle. When he picked a rose from the garden for his youngest daughter, Belle, a terrible Beast appeared.
+            </div>
+
+            <div class="story-paragraph">
+                "You stole my rose!" roared the Beast. "You must die, or send one of your daughters to live with me!" The merchant returned home and told his daughters what had happened.
+            </div>
+
+            <div class="story-paragraph">
+                Belle, who was kind and brave, volunteered to go to the castle. When she arrived, the Beast treated her kindly and gave her beautiful rooms and dresses. Every evening, they would dine together and talk.
+            </div>
+
+            <div class="story-paragraph">
+                Though the Beast was frightening to look at, Belle discovered he had a gentle heart. He gave her a magic mirror to see her family and let her visit them when she missed them terribly.
+            </div>
+
+            <div class="story-paragraph">
+                But when Belle stayed away too long, she found the Beast dying of a broken heart. She realized she had grown to love him, despite his appearance. Her tears of love broke the spell.
+            </div>
+
+            <div class="story-paragraph">
+                The Beast transformed into a handsome prince! He had been cursed by an enchantress until someone could love him for his heart rather than his looks. Belle and the prince were married and lived happily ever after in the enchanted castle.
+            </div>
+        </div>
+
+        <!-- Castle decorations -->
+        <div class="castle-decoration rose">🌹</div>
+        <div class="castle-decoration castle">🏰</div>
+        <div class="castle-decoration book">📚</div>
+        <div class="castle-decoration candle">🕯️</div>
+        <div class="castle-decoration mirror">🪞</div>
+    </div>
+
+    <script>
+        let currentFontSize = 1.2;
+        const minFontSize = 1;
+        const maxFontSize = 1.6;
+        const stepSize = 0.1;
+
+        function createSparkles() {
+            const sparklesContainer = document.getElementById('sparkles');
+            const sparkleCount = 50;
+
+            for (let i = 0; i < sparkleCount; i++) {
+                const sparkle = document.createElement('div');
+                sparkle.className = 'sparkle';
+                
+                // Random position
+                sparkle.style.left = `${Math.random() * 100}%`;
+                sparkle.style.top = `${Math.random() * 100}%`;
+                
+                // Random delay
+                sparkle.style.animationDelay = `${Math.random() * 2}s`;
+                
+                sparklesContainer.appendChild(sparkle);
+            }
+        }
+
+        function changeFontSize(action) {
+            if (action === 'increase' && currentFontSize < maxFontSize) {
+                currentFontSize += stepSize;
+            } else if (action === 'decrease' && currentFontSize > minFontSize) {
+                currentFontSize -= stepSize;
+            }
+            document.querySelector('.story-content').style.fontSize = `${currentFontSize}rem`;
+            localStorage.setItem('preferredFontSize', currentFontSize);
+        }
+
+        function handleImageError(img) {
+            const container = img.parentElement;
+            container.innerHTML = `
+                <div class="w-full h-full flex flex-col items-center justify-center bg-gradient-to-r from-[var(--enchanted-blue)] to-[var(--royal-gold)]">
+                    <span class="text-6xl mb-4">🌹 🏰</span>
+                    <p class="text-xl text-white text-center px-4">A Tale of True Love and Magic...</p>
+                </div>
+            `;
+        }
+
+        function goBackToLibrary() {
+            window.location.href = '../library.html';
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            createSparkles();
+            
+            // Restore font size preference
+            const savedFontSize = localStorage.getItem('preferredFontSize');
+            if (savedFontSize) {
+                currentFontSize = parseFloat(savedFontSize);
+                document.querySelector('.story-content').style.fontSize = `${currentFontSize}rem`;
+            }
+        });
+    </script>
+</body>
+</html>

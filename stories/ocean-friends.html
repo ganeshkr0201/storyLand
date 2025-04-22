@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Coral's Ocean Adventure - StoryLand</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Bubblegum+Sans&family=Quicksand:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+    <style>
+        :root {
+            --primary: #1CA4D8;
+            --secondary: #FF6B9C;
+            --accent: #7B53FF;
+            --background: #E0F7FF;
+            --deep-sea: #063B87;
+            --coral: #FF8A8A;
+        }
+
+        body {
+            font-family: 'Quicksand', sans-serif;
+            background: linear-gradient(180deg, var(--background) 0%, #B6E6FF 100%);
+            color: #2A4365;
+            line-height: 1.8;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .ocean-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(circle at 20% 80%, rgba(28, 164, 216, 0.2) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(123, 83, 255, 0.2) 0%, transparent 50%);
+            z-index: -1;
+        }
+
+        .bubble {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.6);
+            border-radius: 50%;
+            animation: float 8s infinite ease-in-out;
+            pointer-events: none;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0) translateX(0); }
+            50% { transform: translateY(-100px) translateX(20px); }
+        }
+
+        .story-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+            position: relative;
+        }
+
+        .nav-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(90deg, var(--accent) 0%, var(--primary) 100%);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 100;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .nav-button {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            padding: 0.8rem 1.5rem;
+            border-radius: 30px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(5px);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .nav-button:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .story-header {
+            margin-top: 100px;
+            text-align: center;
+            animation: fadeInDown 1s ease;
+        }
+
+        .story-title {
+            font-family: 'Bubblegum Sans', cursive;
+            font-size: clamp(3rem, 8vw, 4.5rem);
+            color: var(--deep-sea);
+            text-shadow: 2px 2px 0px var(--coral);
+            margin-bottom: 2rem;
+        }
+
+        .story-image-container {
+            position: relative;
+            width: 100%;
+            max-width: 800px;
+            margin: 2rem auto;
+            border-radius: 30px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            transform-style: preserve-3d;
+            transform: perspective(1000px);
+        }
+
+        .story-image {
+            width: 100%;
+            height: auto;
+            display: block;
+            transition: transform 0.5s ease;
+        }
+
+        .story-image:hover {
+            transform: scale(1.02);
+        }
+
+        .meta-tags {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin: 2rem 0;
+            flex-wrap: wrap;
+        }
+
+        .meta-tag {
+            background: white;
+            color: var(--primary);
+            padding: 0.8rem 1.5rem;
+            border-radius: 30px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            animation: bounce 1s ease infinite;
+            animation-delay: calc(var(--delay) * 0.2s);
+        }
+
+        .story-content {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            border-radius: 30px;
+            padding: 3rem;
+            margin: 2rem auto;
+            max-width: 800px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .story-text {
+            font-size: clamp(1.2rem, 2.5vw, 1.4rem);
+            line-height: 2;
+            color: #2A4365;
+        }
+
+        .story-text p {
+            margin-bottom: 2rem;
+        }
+
+        .dialogue {
+            color: var(--accent);
+            font-weight: 600;
+            margin: 2rem 0;
+            padding-left: 2rem;
+            border-left: 4px solid var(--secondary);
+            font-size: 1.2rem;
+        }
+
+        .font-controls {
+            position: fixed;
+            right: 2rem;
+            top: 50%;
+            transform: translateY(-50%);
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            z-index: 100;
+        }
+
+        .font-btn {
+            background: white;
+            color: var(--primary);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .font-btn:hover {
+            transform: scale(1.1);
+            background: var(--primary);
+            color: white;
+        }
+
+        @media (max-width: 768px) {
+            .story-container {
+                padding: 1rem;
+            }
+
+            .story-content {
+                padding: 2rem;
+                margin: 1rem;
+            }
+
+            .story-text {
+                font-size: 1.1rem;
+            }
+
+            .meta-tag {
+                font-size: 0.9rem;
+                padding: 0.6rem 1.2rem;
+            }
+
+            .font-controls {
+                right: 1rem;
+            }
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
+        }
+    </style>
+</head>
+<body>
+    <div class="ocean-background"></div>
+    <div id="bubbleContainer"></div>
+
+    <nav class="nav-bar">
+        <a href="../library.html" class="nav-button">
+            ← Back to Library
+        </a>
+        <div class="font-controls">
+            <button class="font-btn" onclick="changeFontSize('decrease')">A-</button>
+            <button class="font-btn" onclick="changeFontSize('increase')">A+</button>
+        </div>
+    </nav>
+
+    <div class="story-container">
+        <header class="story-header">
+            <h1 class="story-title">Coral's Ocean Adventure</h1>
+            <div class="meta-tags">
+                <span class="meta-tag" style="--delay: 0">3-5 years</span>
+                <span class="meta-tag" style="--delay: 1">beginner</span>
+                <span class="meta-tag" style="--delay: 2">animals</span>
+            </div>
+        </header>
+
+        <div class="story-image-container">
+            <img src="../images/library/covers/ocean-friends.avif" alt="Coral's Ocean Adventure" class="story-image">
+        </div>
+
+        <article class="story-content" id="storyContent">
+            <div class="story-text">
+                <p>
+                    Coral was a little clownfish who lived in a beautiful coral reef. She had bright orange scales with white stripes and loved to play hide-and-seek with her friends. But today, she was feeling a bit lonely because all her friends were busy.
+                </p>
+
+                <div class="dialogue">
+                    "I wish I had someone to play with," Coral said to herself as she swam through the colorful coral.
+                </div>
+
+                <p>
+                    Just then, she spotted something new - a shy little seahorse hiding behind a pink coral branch.
+                </p>
+
+                <div class="dialogue">
+                    "Hello!" Coral said cheerfully. "I'm Coral. Would you like to play with me?"
+                </div>
+
+                <p>
+                    The seahorse, whose name was Sparkle, was a bit nervous at first, but Coral's friendly smile made her feel better.
+                </p>
+
+                <p>
+                    Together, they played tag with a group of friendly fish, danced with the swaying seaweed, and even had a race with a speedy turtle named Turbo. Sparkle showed Coral how to wrap her tail around seaweed to stay still, and Coral taught Sparkle how to do somersaults in the water.
+                </p>
+
+                <p>
+                    As they played through the rest of the day, new friends joined them - a playful dolphin, a wise old octopus, and even a group of tiny, glowing jellyfish. Coral realized that sometimes the best adventures happen when you're brave enough to make new friends.
+                </p>
+            </div>
+        </article>
+    </div>
+
+    <script>
+        // Create floating bubbles
+        function createBubbles() {
+            const container = document.getElementById('bubbleContainer');
+            for (let i = 0; i < 20; i++) {
+                const bubble = document.createElement('div');
+                bubble.className = 'bubble';
+                const size = Math.random() * 30 + 10;
+                bubble.style.width = `${size}px`;
+                bubble.style.height = `${size}px`;
+                bubble.style.left = `${Math.random() * 100}vw`;
+                bubble.style.top = `${Math.random() * 100}vh`;
+                bubble.style.animationDelay = `${Math.random() * 8}s`;
+                container.appendChild(bubble);
+            }
+        }
+
+        // Font size control
+        let currentFontSize = localStorage.getItem('storyFontSize') || 1.2;
+        const MIN_FONT_SIZE = 1;
+        const MAX_FONT_SIZE = 2;
+        const STEP_SIZE = 0.1;
+
+        function updateFontSize() {
+            const storyContent = document.getElementById('storyContent');
+            storyContent.style.fontSize = `${currentFontSize}rem`;
+            localStorage.setItem('storyFontSize', currentFontSize);
+        }
+
+        function changeFontSize(action) {
+            if (action === 'increase' && currentFontSize < MAX_FONT_SIZE) {
+                currentFontSize = Math.min(MAX_FONT_SIZE, currentFontSize + STEP_SIZE);
+            } else if (action === 'decrease' && currentFontSize > MIN_FONT_SIZE) {
+                currentFontSize = Math.max(MIN_FONT_SIZE, currentFontSize - STEP_SIZE);
+            }
+            updateFontSize();
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            createBubbles();
+            updateFontSize();
+        });
+    </script>
+</body>
+</html>

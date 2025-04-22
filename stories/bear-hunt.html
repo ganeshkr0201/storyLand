@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>We're Going on a Bear Hunt - StoryLand</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Bubblegum+Sans&family=Comic+Neue:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --adventure-blue: #4A90E2;
+            --grass-green: #8BC34A;
+            --mud-brown: #795548;
+            --sky-light: #B3E5FC;
+            --forest-dark: #2E7D32;
+            --cave-gray: #607D8B;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            background: linear-gradient(135deg, var(--sky-light) 0%, var(--adventure-blue) 100%);
+            font-family: 'Comic Neue', cursive;
+            color: #333;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* Cloud floating effect */
+        .clouds {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .cloud {
+            position: absolute;
+            font-size: 3rem;
+            color: rgba(255, 255, 255, 0.8);
+            animation: float-cloud 20s infinite linear;
+            opacity: 0.7;
+        }
+
+        @keyframes float-cloud {
+            from { transform: translateX(-100%); }
+            to { transform: translateX(100vw); }
+        }
+
+        .story-container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 2rem;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 30px;
+            box-shadow: 0 0 40px rgba(74, 144, 226, 0.3);
+            position: relative;
+            z-index: 1;
+            border: 4px solid var(--adventure-blue);
+        }
+
+        .navigation-bar {
+            background: linear-gradient(to right, var(--grass-green), var(--adventure-blue));
+            padding: 1rem;
+            border-radius: 20px;
+            margin-bottom: 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .back-button {
+            background: rgba(255, 255, 255, 0.2);
+            color: #fff;
+            padding: 0.75rem 1.5rem;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            border: 2px solid var(--mud-brown);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .back-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .control-button {
+            background: rgba(255, 255, 255, 0.2);
+            color: #fff;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            border: 2px solid var(--mud-brown);
+            margin: 0 0.25rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .control-button:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .story-title {
+            font-family: 'Bubblegum Sans', cursive;
+            font-size: 4rem;
+            color: var(--adventure-blue);
+            text-align: center;
+            margin: 2rem 0;
+            position: relative;
+            text-shadow: 3px 3px 0 var(--mud-brown);
+            letter-spacing: 2px;
+        }
+
+        .cover-section {
+            position: relative;
+            margin: 2rem auto;
+            max-width: 800px;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        .cover-frame {
+            position: relative;
+            padding-top: 40%;
+            background: linear-gradient(45deg, var(--grass-green), var(--sky-light));
+            border-radius: 20px;
+            overflow: hidden;
+            border: 5px solid var(--mud-brown);
+        }
+
+        .cover-image {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            transition: transform 0.5s ease;
+            background-color: rgba(255, 255, 255, 0.9);
+            padding: 10px;
+        }
+
+        .cover-frame:hover .cover-image {
+            transform: scale(1.05);
+        }
+
+        .story-tags {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin: 2rem 0;
+            flex-wrap: wrap;
+        }
+
+        .story-tag {
+            background: rgba(74, 144, 226, 0.1);
+            color: var(--adventure-blue);
+            padding: 0.5rem 1.5rem;
+            border-radius: 20px;
+            font-size: 1.1rem;
+            border: 2px solid var(--mud-brown);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .story-content {
+            font-size: 1.2rem;
+            line-height: 1.8;
+            color: #2C3E50;
+            padding: 2rem;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 20px;
+            margin-top: 2rem;
+        }
+
+        .story-paragraph {
+            position: relative;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            border-left: 4px solid var(--adventure-blue);
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 0 20px 20px 0;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .story-paragraph:hover {
+            transform: translateX(10px);
+            box-shadow: 5px 5px 15px rgba(0,0,0,0.1);
+            border-left-color: var(--grass-green);
+        }
+
+        .sound-effect {
+            font-weight: bold;
+            color: var(--adventure-blue);
+            font-style: italic;
+        }
+
+        /* Adventure decorations */
+        .adventure-decoration {
+            position: absolute;
+            font-size: 2rem;
+            opacity: 0.6;
+            pointer-events: none;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-15px) rotate(5deg); }
+        }
+
+        .bear { top: 50px; right: 50px; }
+        .grass { top: 100px; left: 50px; }
+        .river { bottom: 100px; right: 100px; }
+        .footprints { bottom: 150px; left: 100px; }
+        .cave { top: 200px; right: 150px; }
+
+        /* Dark mode */
+        @media (prefers-color-scheme: dark) {
+            .story-container {
+                background: rgba(25, 25, 112, 0.95);
+                color: #fff;
+            }
+            .story-content {
+                background: rgba(255, 255, 255, 0.1);
+                color: #fff;
+            }
+            .story-paragraph {
+                background: rgba(25, 25, 112, 0.8);
+                color: #fff;
+            }
+            .story-title {
+                color: var(--sky-light);
+            }
+            .story-tag {
+                color: var(--sky-light);
+                background: rgba(25, 25, 112, 0.8);
+            }
+            .sound-effect {
+                color: var(--sky-light);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="clouds" id="clouds"></div>
+    <div class="story-container">
+        <nav class="navigation-bar">
+            <button onclick="goBackToLibrary()" class="back-button">
+                <i class="fas fa-compass"></i> Back to Library
+            </button>
+            <div class="font-controls">
+                <button class="control-button" onclick="changeFontSize('decrease')">A-</button>
+                <button class="control-button" onclick="changeFontSize('increase')">A+</button>
+            </div>
+        </nav>
+
+        <h1 class="story-title">We're Going on a Bear Hunt</h1>
+
+        <div class="cover-section">
+            <div class="cover-frame">
+                <picture>
+                    <img src="../images/library/covers/bear-hunt.jpg" 
+                         alt="Children going on a bear hunt adventure" 
+                         class="cover-image"
+                         onerror="handleImageError(this)">
+                </picture>
+            </div>
+        </div>
+
+        <div class="story-tags">
+            <span class="story-tag"><i class="fas fa-child"></i> 3-5 years</span>
+            <span class="story-tag"><i class="fas fa-book-reader"></i> Beginner</span>
+            <span class="story-tag"><i class="fas fa-hiking"></i> Adventure</span>
+        </div>
+
+        <div class="story-content">
+            <div class="story-paragraph" onclick="playSound('adventure')">
+                We're going on a bear hunt! We're going to catch a big one! What a beautiful day! We're not scared!
+            </div>
+
+            <div class="story-paragraph" onclick="playSound('grass')">
+                Uh-uh! Grass! Long, wavy grass! We can't go over it, we can't go under it. Oh no! We've got to go through it! <span class="sound-effect">Swishy swashy! Swishy swashy! Swishy swashy!</span>
+            </div>
+
+            <div class="story-paragraph" onclick="playSound('river')">
+                Uh-uh! A river! A deep, cold river! We can't go over it, we can't go under it. Oh no! We've got to go through it! <span class="sound-effect">Splash splash! Splash splash! Splash splash!</span>
+            </div>
+
+            <div class="story-paragraph" onclick="playSound('mud')">
+                Uh-uh! Mud! Thick, oozy mud! We can't go over it, we can't go under it. Oh no! We've got to go through it! <span class="sound-effect">Squelch squelch! Squelch squelch! Squelch squelch!</span>
+            </div>
+
+            <div class="story-paragraph" onclick="playSound('forest')">
+                Uh-uh! A forest! A big, dark forest! We can't go over it, we can't go under it. Oh no! We've got to go through it! <span class="sound-effect">Stumble trip! Stumble trip! Stumble trip!</span>
+            </div>
+
+            <div class="story-paragraph" onclick="playSound('cave')">
+                Uh-uh! A cave! A narrow, gloomy cave! We can't go over it, we can't go under it. Oh no! We've got to go through it! <span class="sound-effect">Tiptoe tiptoe! Tiptoe tiptoe!</span>
+            </div>
+        </div>
+
+        <!-- Adventure decorations -->
+        <div class="adventure-decoration bear">🐻</div>
+        <div class="adventure-decoration grass">🌿</div>
+        <div class="adventure-decoration river">💦</div>
+        <div class="adventure-decoration footprints">👣</div>
+        <div class="adventure-decoration cave">🏔️</div>
+    </div>
+
+    <script>
+        let currentFontSize = 1.2;
+        const minFontSize = 1;
+        const maxFontSize = 1.6;
+        const stepSize = 0.1;
+
+        function createClouds() {
+            const cloudsContainer = document.getElementById('clouds');
+            const cloudCount = 5;
+            const cloudEmojis = ['☁️', '⛅'];
+
+            for (let i = 0; i < cloudCount; i++) {
+                const cloud = document.createElement('div');
+                cloud.className = 'cloud';
+                cloud.textContent = cloudEmojis[Math.floor(Math.random() * cloudEmojis.length)];
+                
+                // Random position and delay
+                cloud.style.top = `${Math.random() * 50}%`;
+                cloud.style.animationDelay = `${Math.random() * 20}s`;
+                
+                cloudsContainer.appendChild(cloud);
+            }
+        }
+
+        function changeFontSize(action) {
+            if (action === 'increase' && currentFontSize < maxFontSize) {
+                currentFontSize += stepSize;
+            } else if (action === 'decrease' && currentFontSize > minFontSize) {
+                currentFontSize -= stepSize;
+            }
+            document.querySelector('.story-content').style.fontSize = `${currentFontSize}rem`;
+            localStorage.setItem('preferredFontSize', currentFontSize);
+        }
+
+        function handleImageError(img) {
+            const container = img.parentElement;
+            container.innerHTML = `
+                <div class="w-full h-full flex flex-col items-center justify-center bg-gradient-to-r from-[var(--grass-green)] to-[var(--adventure-blue)]">
+                    <span class="text-6xl mb-4">🐻 👣</span>
+                    <p class="text-xl text-white text-center px-4">Let's Go on an Adventure!</p>
+                </div>
+            `;
+        }
+
+        function playSound(type) {
+            // Add sound effects later if needed
+            const paragraph = event.currentTarget;
+            paragraph.style.transform = 'translateX(20px)';
+            setTimeout(() => {
+                paragraph.style.transform = 'translateX(10px)';
+            }, 200);
+        }
+
+        function goBackToLibrary() {
+            window.location.href = '../library.html';
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            createClouds();
+            
+            // Restore font size preference
+            const savedFontSize = localStorage.getItem('preferredFontSize');
+            if (savedFontSize) {
+                currentFontSize = parseFloat(savedFontSize);
+                document.querySelector('.story-content').style.fontSize = `${currentFontSize}rem`;
+            }
+        });
+    </script>
+</body>
+</html> 

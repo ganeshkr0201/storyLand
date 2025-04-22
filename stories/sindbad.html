@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sindbad's Adventures - StoryLand</title>
+    <link href="https://fonts.googleapis.com/css2?family=Tales&family=Crimson+Pro:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --ocean-blue: #1565C0;
+            --wave-light: #64B5F6;
+            --sand-gold: #FFD700;
+            --wood-brown: #8B4513;
+            --pearl-white: #F5F5F5;
+            --coral-red: #FF6F61;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            background: 
+                linear-gradient(rgba(21, 101, 192, 0.95), rgba(21, 101, 192, 0.95)),
+                url('data:image/svg+xml,<svg width="100" height="100" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><path d="M0,50 Q25,40 50,50 T100,50" fill="none" stroke="%2364B5F6" stroke-width="2"/></svg>');
+            font-family: 'Crimson Pro', serif;
+            color: #333;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        .waves {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 200px;
+            background: 
+                radial-gradient(circle at 50% 100%, transparent 20%, var(--wave-light) 21%);
+            background-size: 50px 50px;
+            animation: waveMotion 10s linear infinite;
+            opacity: 0.1;
+            pointer-events: none;
+        }
+
+        @keyframes waveMotion {
+            0% { background-position: 0 0; }
+            100% { background-position: 50px 0; }
+        }
+
+        .story-container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 2rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        .content-wrapper {
+            background: var(--pearl-white);
+            border-radius: 20px;
+            box-shadow: 
+                0 10px 30px rgba(0, 0, 0, 0.2),
+                0 0 0 15px rgba(255, 255, 255, 0.1);
+            overflow: hidden;
+            position: relative;
+            border: 8px solid var(--wood-brown);
+            background-image: 
+                linear-gradient(rgba(245, 245, 245, 0.9), rgba(245, 245, 245, 0.9)),
+                url('data:image/svg+xml,<svg width="20" height="20" xmlns="http://www.w3.org/2000/svg"><path d="M0,10 Q5,0 10,10 T20,10" stroke="%238B4513" stroke-width="0.5" fill="none" opacity="0.1"/></svg>');
+        }
+
+        .navigation-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 2rem;
+            background: linear-gradient(to right, var(--ocean-blue), var(--wave-light));
+            position: relative;
+            overflow: hidden;
+        }
+
+        .back-button {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--pearl-white);
+            text-decoration: none;
+            font-family: 'Tales', serif;
+            font-size: 1.4rem;
+            padding: 0.8rem 1.5rem;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 25px;
+            transition: all 0.3s ease;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .back-button:hover {
+            transform: scale(1.05) translateX(-5px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .font-controls {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .control-button {
+            font-family: 'Tales', serif;
+            color: var(--pearl-white);
+            background: rgba(0, 0, 0, 0.2);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            padding: 0.8rem 1.2rem;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .control-button:hover {
+            transform: scale(1.1);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .story-title {
+            font-family: 'Tales', serif;
+            font-size: 4rem;
+            text-align: center;
+            color: var(--wood-brown);
+            margin: 2rem 0;
+            position: relative;
+            text-shadow: 
+                3px 3px 0 var(--sand-gold),
+                6px 6px 0 rgba(0, 0, 0, 0.1);
+        }
+
+        .cover-section {
+            position: relative;
+            max-width: 800px;
+            margin: 2rem auto;
+            padding: 1rem;
+        }
+
+        .cover-frame {
+            position: relative;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 
+                0 10px 30px rgba(0, 0, 0, 0.2),
+                0 0 0 10px var(--wood-brown);
+            background: linear-gradient(45deg, var(--ocean-blue), var(--wave-light));
+            padding: 10px;
+        }
+
+        .cover-frame::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                linear-gradient(45deg, 
+                    transparent 45%, 
+                    rgba(255, 255, 255, 0.1) 50%,
+                    transparent 55%
+                );
+            background-size: 20px 20px;
+            animation: shimmer 20s linear infinite;
+        }
+
+        @keyframes shimmer {
+            0% { background-position: 0 0; }
+            100% { background-position: 40px 40px; }
+        }
+
+        .cover-image {
+            width: 100%;
+            height: auto;
+            display: block;
+            border-radius: 10px;
+            transition: transform 0.5s ease;
+        }
+
+        .cover-frame:hover .cover-image {
+            transform: scale(1.05);
+        }
+
+        .story-tags {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .story-tag {
+            font-family: 'Tales', serif;
+            padding: 0.6rem 1.5rem;
+            border-radius: 20px;
+            background: rgba(255, 255, 255, 0.9);
+            color: var(--ocean-blue);
+            border: 3px solid var(--ocean-blue);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .story-tag:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .story-content {
+            padding: 2rem;
+            font-size: 1.3rem;
+            line-height: 1.8;
+            position: relative;
+        }
+
+        .floating-element {
+            position: fixed;
+            pointer-events: none;
+            font-size: 2rem;
+            animation: float 15s linear infinite;
+            z-index: 1;
+        }
+
+        @keyframes float {
+            0% { transform: translateX(-100%) translateY(0) rotate(0deg); }
+            50% { transform: translateX(50vw) translateY(-100px) rotate(180deg); }
+            100% { transform: translateX(100vw) translateY(0) rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="waves"></div>
+    <div class="story-container">
+        <div class="content-wrapper">
+            <nav class="navigation-bar">
+                <a href="../library.html" class="back-button">
+                    🗺️ Back to Library
+                </a>
+                <div class="font-controls">
+                    <button class="control-button" onclick="changeFontSize('decrease')">A-</button>
+                    <button class="control-button" onclick="changeFontSize('increase')">A+</button>
+                </div>
+            </nav>
+
+            <h1 class="story-title">
+                <span style="position: absolute; left: 10%; font-size: 3rem;">⛵</span>
+                Sindbad's Adventures
+                <span style="position: absolute; right: 10%; font-size: 3rem;">🌊</span>
+            </h1>
+
+            <div class="cover-section">
+                <div class="cover-frame">
+                    <picture class="cover-image">
+                        <source srcset="../images/library/covers/sindbad.jpeg" type="image/jpeg">
+                        <img src="../images/library/covers/sindbad.jpeg" alt="Sindbad's maritime adventures" class="story-cover" onerror="handleImageError(this, 'maritime')">
+                    </picture>
+                </div>
+            </div>
+
+            <div class="story-tags">
+                <span class="story-tag">🎯 8-12 years</span>
+                <span class="story-tag">📚 Advanced</span>
+                <span class="story-tag">🌊 Adventure</span>
+            </div>
+
+            <div class="story-content">
+                <!-- Story content will go here -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function changeFontSize(action) {
+            const content = document.querySelector('.story-content');
+            const currentSize = parseFloat(window.getComputedStyle(content).fontSize);
+            
+            if (action === 'increase' && currentSize < 24) {
+                content.style.fontSize = (currentSize + 2) + 'px';
+            } else if (action === 'decrease' && currentSize > 14) {
+                content.style.fontSize = (currentSize - 2) + 'px';
+            }
+        }
+
+        function handleImageError(element, type) {
+            const errorMessage = `
+                <div style="
+                    padding: 4rem;
+                    text-align: center;
+                    background: linear-gradient(45deg, var(--ocean-blue), var(--wave-light));
+                    color: var(--pearl-white);
+                    border-radius: 15px;
+                    min-height: 300px;
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: center;
+                    align-items: center;
+                    position: relative;
+                    overflow: hidden;
+                ">
+                    <div style="font-size: 4rem; margin-bottom: 1rem;">⛵ 🌊 🗺️</div>
+                    <div style="
+                        font-family: 'Tales', serif;
+                        font-size: 2rem;
+                        margin-bottom: 1rem;
+                        text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+                    ">Set Sail for Adventure!</div>
+                    <div style="
+                        font-family: 'Crimson Pro', serif;
+                        font-size: 1.2rem;
+                        max-width: 80%;
+                        line-height: 1.6;
+                    ">
+                        Join Sindbad on his legendary voyages across the seven seas...
+                    </div>
+                </div>
+            `;
+            element.parentElement.parentElement.innerHTML = errorMessage;
+        }
+
+        function createFloatingElements() {
+            const elements = ['🐋', '🐠', '⚓', '🌊', '🗺️'];
+            setInterval(() => {
+                const element = document.createElement('div');
+                element.className = 'floating-element';
+                element.textContent = elements[Math.floor(Math.random() * elements.length)];
+                element.style.top = `${Math.random() * 70 + 20}vh`;
+                document.body.appendChild(element);
+                
+                setTimeout(() => {
+                    element.remove();
+                }, 15000);
+            }, 3000);
+        }
+
+        createFloatingElements();
+    </script>
+</body>
+</html> 

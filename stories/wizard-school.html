@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Wizard's Apprentice - StoryLand</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Berkshire+Swash&family=Quicksand:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #6B4DE6;    /* Deep Purple */
+            --secondary: #FF8FB1;   /* Soft Pink */
+            --accent: #FFD700;      /* Gold */
+            --text: #2A1B3D;        /* Dark Purple */
+            --bg: #F9F4FF;          /* Light Purple */
+        }
+
+        body {
+            font-family: 'Quicksand', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            background-image: 
+                radial-gradient(circle at 20% 20%, rgba(107, 77, 230, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(255, 143, 177, 0.1) 0%, transparent 50%);
+        }
+
+        .magic-title {
+            font-family: 'Berkshire Swash', cursive;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            color: transparent;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+            animation: magicFloat 3s ease-in-out infinite;
+        }
+
+        .story-container {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(107, 77, 230, 0.2);
+            border-radius: 30px;
+            box-shadow: 
+                0 10px 30px rgba(107, 77, 230, 0.2),
+                inset 0 0 20px rgba(255, 143, 177, 0.1);
+        }
+
+        .nav-bar {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(10px);
+            border-bottom: 2px solid rgba(107, 77, 230, 0.1);
+        }
+
+        .magic-btn {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 20px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(107, 77, 230, 0.2);
+        }
+
+        .magic-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(107, 77, 230, 0.3);
+        }
+
+        .story-content {
+            font-size: 1.2rem;
+            line-height: 2;
+        }
+
+        .story-content p {
+            margin-bottom: 1.5rem;
+            transition: all 0.3s ease;
+            padding: 1rem;
+            border-radius: 15px;
+            background: rgba(255, 255, 255, 0.5);
+        }
+
+        .story-content p:hover {
+            background: rgba(255, 255, 255, 0.8);
+            transform: scale(1.02);
+            box-shadow: 0 5px 15px rgba(107, 77, 230, 0.1);
+        }
+
+        .magic-tag {
+            background: rgba(107, 77, 230, 0.1);
+            color: var(--primary);
+            padding: 0.5rem 1rem;
+            border-radius: 15px;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .magic-tag:hover {
+            transform: scale(1.1);
+            background: rgba(107, 77, 230, 0.2);
+        }
+
+        .floating-wand {
+            position: fixed;
+            right: 2rem;
+            bottom: 2rem;
+            font-size: 2rem;
+            animation: wandFloat 6s ease-in-out infinite;
+            cursor: pointer;
+            z-index: 100;
+        }
+
+        @keyframes magicFloat {
+            0%, 100% { transform: translateY(0) rotate(-2deg); }
+            50% { transform: translateY(-10px) rotate(2deg); }
+        }
+
+        @keyframes wandFloat {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-15px) rotate(15deg); }
+        }
+
+        .sparkle {
+            position: absolute;
+            pointer-events: none;
+            animation: sparkle 1s linear forwards;
+        }
+
+        @keyframes sparkle {
+            0% { transform: scale(0) rotate(0deg); opacity: 1; }
+            100% { transform: scale(1.5) rotate(180deg); opacity: 0; }
+        }
+
+        /* Dark mode */
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --bg: #1A1B3D;
+                --text: #F9F4FF;
+            }
+
+            .story-container {
+                background: rgba(42, 27, 61, 0.9);
+            }
+
+            .nav-bar {
+                background: rgba(42, 27, 61, 0.8);
+            }
+
+            .story-content p {
+                background: rgba(42, 27, 61, 0.5);
+            }
+
+            .story-content p:hover {
+                background: rgba(42, 27, 61, 0.8);
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="nav-bar sticky top-0 z-50 p-4">
+        <div class="container mx-auto flex justify-between items-center">
+            <a href="../library.html" class="magic-btn">
+                <i class="fas fa-hat-wizard mr-2"></i>Back to Library
+            </a>
+            <div class="flex gap-4">
+                <button onclick="adjustFontSize('decrease')" class="magic-btn">
+                    <i class="fas fa-text-height"></i> A-
+                </button>
+                <button onclick="adjustFontSize('increase')" class="magic-btn">
+                    <i class="fas fa-text-height"></i> A+
+                </button>
+                <button onclick="toggleDarkMode()" class="magic-btn">
+                    <i class="fas fa-moon"></i>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Story Content -->
+    <div class="container mx-auto px-4 py-8">
+        <div class="story-container p-8 max-w-4xl mx-auto">
+            <h1 class="magic-title text-5xl text-center mb-8">The Wizard's Apprentice</h1>
+            
+            <img src="../images/library/covers/wizard-school.jpeg" 
+                 alt="Wizard School" 
+                 class="w-full max-w-2xl mx-auto h-80 object-cover rounded-3xl mb-8 shadow-lg">
+
+            <!-- Story metadata -->
+            <div class="flex justify-center gap-4 mb-8 flex-wrap">
+                <span class="magic-tag">
+                    <i class="fas fa-child"></i> 6-8 years
+                </span>
+                <span class="magic-tag">
+                    <i class="fas fa-book-open"></i> Intermediate
+                </span>
+                <span class="magic-tag">
+                    <i class="fas fa-hat-wizard"></i> Fantasy
+                </span>
+            </div>
+
+            <!-- Story content -->
+            <div class="story-content" id="storyContent">
+                <p>In a hidden valley surrounded by misty mountains stood the most magical school in the world - Starfall Academy.</p>
+                
+                <p>This was where young wizards and witches came to learn the art of magic. Among them was a young boy named Leo, who had just received his first wand.</p>
+                
+                <p>On his first day, Leo met his classmates: Emma, who could make flowers bloom with a wave of her hand; Max, who could turn invisible when he was nervous; and Lily, who could talk to animals. Their teacher, Professor Moonbeam, was a kind but strict wizard with a long silver beard that sparkled like stars.</p>
+                
+                <p>Their first lesson was in Basic Spells. "Magic," said Professor Moonbeam, "is not just about waving wands and saying words. It's about believing in yourself and understanding the world around you." He showed them how to make a feather float, and soon the classroom was filled with floating feathers of all colors.</p>
+            </div>
+
+            <div class="mt-12 text-center">
+                <p class="text-3xl font-bold magic-title mb-6">To Be Continued...</p>
+                <a href="../library.html" class="magic-btn inline-block">
+                    <i class="fas fa-books mr-2"></i>More Magical Stories
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Floating Wand -->
+    <div class="floating-wand" onclick="createSparkles(event)">⚡</div>
+
+    <script>
+        function adjustFontSize(action) {
+            const content = document.getElementById('storyContent');
+            const currentSize = parseFloat(window.getComputedStyle(content).fontSize);
+            const newSize = action === 'increase' ? currentSize * 1.1 : currentSize * 0.9;
+            content.style.fontSize = `${newSize}px`;
+        }
+
+        function toggleDarkMode() {
+            document.body.classList.toggle('dark-mode');
+        }
+
+        function createSparkles(event) {
+            const colors = ['#FFD700', '#FF69B4', '#4169E1', '#9400D3'];
+            for (let i = 0; i < 8; i++) {
+                const sparkle = document.createElement('div');
+                sparkle.className = 'sparkle';
+                sparkle.style.left = `${event.clientX}px`;
+                sparkle.style.top = `${event.clientY}px`;
+                sparkle.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                sparkle.style.width = '10px';
+                sparkle.style.height = '10px';
+                sparkle.style.borderRadius = '50%';
+                document.body.appendChild(sparkle);
+                
+                setTimeout(() => sparkle.remove(), 1000);
+            }
+        }
+
+        // Add sparkle effect to paragraphs
+        document.querySelectorAll('.story-content p').forEach(p => {
+            p.addEventListener('mouseover', () => {
+                const rect = p.getBoundingClientRect();
+                createSparkles({
+                    clientX: rect.left + rect.width / 2,
+                    clientY: rect.top + rect.height / 2
+                });
+            });
+        });
+    </script>
+</body>
+</html>

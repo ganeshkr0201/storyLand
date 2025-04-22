@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Monkey and the Crocodile - StoryLand</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Pangolin&family=Quicksand:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --tropical-green: #2E8B57;
+            --sunset-orange: #FF7F50;
+            --river-turquoise: #40E0D0;
+            --palm-brown: #8B4513;
+            --banana-yellow: #FFD700;
+            --jungle-dark: #1a472a;
+            --leaf-light: #98FB98;
+            --coral-pink: #FF6B6B;
+        }
+
+        body {
+            font-family: 'Quicksand', sans-serif;
+            background: linear-gradient(135deg, var(--tropical-green) 0%, var(--sunset-orange) 100%);
+            min-height: 100vh;
+            color: #333;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: 
+                url("data:image/svg+xml,%3Csvg width='52' height='26' viewBox='0 0 52 26' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%2398FB98' fill-opacity='0.1'%3E%3Cpath d='M10 10c0-2.21-1.79-4-4-4-3.314 0-6-2.686-6-6h2c0 2.21 1.79 4 4 4 3.314 0 6 2.686 6 6 0 2.21 1.79 4 4 4 3.314 0 6 2.686 6 6 0 2.21 1.79 4 4 4v2c-3.314 0-6-2.686-6-6 0-2.21-1.79-4-4-4-3.314 0-6-2.686-6-6zm25.464-1.95l8.486 8.486-1.414 1.414-8.486-8.486 1.414-1.414z' /%3E%3C/g%3E%3C/g%3E%3C/svg%3E"),
+                url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M50 50c0 0 20-20 40-20s20 20 20 20-20 20-40 20-20-20-20-20z' fill='%23FFD700' fill-opacity='0.1'/%3E%3C/svg%3E");
+            z-index: -1;
+        }
+
+        .navigation-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            padding: 1rem 2rem;
+            background: linear-gradient(135deg, var(--jungle-dark) 0%, var(--tropical-green) 100%);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 100;
+            border-bottom: 2px solid var(--banana-yellow);
+            box-shadow: 
+                0 4px 12px rgba(0, 0, 0, 0.2),
+                0 0 20px rgba(255, 215, 0, 0.1);
+        }
+
+        .navigation-button {
+            padding: 0.75rem 1.5rem;
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--banana-yellow);
+            border: 2px solid var(--banana-yellow);
+            border-radius: 12px;
+            font-size: 1.2rem;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 10px rgba(255, 215, 0, 0.2);
+        }
+
+        .font-controls {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .navigation-button:hover {
+            transform: translateY(-2px);
+            background: rgba(255, 255, 255, 0.2);
+            box-shadow: 
+                0 6px 16px rgba(0, 0, 0, 0.15),
+                0 0 30px rgba(255, 215, 0, 0.2);
+            color: white;
+        }
+
+        .page-container {
+            max-width: 1000px;
+            margin: 6rem auto 2rem;
+            padding: 0 1rem;
+            position: relative;
+        }
+
+        .story-container {
+            background: rgba(255, 255, 255, 0.95);
+            border: 3px solid var(--banana-yellow);
+            border-radius: 24px;
+            box-shadow: 
+                0 0 30px rgba(46, 139, 87, 0.3),
+                0 0 60px rgba(255, 215, 0, 0.1);
+            overflow: hidden;
+            position: relative;
+        }
+
+        .story-header {
+            text-align: center;
+            padding: 2rem;
+            background: linear-gradient(135deg, var(--jungle-dark) 0%, var(--tropical-green) 100%);
+            border-bottom: 3px solid var(--banana-yellow);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .story-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(circle at 20% 50%, rgba(255, 215, 0, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 50%, rgba(255, 215, 0, 0.1) 0%, transparent 50%);
+            z-index: 0;
+        }
+
+        .story-title {
+            font-family: 'Pangolin', cursive;
+            font-size: 4rem;
+            color: var(--banana-yellow);
+            text-shadow: 
+                2px 2px 4px rgba(0, 0, 0, 0.3),
+                0 0 20px rgba(255, 215, 0, 0.5);
+            margin-bottom: 1rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .cover-container {
+            position: relative;
+            padding: 3rem;
+            background: linear-gradient(to bottom, var(--jungle-dark) 0%, var(--tropical-green) 100%);
+            border-bottom: 3px solid var(--banana-yellow);
+        }
+
+        .cover-frame {
+            position: relative;
+            max-width: 600px;
+            height: 400px;
+            margin: 0 auto;
+            border: 8px solid var(--banana-yellow);
+            border-radius: 16px;
+            box-shadow: 
+                0 0 20px rgba(255, 215, 0, 0.3),
+                0 0 40px rgba(255, 215, 0, 0.2);
+            overflow: hidden;
+            background: var(--river-turquoise);
+        }
+
+        .cover-frame::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent 45%, rgba(255, 215, 0, 0.2) 50%, transparent 55%);
+            animation: shimmer 3s infinite;
+            z-index: 2;
+        }
+
+        .cover-image {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            position: relative;
+            z-index: 1;
+            transition: transform 0.3s ease;
+            background-color: var(--river-turquoise);
+            padding: 1rem;
+        }
+
+        .cover-frame:hover .cover-image {
+            transform: scale(1.05);
+        }
+
+        .story-tag {
+            display: inline-block;
+            padding: 0.5rem 1.5rem;
+            background: rgba(255, 255, 255, 0.15);
+            color: var(--banana-yellow);
+            border: 2px solid var(--banana-yellow);
+            border-radius: 999px;
+            margin: 0.25rem;
+            font-size: 0.9rem;
+            backdrop-filter: blur(5px);
+            animation: float 3s ease-in-out infinite;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+        }
+
+        .story-content {
+            padding: 2rem;
+            font-size: 1.2rem;
+            line-height: 1.8;
+            position: relative;
+            z-index: 1;
+            background: 
+                linear-gradient(rgba(255, 255, 255, 0.95), rgba(255, 255, 255, 0.95)),
+                url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M50 50c0 0 20-20 40-20s20 20 20 20-20 20-40 20-20-20-20-20z' fill='%2398FB98' fill-opacity='0.1'/%3E%3C/svg%3E");
+        }
+
+        .story-paragraph {
+            position: relative;
+            margin-bottom: 1.5rem;
+            padding: 1.5rem;
+            background: rgba(152, 251, 152, 0.1);
+            border-left: 3px solid var(--tropical-green);
+            border-radius: 0 12px 12px 0;
+            transition: all 0.3s ease;
+        }
+
+        .story-paragraph:hover {
+            transform: translateX(10px);
+            background: rgba(152, 251, 152, 0.2);
+            box-shadow: 
+                0 4px 12px rgba(46, 139, 87, 0.1),
+                0 0 20px rgba(255, 215, 0, 0.1);
+        }
+
+        .jungle-decoration {
+            position: absolute;
+            font-size: 2rem;
+            animation: float 6s ease-in-out infinite;
+            opacity: 0.7;
+            filter: drop-shadow(0 0 5px rgba(255, 215, 0, 0.3));
+            z-index: 2;
+            pointer-events: none;
+        }
+
+        .monkey { top: 10%; right: 5%; }
+        .crocodile { top: 30%; left: 5%; }
+        .tree { top: 50%; right: 5%; }
+        .river { top: 70%; left: 5%; }
+        .fruit { top: 90%; right: 5%; }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-5px) rotate(5deg); }
+        }
+
+        @keyframes shimmer {
+            0% { transform: translateX(-100%) rotate(45deg); }
+            100% { transform: translateX(100%) rotate(45deg); }
+        }
+
+        .leaf {
+            position: absolute;
+            width: 30px;
+            height: 30px;
+            background: var(--leaf-light);
+            mask: url("data:image/svg+xml,%3Csvg viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M50,0 C50,50 100,50 100,50 C50,50 50,100 50,100 C50,50 0,50 0,50 C50,50 50,0 50,0'/%3E%3C/svg%3E") center/contain no-repeat;
+            -webkit-mask: url("data:image/svg+xml,%3Csvg viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M50,0 C50,50 100,50 100,50 C50,50 50,100 50,100 C50,50 0,50 0,50 C50,50 50,0 50,0'/%3E%3C/svg%3E") center/contain no-repeat;
+            opacity: 0.1;
+            animation: leafFall 10s linear infinite;
+        }
+
+        @keyframes leafFall {
+            0% { 
+                transform: translateY(-100%) rotate(0deg);
+                opacity: 0;
+            }
+            10% { opacity: 0.1; }
+            90% { opacity: 0.1; }
+            100% { 
+                transform: translateY(100vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navigation-bar">
+        <a href="../library.html" class="navigation-button">
+            ← Back to Library
+        </a>
+        <div class="font-controls">
+            <button class="navigation-button" onclick="changeFontSize('decrease')">A-</button>
+            <button class="navigation-button" onclick="changeFontSize('increase')">A+</button>
+        </div>
+    </nav>
+
+    <div class="page-container">
+        <div class="story-container">
+            <div class="jungle-decoration monkey">🐒</div>
+            <div class="jungle-decoration crocodile">🐊</div>
+            <div class="jungle-decoration tree">🌴</div>
+            <div class="jungle-decoration river">💧</div>
+            <div class="jungle-decoration fruit">🍌</div>
+
+            <div class="story-header">
+                <h1 class="story-title">The Monkey and the Crocodile</h1>
+                <div class="tags-container">
+                    <span class="story-tag">6-12 years</span>
+                    <span class="story-tag">intermediate</span>
+                    <span class="story-tag">folk tale</span>
+                </div>
+            </div>
+
+            <div class="cover-container">
+                <div class="cover-frame">
+                    <img src="../images/library/covers/monkey-crocodile.jpeg" 
+                         alt="The Monkey and the Crocodile" 
+                         class="cover-image"
+                         onerror="this.parentElement.innerHTML='<div style=\'padding: 2rem; text-align: center; color: var(--tropical-green); text-shadow: 1px 1px 2px rgba(0,0,0,0.3);\'><span style=\'font-size: 3rem;\'>🐒</span><br>Cover Image Coming Soon</div>';">
+                </div>
+            </div>
+
+            <div class="story-content">
+                <div class="story-paragraph">
+                    In a beautiful forest by a river, there lived a clever monkey named Raktamukha. He spent his days playing in the 
+                    trees and eating delicious fruits. One day, he met a crocodile named Karalamukha who lived in the river.
+                </div>
+
+                <div class="story-paragraph">
+                    The monkey and the crocodile became good friends. Every day, the monkey would share sweet fruits from his tree 
+                    with the crocodile. The crocodile would take some fruits home to his wife, who loved them very much.
+                </div>
+
+                <div class="story-paragraph">
+                    One day, the crocodile's wife said, "If the fruits are so sweet, imagine how sweet the monkey's heart must be! Bring 
+                    me his heart to eat." The crocodile was shocked but didn't want to upset his wife.
+                </div>
+
+                <div class="story-paragraph">
+                    The next day, the crocodile invited the monkey to his home for dinner. "My wife wants to meet you," he said. The 
+                    monkey agreed and climbed onto the crocodile's back for the ride across the river.
+                </div>
+
+                <div class="story-paragraph">
+                    In the middle of the river, the crocodile said, "I'm sorry, my friend, but my wife wants to eat your heart." The 
+                    clever monkey replied, "Oh no! I left my heart hanging on the tree. Let's go back and get it!"
+                </div>
+
+                <div class="story-paragraph">
+                    The foolish crocodile believed him and swam back. As soon as they reached the shore, the monkey jumped onto his 
+                    tree and said, "How silly of you to think I would carry my heart with me! Never trust a false friend!"
+                </div>
+
+                <div class="story-paragraph">
+                    From that day on, the monkey never came down from his tree when the crocodile was around. He had learned to be 
+                    careful about whom to trust.
+                </div>
+
+                <div class="story-paragraph">
+                    Moral: Be wise in choosing your friends, and always be careful of those who might betray your trust.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function changeFontSize(action) {
+            const content = document.querySelector('.story-content');
+            const currentSize = parseFloat(window.getComputedStyle(content).fontSize);
+            
+            if (action === 'increase' && currentSize < 24) {
+                content.style.fontSize = (currentSize + 2) + 'px';
+            } else if (action === 'decrease' && currentSize > 14) {
+                content.style.fontSize = (currentSize - 2) + 'px';
+            }
+        }
+
+        // Add falling leaves
+        function createLeaves() {
+            const container = document.querySelector('body');
+            for (let i = 0; i < 20; i++) {
+                const leaf = document.createElement('div');
+                leaf.className = 'leaf';
+                leaf.style.left = Math.random() * 100 + '%';
+                leaf.style.animationDelay = Math.random() * 10 + 's';
+                container.appendChild(leaf);
+            }
+        }
+
+        createLeaves();
+    </script>
+</body>
+</html> 

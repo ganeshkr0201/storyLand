@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rapunzel - StoryLand</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Tangerine:wght@700&family=Alice&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --tower-stone: #8B728E;
+            --golden-hair: #FFD700;
+            --garden-green: #4A7C59;
+            --sky-blue: #87CEEB;
+            --sunset-pink: #FF9AA2;
+            --lavender: #E6E6FA;
+            --deep-purple: #483D8B;
+        }
+
+        body {
+            font-family: 'Playfair Display', serif;
+            background: linear-gradient(135deg, var(--sky-blue) 0%, var(--sunset-pink) 50%, var(--lavender) 100%);
+            min-height: 100vh;
+            color: #2C1810;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: 
+                url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M30 5c5 0 10 5 10 10s-5 10-10 10-10-5-10-10 5-10 10-10zM10 30c5 0 10 5 10 10s-5 10-10 10S0 45 0 40s5-10 10-10zm40 0c5 0 10 5 10 10s-5 10-10 10-10-5-10-10 5-10 10-10z' fill='%23FFFFFF' fill-opacity='0.1'/%3E%3C/svg%3E"),
+                url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M50 50l20-20M30 70l20-20M70 30l-20 20' stroke='%23FFD700' stroke-opacity='0.1' stroke-width='1'/%3E%3C/svg%3E");
+            z-index: -1;
+        }
+
+        .page-container {
+            max-width: 1000px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+            position: relative;
+        }
+
+        .story-container {
+            background: rgba(255, 255, 255, 0.95);
+            border: 3px solid var(--tower-stone);
+            border-radius: 24px;
+            box-shadow: 
+                0 0 30px rgba(139, 114, 142, 0.3),
+                0 0 60px rgba(255, 215, 0, 0.1);
+            overflow: hidden;
+            position: relative;
+        }
+
+        .story-header {
+            text-align: center;
+            padding: 2rem;
+            background: linear-gradient(135deg, var(--deep-purple) 0%, var(--tower-stone) 100%);
+            border-bottom: 3px solid var(--golden-hair);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .story-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(circle at 20% 50%, rgba(255, 215, 0, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 50%, rgba(255, 215, 0, 0.1) 0%, transparent 50%);
+            z-index: 0;
+        }
+
+        .story-title {
+            font-family: 'Tangerine', cursive;
+            font-size: 6rem;
+            color: var(--golden-hair);
+            text-shadow: 
+                2px 2px 4px rgba(0, 0, 0, 0.3),
+                0 0 20px rgba(255, 215, 0, 0.5);
+            margin-bottom: 1rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .cover-container {
+            position: relative;
+            padding: 3rem;
+            background: linear-gradient(to bottom, var(--deep-purple) 0%, var(--garden-green) 100%);
+            border-bottom: 3px solid var(--golden-hair);
+        }
+
+        .cover-frame {
+            position: relative;
+            max-width: 600px;
+            height: 400px;
+            margin: 0 auto;
+            border: 8px solid var(--golden-hair);
+            border-radius: 16px;
+            box-shadow: 
+                0 0 20px rgba(255, 215, 0, 0.3),
+                0 0 40px rgba(255, 215, 0, 0.2);
+            overflow: hidden;
+            background: var(--lavender);
+        }
+
+        .cover-frame::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent 45%, rgba(255, 215, 0, 0.2) 50%, transparent 55%);
+            animation: shimmer 3s infinite;
+            z-index: 2;
+        }
+
+        .cover-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            position: relative;
+            z-index: 1;
+            transition: transform 0.3s ease;
+        }
+
+        .cover-frame:hover .cover-image {
+            transform: scale(1.05);
+        }
+
+        .story-tag {
+            display: inline-block;
+            padding: 0.5rem 1.5rem;
+            background: rgba(255, 255, 255, 0.15);
+            color: var(--golden-hair);
+            border: 2px solid var(--golden-hair);
+            border-radius: 999px;
+            margin: 0.25rem;
+            font-size: 0.9rem;
+            backdrop-filter: blur(5px);
+            animation: float 3s ease-in-out infinite;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+        }
+
+        .story-content {
+            padding: 2rem;
+            font-size: 1.2rem;
+            line-height: 1.8;
+            position: relative;
+            z-index: 1;
+            background: 
+                linear-gradient(rgba(255, 255, 255, 0.95), rgba(255, 255, 255, 0.95)),
+                url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M50 50c0 0 20-20 40-20s20 20 20 20-20 20-40 20-20-20-20-20z' fill='%23E6E6FA' fill-opacity='0.1'/%3E%3C/svg%3E");
+        }
+
+        .story-paragraph {
+            position: relative;
+            margin-bottom: 1.5rem;
+            padding: 1.5rem;
+            background: rgba(230, 230, 250, 0.3);
+            border-left: 3px solid var(--garden-green);
+            border-radius: 0 12px 12px 0;
+            transition: all 0.3s ease;
+        }
+
+        .story-paragraph:hover {
+            transform: translateX(10px);
+            background: rgba(230, 230, 250, 0.5);
+            box-shadow: 
+                0 4px 12px rgba(74, 124, 89, 0.1),
+                0 0 20px rgba(255, 215, 0, 0.1);
+        }
+
+        .fairy-tale-decoration {
+            position: absolute;
+            font-size: 2rem;
+            animation: float 6s ease-in-out infinite;
+            opacity: 0.7;
+            filter: drop-shadow(0 0 5px rgba(255, 215, 0, 0.3));
+            z-index: 2;
+        }
+
+        .tower { top: 10%; right: 5%; }
+        .hair { top: 30%; left: 5%; }
+        .garden { top: 50%; right: 5%; }
+        .witch { top: 70%; left: 5%; }
+        .prince { top: 90%; right: 5%; }
+
+        .navigation-button {
+            position: fixed;
+            padding: 0.75rem 1.5rem;
+            background: linear-gradient(135deg, var(--deep-purple) 0%, var(--tower-stone) 100%);
+            color: var(--golden-hair);
+            border: 2px solid var(--golden-hair);
+            border-radius: 12px;
+            font-size: 1.2rem;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            z-index: 100;
+            box-shadow: 
+                0 4px 12px rgba(0, 0, 0, 0.1),
+                0 0 20px rgba(255, 215, 0, 0.1);
+        }
+
+        .back-button {
+            top: 20px;
+            left: 20px;
+        }
+
+        .font-controls {
+            top: 20px;
+            right: 20px;
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .navigation-button:hover {
+            transform: translateY(-2px);
+            background: var(--deep-purple);
+            box-shadow: 
+                0 6px 16px rgba(0, 0, 0, 0.15),
+                0 0 30px rgba(255, 215, 0, 0.2);
+        }
+
+        .golden-strand {
+            position: absolute;
+            width: 2px;
+            height: 150px;
+            background: linear-gradient(var(--golden-hair), transparent);
+            animation: flow 4s infinite;
+            opacity: 0.4;
+            filter: drop-shadow(0 0 3px rgba(255, 215, 0, 0.3));
+        }
+
+        @keyframes flow {
+            0% { transform: translateY(-100%) rotate(5deg); }
+            100% { transform: translateY(100vh) rotate(-5deg); }
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-5px) rotate(5deg); }
+        }
+
+        @keyframes shimmer {
+            0% { transform: translateX(-100%) rotate(45deg); }
+            100% { transform: translateX(100%) rotate(45deg); }
+        }
+
+        .magical-sparkle {
+            position: absolute;
+            width: 3px;
+            height: 3px;
+            background: var(--golden-hair);
+            border-radius: 50%;
+            animation: sparkle 2s infinite;
+            box-shadow: 0 0 5px var(--golden-hair);
+        }
+
+        @keyframes sparkle {
+            0%, 100% { opacity: 0; transform: scale(0) rotate(0deg); }
+            50% { opacity: 1; transform: scale(1) rotate(180deg); }
+        }
+    </style>
+</head>
+<body>
+    <a href="../library.html" class="navigation-button back-button">
+        ← Back to Library
+    </a>
+
+    <div class="font-controls">
+        <button class="navigation-button" onclick="changeFontSize('decrease')">A-</button>
+        <button class="navigation-button" onclick="changeFontSize('increase')">A+</button>
+    </div>
+
+    <div class="page-container">
+        <div class="story-container">
+            <div class="fairy-tale-decoration tower">🏰</div>
+            <div class="fairy-tale-decoration hair">👱‍♀️</div>
+            <div class="fairy-tale-decoration garden">🌺</div>
+            <div class="fairy-tale-decoration witch">🧙‍♀️</div>
+            <div class="fairy-tale-decoration prince">🤴</div>
+
+            <div class="story-header">
+                <h1 class="story-title">Rapunzel</h1>
+                <div class="tags-container">
+                    <span class="story-tag">5-10 years</span>
+                    <span class="story-tag">intermediate</span>
+                    <span class="story-tag">fairy tale</span>
+                </div>
+            </div>
+
+            <div class="cover-container">
+                <div class="cover-frame">
+                    <img src="../images/library/covers/rapunzel.jpg" 
+                         alt="Rapunzel" 
+                         class="cover-image"
+                         onerror="this.src='../images/library/covers/rapunzel.webp'; this.onerror='this.onerror=null; this.parentElement.innerHTML=\'<div style=\\\'padding: 2rem; text-align: center; color: var(--golden-hair); text-shadow: 1px 1px 2px rgba(0,0,0,0.3);\\\'><span style=\\\'font-size: 3rem;\\\'>🏰</span><br>Cover Image Coming Soon</div>\'';">
+                </div>
+            </div>
+
+            <div class="story-content">
+                <div class="story-paragraph">
+                    Once upon a time, a man and woman longed for a child. Behind their house was a beautiful garden belonging to a 
+                    witch. The woman saw some rapunzel plants in the garden and wanted them so badly that she became ill.
+                </div>
+
+                <div class="story-paragraph">
+                    Her husband climbed over the wall to get some rapunzel for her. But the witch caught him! "You may take the 
+                    rapunzel," she said, "but you must give me your child when it is born."
+                </div>
+
+                <div class="story-paragraph">
+                    When their baby girl was born, the witch took her away and named her Rapunzel. She locked Rapunzel in a tall tower 
+                    with no doors or stairs. The only way in or out was through a window at the very top.
+                </div>
+
+                <div class="story-paragraph">
+                    When the witch wanted to visit, she would call, "Rapunzel, Rapunzel, let down your hair!" Rapunzel would let her long 
+                    golden hair fall out the window, and the witch would climb up.
+                </div>
+
+                <div class="story-paragraph">
+                    One day, a prince heard Rapunzel singing. He watched the witch climb up her hair and decided to try it himself. 
+                    He called out just like the witch did, and Rapunzel let down her hair.
+                </div>
+
+                <div class="story-paragraph">
+                    The prince and Rapunzel fell in love. They planned to escape together, but the witch discovered their plan. She cut off Rapunzel's hair and sent her far away.
+                </div>
+
+                <div class="story-paragraph">
+                    When the prince came to rescue Rapunzel, the witch tricked him. He fell from the tower and was blinded by thorns. For years, he wandered the land, searching for his lost love.
+                </div>
+
+                <div class="story-paragraph">
+                    One day, he heard Rapunzel's beautiful voice. She had been living in the forest with the twins they had together. When her tears touched his eyes, his sight was restored.
+                </div>
+
+                <div class="story-paragraph">
+                    The prince and Rapunzel returned to his kingdom, where they lived happily ever after with their children.
+                </div>
+
+                <div class="story-paragraph">
+                    Moral: Love and hope can overcome even the most difficult obstacles.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function changeFontSize(action) {
+            const content = document.querySelector('.story-content');
+            const currentSize = parseFloat(window.getComputedStyle(content).fontSize);
+            
+            if (action === 'increase' && currentSize < 24) {
+                content.style.fontSize = (currentSize + 2) + 'px';
+            } else if (action === 'decrease' && currentSize > 14) {
+                content.style.fontSize = (currentSize - 2) + 'px';
+            }
+        }
+
+        // Add flowing golden strands
+        function createGoldenStrands() {
+            const container = document.querySelector('body');
+            for (let i = 0; i < 20; i++) {
+                const strand = document.createElement('div');
+                strand.className = 'golden-strand';
+                strand.style.left = Math.random() * 100 + '%';
+                strand.style.animationDelay = Math.random() * 4 + 's';
+                strand.style.transform = `rotate(${Math.random() * 10 - 5}deg)`;
+                container.appendChild(strand);
+            }
+        }
+
+        // Add magical sparkles
+        function createSparkles() {
+            const container = document.querySelector('.story-container');
+            for (let i = 0; i < 30; i++) {
+                const sparkle = document.createElement('div');
+                sparkle.className = 'magical-sparkle';
+                sparkle.style.left = Math.random() * 100 + '%';
+                sparkle.style.top = Math.random() * 100 + '%';
+                sparkle.style.animationDelay = Math.random() * 2 + 's';
+                container.appendChild(sparkle);
+            }
+        }
+
+        createGoldenStrands();
+        createSparkles();
+    </script>
+</body>
+</html> 

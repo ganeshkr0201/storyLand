@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Polar Bear's Winter Journey - StoryLand</title>
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600&family=Snowy+Day&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --ice-blue: #A5D8FF;
+            --deep-blue: #1E40AF;
+            --snow-white: #FFFFFF;
+            --polar-gray: #94A3B8;
+            --aurora-green: #4ADE80;
+            --aurora-pink: #EC4899;
+            --text-color: #1E293B;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            background: linear-gradient(135deg, var(--deep-blue) 0%, #1E293B 100%);
+            font-family: 'Quicksand', sans-serif;
+            color: var(--text-color);
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        .snowfall {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            background-image: 
+                radial-gradient(2px 2px at 20px 30px, var(--snow-white) 100%, transparent),
+                radial-gradient(2px 2px at 40px 70px, var(--snow-white) 100%, transparent),
+                radial-gradient(2px 2px at 50px 160px, var(--snow-white) 100%, transparent),
+                radial-gradient(2px 2px at 90px 40px, var(--snow-white) 100%, transparent);
+            background-size: 200px 200px;
+            animation: snow 8s linear infinite;
+        }
+
+        @keyframes snow {
+            0% { background-position: 0px 0px, 0px 0px, 0px 0px, 0px 0px; }
+            100% { background-position: 200px 200px, 100px 200px, -100px 200px, -50px 200px; }
+        }
+
+        .aurora {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 50vh;
+            background: linear-gradient(180deg, 
+                transparent 0%, 
+                rgba(74, 222, 128, 0.2) 20%,
+                rgba(236, 72, 153, 0.2) 40%,
+                transparent 100%
+            );
+            filter: blur(20px);
+            animation: aurora 8s ease-in-out infinite;
+            opacity: 0.5;
+            pointer-events: none;
+        }
+
+        @keyframes aurora {
+            0%, 100% { transform: translateY(-20px); opacity: 0.5; }
+            50% { transform: translateY(0px); opacity: 0.8; }
+        }
+
+        .story-container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 2rem;
+            position: relative;
+        }
+
+        .content-wrapper {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 30px;
+            box-shadow: 
+                0 0 40px rgba(165, 216, 255, 0.3),
+                0 0 80px rgba(255, 255, 255, 0.2);
+            overflow: hidden;
+            position: relative;
+            border: 8px solid var(--ice-blue);
+            backdrop-filter: blur(10px);
+        }
+
+        .navigation-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 2rem;
+            background: linear-gradient(to right, var(--ice-blue), var(--deep-blue));
+            position: relative;
+            overflow: hidden;
+        }
+
+        .back-button {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: white;
+            text-decoration: none;
+            font-size: 1.2rem;
+            padding: 0.8rem 1.5rem;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 25px;
+            transition: all 0.3s ease;
+            border: 2px solid rgba(255, 255, 255, 0.4);
+        }
+
+        .back-button:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateX(-5px);
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.4);
+        }
+
+        .font-controls {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .control-button {
+            font-family: 'Quicksand', sans-serif;
+            color: white;
+            background: rgba(255, 255, 255, 0.2);
+            border: 2px solid rgba(255, 255, 255, 0.4);
+            padding: 0.8rem 1.2rem;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .control-button:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .story-title {
+            font-family: 'Snowy Day', cursive;
+            font-size: 4rem;
+            text-align: center;
+            color: var(--deep-blue);
+            margin: 2rem 0;
+            position: relative;
+            text-shadow: 
+                2px 2px 0 var(--ice-blue),
+                4px 4px 0 rgba(0, 0, 0, 0.1);
+        }
+
+        .story-icon {
+            position: absolute;
+            font-size: 2.5rem;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        .icon-left { left: 10%; top: 50%; transform: translateY(-50%); }
+        .icon-right { right: 10%; top: 50%; transform: translateY(-50%); }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(-50%); }
+            50% { transform: translateY(-70%); }
+        }
+
+        .cover-section {
+            position: relative;
+            max-width: 800px;
+            margin: 2rem auto;
+            padding: 1rem;
+        }
+
+        .cover-frame {
+            position: relative;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 
+                0 10px 30px rgba(0, 0, 0, 0.2),
+                0 0 0 10px var(--ice-blue);
+            background: linear-gradient(45deg, var(--ice-blue), var(--snow-white));
+        }
+
+        .cover-image {
+            width: 100%;
+            height: auto;
+            display: block;
+            transition: transform 0.5s ease;
+        }
+
+        .cover-frame:hover .cover-image {
+            transform: scale(1.05);
+        }
+
+        .story-tags {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .story-tag {
+            font-family: 'Quicksand', sans-serif;
+            padding: 0.6rem 1.5rem;
+            border-radius: 20px;
+            font-size: 1.1rem;
+            background: var(--ice-blue);
+            color: var(--deep-blue);
+            border: 2px solid var(--deep-blue);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .story-tag:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(165, 216, 255, 0.4);
+        }
+
+        .story-content {
+            padding: 2rem;
+            font-size: 1.2rem;
+            line-height: 1.8;
+            position: relative;
+        }
+
+        .story-paragraph {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            border-radius: 15px;
+            border: 2px solid var(--ice-blue);
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .story-paragraph:hover {
+            transform: translateX(10px);
+            box-shadow: 0 10px 20px rgba(165, 216, 255, 0.3);
+        }
+
+        .story-paragraph::before {
+            content: '❄️';
+            position: absolute;
+            left: -30px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 1.5rem;
+        }
+
+        .arctic-animal {
+            position: fixed;
+            pointer-events: none;
+            opacity: 0.8;
+            animation: waddle 20s linear infinite;
+        }
+
+        @keyframes waddle {
+            0% { transform: translateX(-100%) rotate(5deg); }
+            50% { transform: translateX(50vw) rotate(-5deg); }
+            100% { transform: translateX(100vw) rotate(5deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="snowfall"></div>
+    <div class="aurora"></div>
+    <div class="story-container">
+        <div class="content-wrapper">
+            <nav class="navigation-bar">
+                <a href="../library.html" class="back-button">
+                    ❄️ Back to Library
+                </a>
+                <div class="font-controls">
+                    <button class="control-button" onclick="changeFontSize('decrease')">A-</button>
+                    <button class="control-button" onclick="changeFontSize('increase')">A+</button>
+                </div>
+            </nav>
+
+            <h1 class="story-title">
+                <span class="story-icon icon-left">🐻‍❄️</span>
+                Polar Bear's Winter Journey
+                <span class="story-icon icon-right">🐧</span>
+            </h1>
+
+            <div class="cover-section">
+                <div class="cover-frame">
+                    <picture>
+                        <source srcset="../images/library/covers/arctic-animals.webp" type="image/webp">
+                        <source srcset="../images/library/covers/arctic-animals.jpg" type="image/jpeg">
+                        <img 
+                            src="../images/library/covers/arctic-animals.webp" 
+                            alt="A young polar bear cub on an arctic adventure with penguin friends" 
+                            class="cover-image"
+                            onerror="handleImageError(this)"
+                        >
+                    </picture>
+                </div>
+            </div>
+
+            <div class="story-tags">
+                <span class="story-tag">🐻‍❄️ 3-5 years</span>
+                <span class="story-tag">📚 Beginner</span>
+                <span class="story-tag">🦊 Animals</span>
+            </div>
+
+            <div class="story-content">
+                <div class="story-paragraph">
+                    Snowflake was a young polar bear who lived in the Arctic. His fur was as white as the snow, and his eyes sparkled like ice crystals. One winter morning, he woke up to find that his mother was gone. She had left to find food, as she often did.
+                </div>
+
+                <div class="story-paragraph">
+                    "I'll go find her!" Snowflake said bravely. He put on his warmest scarf (made of sealskin) and set off across the ice. The wind was cold, but Snowflake's thick fur kept him warm.
+                </div>
+
+                <div class="story-paragraph">
+                    As he walked, Snowflake met a friendly group of penguins. "Have you seen my mother?" he asked. The penguins hadn't seen her, but they offered to help him search. Together, they waddled across the snowy landscape.
+                </div>
+
+                <div class="story-paragraph">
+                    Next, they found a wise old seal sunbathing on an ice floe. "Your mother passed by earlier," the seal told them. "She was heading toward the fishing grounds." Snowflake and his penguin friends thanked the seal and continued their journey.
+                </div>
+
+                <div class="story-paragraph">
+                    Finally, they spotted a large white figure in the distance. It was Snowflake's mother! She had caught plenty of fish and was already on her way back home. She was surprised but proud to see how brave her little cub had been.
+                </div>
+
+                <div class="story-paragraph">
+                    The penguins celebrated with Snowflake and his mother, and they all shared a delicious fish dinner. From that day on, Snowflake knew he could be brave when he needed to be, but it was always better to have friends by your side.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function changeFontSize(action) {
+            const content = document.querySelector('.story-content');
+            const currentSize = parseFloat(window.getComputedStyle(content).fontSize);
+            
+            if (action === 'increase' && currentSize < 24) {
+                content.style.fontSize = (currentSize + 2) + 'px';
+            } else if (action === 'decrease' && currentSize > 14) {
+                content.style.fontSize = (currentSize - 2) + 'px';
+            }
+        }
+
+        function handleImageError(element) {
+            const errorMessage = `
+                <div style="
+                    padding: 4rem; 
+                    text-align: center; 
+                    background: linear-gradient(45deg, var(--ice-blue), var(--snow-white));
+                    color: var(--deep-blue);
+                    border-radius: 15px;
+                    min-height: 300px;
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: center;
+                    align-items: center;
+                    position: relative;
+                    overflow: hidden;
+                ">
+                    <div style="font-size: 4rem; margin-bottom: 1rem;">🐻‍❄️ 🐧 ❄️</div>
+                    <div style="
+                        font-family: 'Snowy Day', cursive; 
+                        font-size: 2rem; 
+                        margin-bottom: 1rem;
+                        color: var(--deep-blue);
+                        text-shadow: 2px 2px 0 var(--ice-blue);
+                    ">An Arctic Adventure Awaits</div>
+                    <div style="
+                        font-family: 'Quicksand', sans-serif; 
+                        font-size: 1.2rem;
+                        max-width: 80%;
+                        line-height: 1.6;
+                    ">
+                        Join Snowflake the polar bear cub as he embarks on a magical journey across the frozen tundra...
+                    </div>
+                </div>
+            `;
+            element.parentElement.parentElement.innerHTML = errorMessage;
+        }
+
+        function createArcticAnimals() {
+            const animals = ['🐻‍❄️', '🐧', '🦊', '🦭'];
+            setInterval(() => {
+                const animal = document.createElement('div');
+                animal.className = 'arctic-animal';
+                animal.textContent = animals[Math.floor(Math.random() * animals.length)];
+                animal.style.top = `${Math.random() * 100}vh`;
+                animal.style.fontSize = `${Math.random() * 2 + 2}rem`;
+                document.body.appendChild(animal);
+                
+                setTimeout(() => {
+                    animal.remove();
+                }, 20000);
+            }, 5000);
+        }
+
+        createArcticAnimals();
+    </script>
+</body>
+</html>

@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Farmyard Friends - StoryLand</title>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600&family=Coming+Soon&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --barn-red: #E53E3E;
+            --hay-yellow: #F6E05E;
+            --grass-green: #48BB78;
+            --sky-blue: #63B3ED;
+            --wood-brown: #C05621;
+            --fence-beige: #F6AD55;
+            --text-color: #2D3748;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            background: linear-gradient(180deg, var(--sky-blue) 0%, #A0D8EF 100%);
+            font-family: 'Fredoka', sans-serif;
+            color: var(--text-color);
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        .clouds {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            background-image: 
+                radial-gradient(50px 50px at 100px 100px, rgba(255, 255, 255, 0.8) 100%, transparent),
+                radial-gradient(40px 40px at 200px 150px, rgba(255, 255, 255, 0.7) 100%, transparent),
+                radial-gradient(60px 60px at 300px 50px, rgba(255, 255, 255, 0.9) 100%, transparent);
+            background-size: 600px 400px;
+            animation: float-clouds 30s linear infinite;
+        }
+
+        @keyframes float-clouds {
+            0% { background-position: 0px 0px; }
+            100% { background-position: 600px 0px; }
+        }
+
+        .grass-field {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 30vh;
+            background: linear-gradient(0deg, var(--grass-green) 0%, #9AE6B4 100%);
+            z-index: -1;
+        }
+
+        .story-container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 2rem;
+            position: relative;
+        }
+
+        .content-wrapper {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 30px;
+            box-shadow: 
+                0 10px 30px rgba(0, 0, 0, 0.1),
+                0 0 0 10px rgba(255, 255, 255, 0.5);
+            overflow: hidden;
+            position: relative;
+            border: 8px solid var(--wood-brown);
+            background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 0h100v100H0z' fill='%23C05621' fill-opacity='0.1'/%3E%3Cpath d='M10 10h80v80H10z' fill='none' stroke='%23C05621' stroke-opacity='0.2'/%3E%3C/svg%3E");
+        }
+
+        .navigation-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 2rem;
+            background: linear-gradient(to right, var(--barn-red), #C53030);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .back-button {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: white;
+            text-decoration: none;
+            font-size: 1.2rem;
+            padding: 0.8rem 1.5rem;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 25px;
+            transition: all 0.3s ease;
+            border: 2px solid rgba(255, 255, 255, 0.4);
+        }
+
+        .back-button:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateX(-5px);
+        }
+
+        .font-controls {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .control-button {
+            font-family: 'Fredoka', sans-serif;
+            color: white;
+            background: rgba(255, 255, 255, 0.2);
+            border: 2px solid rgba(255, 255, 255, 0.4);
+            padding: 0.8rem 1.2rem;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .control-button:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .story-title {
+            font-family: 'Coming Soon', cursive;
+            font-size: 4rem;
+            text-align: center;
+            color: var(--barn-red);
+            margin: 2rem 0;
+            position: relative;
+            text-shadow: 
+                2px 2px 0 var(--hay-yellow),
+                4px 4px 0 rgba(0, 0, 0, 0.1);
+        }
+
+        .story-icon {
+            position: absolute;
+            font-size: 2.5rem;
+            animation: bounce 2s ease-in-out infinite;
+        }
+
+        .icon-left { left: 10%; top: 50%; transform: translateY(-50%); }
+        .icon-right { right: 10%; top: 50%; transform: translateY(-50%); }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(-50%); }
+            50% { transform: translateY(-80%); }
+        }
+
+        .cover-section {
+            position: relative;
+            max-width: 800px;
+            margin: 2rem auto;
+            padding: 1rem;
+        }
+
+        .cover-frame {
+            position: relative;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 
+                0 10px 30px rgba(0, 0, 0, 0.2),
+                0 0 0 15px var(--fence-beige);
+            background: linear-gradient(45deg, var(--fence-beige), #FBD38D);
+            padding: 10px;
+        }
+
+        .cover-frame::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                repeating-linear-gradient(90deg, 
+                    var(--wood-brown) 0px, 
+                    var(--wood-brown) 10px,
+                    transparent 10px,
+                    transparent 20px
+                );
+            opacity: 0.1;
+            pointer-events: none;
+        }
+
+        .cover-image {
+            width: 100%;
+            height: auto;
+            display: block;
+            border-radius: 10px;
+            transition: transform 0.5s ease;
+        }
+
+        .cover-frame:hover .cover-image {
+            transform: scale(1.05);
+        }
+
+        .story-tags {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .story-tag {
+            font-family: 'Fredoka', sans-serif;
+            padding: 0.6rem 1.5rem;
+            border-radius: 20px;
+            font-size: 1.1rem;
+            background: var(--hay-yellow);
+            color: var(--wood-brown);
+            border: 2px solid var(--wood-brown);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .story-tag:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(246, 173, 85, 0.4);
+        }
+
+        .story-content {
+            padding: 2rem;
+            font-size: 1.2rem;
+            line-height: 1.8;
+            position: relative;
+        }
+
+        .story-paragraph {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            border-radius: 15px;
+            border: 2px solid var(--fence-beige);
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .story-paragraph:hover {
+            transform: translateX(10px);
+            box-shadow: 0 10px 20px rgba(246, 173, 85, 0.2);
+        }
+
+        .story-paragraph::before {
+            content: '🌾';
+            position: absolute;
+            left: -30px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 1.5rem;
+        }
+
+        .farm-animal {
+            position: fixed;
+            pointer-events: none;
+            opacity: 0.8;
+            animation: walk 15s linear infinite;
+        }
+
+        @keyframes walk {
+            0% { transform: translateX(-100%) rotate(0deg); }
+            50% { transform: translateX(50vw) rotate(5deg); }
+            100% { transform: translateX(100vw) rotate(0deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="clouds"></div>
+    <div class="grass-field"></div>
+    <div class="story-container">
+        <div class="content-wrapper">
+            <nav class="navigation-bar">
+                <a href="../library.html" class="back-button">
+                    🚜 Back to Library
+                </a>
+                <div class="font-controls">
+                    <button class="control-button" onclick="changeFontSize('decrease')">A-</button>
+                    <button class="control-button" onclick="changeFontSize('increase')">A+</button>
+                </div>
+            </nav>
+
+            <h1 class="story-title">
+                <span class="story-icon icon-left">🐮</span>
+                Farmyard Friends
+                <span class="story-icon icon-right">🐷</span>
+            </h1>
+
+            <div class="cover-section">
+                <div class="cover-frame">
+                    <picture>
+                        <source srcset="../images/library/covers/farm-animals.jpg" type="image/jpeg">
+                        <img 
+                            src="../images/library/covers/farm-animals.jpg" 
+                            alt="A group of friendly farm animals including a cow, pig, sheep, and dog gathered by a wooden fence" 
+                            class="cover-image"
+                            onerror="handleImageError(this)"
+                        >
+                    </picture>
+                </div>
+            </div>
+
+            <div class="story-tags">
+                <span class="story-tag">🌾 3-5 years</span>
+                <span class="story-tag">📚 Beginner</span>
+                <span class="story-tag">🐄 Animals</span>
+            </div>
+
+            <div class="story-content">
+                <div class="story-paragraph">
+                    On a sunny farm, there lived a group of animal friends who loved to play together. There was Daisy the cow, who had the most beautiful black and white spots, and her best friend Clover the sheep, who was always getting her wool caught in the fence.
+                </div>
+
+                <div class="story-paragraph">
+                    One morning, the animals woke up to find that Farmer Joe had left the gate open! "Let's have an adventure!" clucked Henrietta the hen. All the animals agreed, but they needed to choose a leader for their journey.
+                </div>
+
+                <div class="story-paragraph">
+                    "I should lead," barked Max the farm dog. "I know all the best places to explore!" The other animals thought this was a great idea, since Max always kept them safe during their daily activities.
+                </div>
+
+                <div class="story-paragraph">
+                    Together, they visited the big apple orchard, where Percy the pig found delicious fallen apples. They played in the meadow, where butterflies danced around them, and even discovered a new pond perfect for afternoon swims.
+                </div>
+
+                <div class="story-paragraph">
+                    As the sun began to set, Max knew it was time to head back. He guided his friends home, where they found Farmer Joe waiting with fresh hay and treats. He wasn't even mad about their adventure – he was just happy they were all safe.
+                </div>
+
+                <div class="story-paragraph">
+                    That night, as the animals settled into the barn, they agreed it had been the best day ever. But the most important thing they learned was that adventures are more fun when you have friends to share them with.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function changeFontSize(action) {
+            const content = document.querySelector('.story-content');
+            const currentSize = parseFloat(window.getComputedStyle(content).fontSize);
+            
+            if (action === 'increase' && currentSize < 24) {
+                content.style.fontSize = (currentSize + 2) + 'px';
+            } else if (action === 'decrease' && currentSize > 14) {
+                content.style.fontSize = (currentSize - 2) + 'px';
+            }
+        }
+
+        function handleImageError(element) {
+            const errorMessage = `
+                <div style="
+                    padding: 4rem; 
+                    text-align: center; 
+                    background: linear-gradient(45deg, var(--fence-beige), #FBD38D);
+                    color: var(--wood-brown);
+                    border-radius: 15px;
+                    min-height: 300px;
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: center;
+                    align-items: center;
+                    position: relative;
+                    overflow: hidden;
+                ">
+                    <div style="font-size: 4rem; margin-bottom: 1rem;">🐮 🐷 🐑</div>
+                    <div style="
+                        font-family: 'Coming Soon', cursive; 
+                        font-size: 2rem; 
+                        margin-bottom: 1rem;
+                        color: var(--barn-red);
+                        text-shadow: 2px 2px 0 var(--hay-yellow);
+                    ">A Farm Adventure Awaits!</div>
+                    <div style="
+                        font-family: 'Fredoka', sans-serif; 
+                        font-size: 1.2rem;
+                        max-width: 80%;
+                        line-height: 1.6;
+                    ">
+                        Join our farmyard friends as they embark on an exciting adventure beyond the farm gate...
+                    </div>
+                </div>
+            `;
+            element.parentElement.parentElement.innerHTML = errorMessage;
+        }
+
+        function createFarmAnimals() {
+            const animals = ['🐮', '🐷', '🐑', '🐔', '🐶'];
+            setInterval(() => {
+                const animal = document.createElement('div');
+                animal.className = 'farm-animal';
+                animal.textContent = animals[Math.floor(Math.random() * animals.length)];
+                animal.style.top = `${Math.random() * 70 + 20}vh`;
+                animal.style.fontSize = `${Math.random() * 2 + 2}rem`;
+                document.body.appendChild(animal);
+                
+                setTimeout(() => {
+                    animal.remove();
+                }, 15000);
+            }, 4000);
+        }
+
+        createFarmAnimals();
+    </script>
+</body>
+</html>

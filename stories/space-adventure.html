@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Captain Luna's Cosmic Quest - StoryLand</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;700&family=Patrick+Hand&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+    <style>
+        body {
+            font-family: 'Patrick Hand', cursive;
+            background: linear-gradient(135deg, #0F2027 0%, #203A43 50%, #2C5364 100%);
+            color: #fff;
+            position: relative;
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+
+        .story-container {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            padding: 2rem;
+            margin: 2rem auto;
+            width: 90%;
+            max-width: 1400px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .story-title {
+            font-family: 'Space Grotesk', sans-serif;
+            color: #7B68EE;
+            text-shadow: 0 0 10px rgba(123, 104, 238, 0.5);
+            animation: glow 2s ease-in-out infinite alternate;
+            font-size: clamp(2.5rem, 6vw, 5rem);
+            line-height: 1.2;
+            margin-bottom: 1.5rem;
+        }
+
+        @keyframes glow {
+            from { text-shadow: 0 0 10px rgba(123, 104, 238, 0.5); }
+            to { text-shadow: 0 0 20px rgba(123, 104, 238, 0.8), 0 0 30px rgba(123, 104, 238, 0.6); }
+        }
+
+        .star {
+            position: absolute;
+            background: white;
+            border-radius: 50%;
+            animation: twinkle 1s infinite alternate;
+        }
+
+        @keyframes twinkle {
+            from { opacity: 0.2; }
+            to { opacity: 1; }
+        }
+
+        .nav-button {
+            background: linear-gradient(45deg, #7B68EE, #4B0082);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            transition: all 0.3s ease;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            font-size: clamp(1rem, 2vw, 1.25rem);
+        }
+
+        .nav-button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 15px rgba(123, 104, 238, 0.5);
+        }
+
+        .font-controls {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 0.5rem;
+            border-radius: 20px;
+            display: flex;
+            gap: 0.5rem;
+            align-items: center;
+        }
+
+        .font-size-btn {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            font-size: 1.2rem;
+        }
+
+        .font-size-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: scale(1.1);
+        }
+
+        .story-content-wrapper {
+            display: grid;
+            grid-template-columns: 1fr minmax(auto, 1000px) 1fr;
+            gap: 2rem;
+            margin-top: 2rem;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            padding: 2rem;
+        }
+
+        .story-image-container {
+            grid-column: 1 / -1;
+            max-height: 350px;
+            width: 80%;
+            margin: 0 auto;
+            overflow: hidden;
+            border-radius: 20px;
+            box-shadow: 0 0 20px rgba(123, 104, 238, 0.3);
+        }
+
+        .story-image {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            transition: transform 0.3s ease;
+            background: rgba(0, 0, 0, 0.2);
+            padding: 1rem;
+        }
+
+        .story-image:hover {
+            transform: scale(1.02);
+        }
+
+        .story-text {
+            grid-column: 2;
+            line-height: 1.8;
+            font-size: clamp(1.3rem, 2vw, 1.8rem);
+            color: #E0E0E0;
+            max-width: 75ch;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .story-text p {
+            margin-bottom: 2rem;
+            text-align: justify;
+        }
+
+        .story-text .dialogue {
+            color: #B19EF8;
+            font-weight: 500;
+            margin: 1.5rem 0;
+        }
+
+        .story-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+            margin: 1.5rem 0;
+            justify-content: center;
+        }
+
+        .meta-tag {
+            background: rgba(123, 104, 238, 0.2);
+            padding: 0.8rem 2rem;
+            border-radius: 25px;
+            font-size: clamp(1.1rem, 2vw, 1.4rem);
+            color: #B19EF8;
+        }
+
+        @media (max-width: 768px) {
+            .story-container {
+                width: 95%;
+                padding: 1rem;
+                margin: 1rem auto;
+            }
+
+            .story-content-wrapper {
+                grid-template-columns: 1fr;
+                padding: 1rem;
+            }
+
+            .story-text {
+                grid-column: 1;
+                padding: 1rem;
+                font-size: clamp(1.1rem, 3vw, 1.6rem);
+                line-height: 1.6;
+            }
+
+            .story-text p {
+                margin-bottom: 1.5rem;
+            }
+
+            .story-image-container {
+                width: 95%;
+                max-height: 250px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="stars"></div>
+    
+    <!-- Navigation -->
+    <nav class="p-4 flex justify-between items-center z-10 relative">
+        <a href="../library.html" class="nav-button">
+            ← Back to Library
+        </a>
+        <div class="font-controls">
+            <span class="text-white">Text Size:</span>
+            <button class="font-size-btn" onclick="changeFontSize('decrease')">A-</button>
+            <button class="font-size-btn" onclick="changeFontSize('increase')">A+</button>
+        </div>
+    </nav>
+
+    <!-- Story Content -->
+    <div class="story-container animate__animated animate__fadeIn">
+        <h1 class="story-title text-center mb-6">Captain Luna's Cosmic Quest</h1>
+        
+        <div class="story-meta">
+            <span class="meta-tag">6-8 years</span>
+            <span class="meta-tag">intermediate</span>
+            <span class="meta-tag">adventure</span>
+        </div>
+
+        <div class="story-content-wrapper">
+            <div class="story-image-container">
+                <img src="../images/library/covers/space-adventure.webp" alt="Space Adventure" class="story-image">
+            </div>
+            
+            <div class="story-text" id="storyContent">
+                <p>
+                    In the year 2025, Captain Luna and her crew of young space explorers were preparing for their most exciting mission yet. Their spaceship, the Star Voyager, was the fastest in the galaxy, and today they were going to explore a new planet that no one had ever visited before.
+                </p>
+
+                <p class="dialogue">
+                    "All systems ready, Captain!" announced Max, the ship's engineer. His robot assistant, BEEP-1, beeped excitedly in agreement.
+                </p>
+
+                <p class="dialogue">
+                    "Excellent!" said Captain Luna, adjusting her space helmet. "Let's begin our countdown. 10... 9... 8..."
+                </p>
+
+                <p>
+                    The Star Voyager's engines roared to life as it lifted off from the space station. Through the windows, the crew could see Earth getting smaller and smaller until it was just a tiny blue dot in the distance.
+                </p>
+
+                <p>
+                    After traveling through space for several hours, they finally reached their destination - Planet Zeta-9. It was a beautiful planet with purple skies and floating islands made of crystal.
+                </p>
+
+                <p class="dialogue">
+                    "Look at that!" exclaimed Sarah, the science officer, pointing to a group of friendly-looking aliens waving at them from one of the floating islands. The aliens had three eyes and skin that changed colors like a rainbow.
+                </p>
+
+                <p>
+                    Captain Luna led her crew to meet the aliens, who introduced themselves as the Zetarians. They showed the crew their amazing floating city and taught them how to use the planet's special crystals to create beautiful light shows in the sky.
+                </p>
+
+                <p>
+                    The crew spent the day learning about Zetarian culture, playing games with the alien children, and even trying some of their favorite space snacks. As the sun set on Zeta-9, the sky filled with a spectacular display of colors created by the crystals.
+                </p>
+
+                <p class="dialogue">
+                    "This has been the best mission ever!" said Captain Luna as they prepared to return to Earth. "We've made new friends and discovered a beautiful new world."
+                </p>
+
+                <p>
+                    The Zetarians waved goodbye as the Star Voyager lifted off, promising to visit Earth soon. As the ship soared through space, Captain Luna and her crew couldn't wait to share their amazing adventure with everyone back home.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Create stars
+        function createStars() {
+            const starsContainer = document.querySelector('.stars');
+            for (let i = 0; i < 100; i++) {
+                const star = document.createElement('div');
+                star.className = 'star';
+                star.style.width = Math.random() * 3 + 'px';
+                star.style.height = star.style.width;
+                star.style.left = Math.random() * 100 + 'vw';
+                star.style.top = Math.random() * 100 + 'vh';
+                star.style.animationDelay = Math.random() * 2 + 's';
+                starsContainer.appendChild(star);
+            }
+        }
+
+        // Font size adjustment with local storage
+        let currentFontSize = localStorage.getItem('storyFontSize') || 1.4;
+        const MIN_FONT_SIZE = 1.2;
+        const MAX_FONT_SIZE = 2.5;
+        const STEP_SIZE = 0.15;
+
+        function updateFontSize() {
+            const storyContent = document.getElementById('storyContent');
+            storyContent.style.fontSize = `${currentFontSize}rem`;
+            localStorage.setItem('storyFontSize', currentFontSize);
+        }
+
+        function changeFontSize(action) {
+            if (action === 'increase' && currentFontSize < MAX_FONT_SIZE) {
+                currentFontSize = Math.min(MAX_FONT_SIZE, currentFontSize + STEP_SIZE);
+            } else if (action === 'decrease' && currentFontSize > MIN_FONT_SIZE) {
+                currentFontSize = Math.max(MIN_FONT_SIZE, currentFontSize - STEP_SIZE);
+            }
+            updateFontSize();
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            createStars();
+            updateFontSize();
+        });
+    </script>
+</body>
+</html>

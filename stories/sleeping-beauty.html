@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sleeping Beauty - StoryLand</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600&family=Cormorant+Garamond:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --royal-purple: #663399;
+            --rose-pink: #FF69B4;
+            --castle-stone: #8B8589;
+            --golden-crown: #FFD700;
+            --fairy-blue: #87CEEB;
+            --enchanted-green: #98FB98;
+            --cursed-red: #DC143C;
+            --dawn-pink: #FFC0CB;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            font-family: 'Cormorant Garamond', serif;
+            background: linear-gradient(135deg, var(--royal-purple) 0%, var(--rose-pink) 100%);
+            color: #333;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='40' viewBox='0 0 40 40'%3E%3Cpath d='M20 0L40 20L20 40L0 20z' fill='%23FFF' fill-opacity='0.05'/%3E%3C/svg%3E"),
+                url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='60' height='60' viewBox='0 0 60 60'%3E%3Cpath d='M30 0L60 30L30 60L0 30z' fill='%23FFD700' fill-opacity='0.05'/%3E%3C/svg%3E");
+            z-index: -1;
+        }
+
+        .castle-container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+            position: relative;
+        }
+
+        .story-scroll {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 30px;
+            box-shadow: 
+                0 0 30px rgba(102, 51, 153, 0.3),
+                0 0 60px rgba(255, 215, 0, 0.2);
+            overflow: hidden;
+            position: relative;
+            backdrop-filter: blur(10px);
+            border: 2px solid var(--golden-crown);
+        }
+
+        .navigation-bar {
+            background: linear-gradient(to right, var(--royal-purple), var(--rose-pink));
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 3px solid var(--golden-crown);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .back-button {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: white;
+            text-decoration: none;
+            font-size: 1.2rem;
+            padding: 0.5rem 1.5rem;
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid var(--golden-crown);
+            border-radius: 20px;
+            transition: all 0.3s ease;
+            font-family: 'Cinzel', serif;
+        }
+
+        .back-button:hover {
+            transform: translateX(-5px);
+            background: rgba(255, 255, 255, 0.2);
+            box-shadow: 0 0 20px var(--golden-crown);
+        }
+
+        .font-controls {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .font-button {
+            padding: 0.5rem 1rem;
+            border: 2px solid var(--golden-crown);
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Cinzel', serif;
+        }
+
+        .font-button:hover {
+            background: rgba(255, 255, 255, 0.2);
+            box-shadow: 0 0 15px var(--golden-crown);
+        }
+
+        .story-header {
+            text-align: center;
+            padding: 2rem;
+            background: linear-gradient(to bottom right, var(--royal-purple), var(--rose-pink));
+            position: relative;
+            overflow: hidden;
+        }
+
+        .story-title {
+            font-family: 'Cinzel', serif;
+            font-size: 3.5rem;
+            color: var(--golden-crown);
+            margin: 0;
+            text-shadow: 
+                2px 2px 4px rgba(0, 0, 0, 0.3),
+                0 0 20px var(--golden-crown);
+            letter-spacing: 2px;
+        }
+
+        .cover-container {
+            position: relative;
+            padding: 2rem;
+            background: linear-gradient(to bottom, var(--royal-purple), var(--rose-pink));
+        }
+
+        .cover-frame {
+            position: relative;
+            max-width: 800px;
+            margin: 0 auto;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 
+                0 0 30px rgba(102, 51, 153, 0.4),
+                0 0 60px rgba(255, 215, 0, 0.3);
+            border: 4px solid var(--golden-crown);
+        }
+
+        .cover-image {
+            width: 100%;
+            height: auto;
+            display: block;
+            transition: transform 0.5s ease;
+        }
+
+        .cover-frame:hover .cover-image {
+            transform: scale(1.05);
+        }
+
+        .story-tags {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .story-tag {
+            padding: 0.5rem 1.5rem;
+            border-radius: 20px;
+            font-size: 1rem;
+            font-family: 'Cinzel', serif;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        .tag-age {
+            background: rgba(102, 51, 153, 0.2);
+            border: 2px solid var(--royal-purple);
+            color: white;
+        }
+
+        .tag-level {
+            background: rgba(255, 105, 180, 0.2);
+            border: 2px solid var(--rose-pink);
+            color: white;
+        }
+
+        .tag-genre {
+            background: rgba(135, 206, 235, 0.2);
+            border: 2px solid var(--fairy-blue);
+            color: white;
+        }
+
+        .story-content {
+            padding: 2rem;
+            font-size: 1.3rem;
+            line-height: 1.8;
+            position: relative;
+            color: #2C1810;
+        }
+
+        .story-paragraph {
+            background: rgba(255, 255, 255, 0.8);
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            border-radius: 15px;
+            border-left: 4px solid var(--royal-purple);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .story-paragraph:hover {
+            transform: translateX(10px);
+            background: rgba(255, 255, 255, 0.9);
+            box-shadow: 
+                0 5px 15px rgba(102, 51, 153, 0.2),
+                0 0 30px rgba(255, 215, 0, 0.1);
+        }
+
+        .magical-decoration {
+            position: absolute;
+            pointer-events: none;
+            animation: float 6s ease-in-out infinite;
+            z-index: 1;
+        }
+
+        .rose {
+            font-size: 1.5rem;
+            color: var(--rose-pink);
+            filter: drop-shadow(0 0 5px rgba(255, 105, 180, 0.5));
+        }
+
+        .crown {
+            font-size: 1.5rem;
+            color: var(--golden-crown);
+            filter: drop-shadow(0 0 5px rgba(255, 215, 0, 0.5));
+        }
+
+        .spindle {
+            width: 30px;
+            height: 80px;
+            background: var(--castle-stone);
+            mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12,2A10,10 0 0,1 22,12A10,10 0 0,1 12,22A10,10 0 0,1 2,12A10,10 0 0,1 12,2M12,4A8,8 0 0,0 4,12A8,8 0 0,0 12,20A8,8 0 0,0 20,12A8,8 0 0,0 12,4Z'/%3E%3C/svg%3E") center/contain no-repeat;
+            opacity: 0.6;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-10px) rotate(5deg); }
+        }
+
+        .sparkle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: var(--golden-crown);
+            border-radius: 50%;
+            animation: sparkle 2s ease-in-out infinite;
+            opacity: 0;
+        }
+
+        @keyframes sparkle {
+            0% { transform: scale(0); opacity: 0; }
+            50% { transform: scale(1); opacity: 1; }
+            100% { transform: scale(0); opacity: 0; }
+        }
+
+        .castle-tower {
+            position: absolute;
+            width: 60px;
+            height: 120px;
+            background: var(--castle-stone);
+            opacity: 0.1;
+            clip-path: polygon(20% 0%, 80% 0%, 100% 100%, 0% 100%);
+        }
+
+        .castle-tower-left {
+            left: -30px;
+            top: 20%;
+        }
+
+        .castle-tower-right {
+            right: -30px;
+            top: 20%;
+        }
+    </style>
+</head>
+<body>
+    <div class="castle-container">
+        <div class="story-scroll">
+            <nav class="navigation-bar">
+                <a href="../library.html" class="back-button">
+                    ← Back to Library
+                </a>
+                <div class="font-controls">
+                    <button class="font-button" onclick="changeFontSize('decrease')">A-</button>
+                    <button class="font-button" onclick="changeFontSize('increase')">A+</button>
+                </div>
+            </nav>
+
+            <header class="story-header">
+                <h1 class="story-title">Sleeping Beauty</h1>
+                <div class="story-tags">
+                    <span class="story-tag tag-age">5-10 years</span>
+                    <span class="story-tag tag-level">intermediate</span>
+                    <span class="story-tag tag-genre">fairy tale</span>
+                </div>
+            </header>
+
+            <div class="cover-container">
+                <div class="cover-frame">
+                    <img src="../images/library/covers/sleeping-beauty.jpg" 
+                         alt="Sleeping Beauty" 
+                         class="cover-image"
+                         onerror="this.parentElement.innerHTML='<div style=\'padding: 4rem; text-align: center; background: var(--royal-purple); color: var(--golden-crown);\'><span style=\'font-size: 4rem;\'>👑</span><br>Royal Portrait Coming Soon</div>';">
+                </div>
+            </div>
+
+            <div class="story-content">
+                <div class="story-paragraph">
+                    Once upon a time, a king and queen had a beautiful baby girl. They named her Alisha and invited all the fairies in 
+                    the kingdom to a celebration.
+                </div>
+
+                <div class="story-paragraph">
+                    Each fairy gave the baby a special gift - beauty, grace, kindness, and more. But one fairy, who had not been 
+                    invited, was very angry. She cast a terrible spell: "On her sixteenth birthday, the princess will prick her finger on a 
+                    spinning wheel and die!"
+                </div>
+
+                <div class="story-paragraph">
+                    Luckily, one fairy had not yet given her gift. She couldn't break the spell, but she could change it. "The princess will not die," she said. "She will fall into a deep sleep for one hundred years, until she is awakened by true love's kiss."
+                </div>
+
+                <div class="story-paragraph">
+                    The king ordered all spinning wheels in the kingdom to be destroyed. But on Aurora's sixteenth birthday, she found an old woman spinning in a tower. Curious, she touched the spinning wheel and pricked her finger.
+                </div>
+
+                <div class="story-paragraph">
+                    Immediately, Aurora fell into a deep sleep. The good fairy's magic spread throughout the castle, putting everyone to sleep. A thick forest of thorns grew around the castle, protecting it from intruders.
+                </div>
+
+                <div class="story-paragraph">
+                    Many years later, a prince heard the story of the sleeping princess. He fought his way through the thorny forest and found the castle. When he saw Aurora, he fell in love with her beauty.
+                </div>
+
+                <div class="story-paragraph">
+                    The prince kissed Alisha, and she woke up! The spell was broken, and everyone in the castle woke up too. The prince and princess were married, and they lived happily ever after.
+                </div>
+
+                <div class="story-paragraph text-xl font-bold text-[#9B5DE5] mt-8">
+                    Moral: True love can overcome any obstacle.
+                </div>
+            </div>
+
+            <div class="mt-8 text-center">
+                <p class="text-xl text-[#9B5DE5]">The End</p>
+                <a href="../library.html" 
+                   class="inline-block mt-4 px-6 py-2 bg-[#FEE440] text-[#9B5DE5] rounded-md hover:bg-[#FFE66D] hover:text-[#7B4BC4] transition-colors comic-border">
+                    Back to Library
+                </a>
+            </div>
+
+            <div class="castle-tower castle-tower-left"></div>
+            <div class="castle-tower castle-tower-right"></div>
+        </div>
+    </div>
+
+    <script>
+        function changeFontSize(action) {
+            const content = document.querySelector('.story-content');
+            const currentSize = parseFloat(window.getComputedStyle(content).fontSize);
+            
+            if (action === 'increase' && currentSize < 24) {
+                content.style.fontSize = (currentSize + 2) + 'px';
+            } else if (action === 'decrease' && currentSize > 14) {
+                content.style.fontSize = (currentSize - 2) + 'px';
+            }
+        }
+
+        function createSparkles() {
+            const container = document.querySelector('.story-scroll');
+            for (let i = 0; i < 30; i++) {
+                const sparkle = document.createElement('div');
+                sparkle.className = 'sparkle';
+                sparkle.style.left = Math.random() * 100 + '%';
+                sparkle.style.top = Math.random() * 100 + '%';
+                sparkle.style.animationDelay = Math.random() * 2 + 's';
+                container.appendChild(sparkle);
+            }
+        }
+
+        function createMagicalDecorations() {
+            const container = document.querySelector('.story-scroll');
+            const decorations = [
+                { type: 'rose', emoji: '🌹', positions: [
+                    { top: '10%', right: '5%' },
+                    { top: '30%', left: '5%' },
+                    { top: '50%', right: '8%' },
+                    { top: '70%', left: '7%' }
+                ]},
+                { type: 'crown', emoji: '👑', positions: [
+                    { top: '20%', right: '10%' },
+                    { top: '40%', left: '10%' },
+                    { top: '60%', right: '12%' },
+                    { top: '80%', left: '8%' }
+                ]}
+            ];
+
+            decorations.forEach(decor => {
+                decor.positions.forEach(pos => {
+                    const element = document.createElement('div');
+                    element.className = `magical-decoration ${decor.type}`;
+                    if (decor.emoji) element.textContent = decor.emoji;
+                    Object.assign(element.style, pos);
+                    container.appendChild(element);
+                });
+            });
+        }
+
+        createSparkles();
+        createMagicalDecorations();
+    </script>
+</body>
+</html> 

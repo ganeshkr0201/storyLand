@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cinderella - StoryLand</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Quicksand:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --midnight-blue: #191970;
+            --crystal-blue: #ADD8E6;
+            --fairy-pink: #FFB6C1;
+            --silver-sparkle: #C0C0C0;
+            --magic-purple: #9370DB;
+            --golden-pumpkin: #FFD700;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            background: linear-gradient(135deg, var(--midnight-blue) 0%, var(--magic-purple) 100%);
+            font-family: 'Quicksand', sans-serif;
+            color: #333;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* Magic dust effect */
+        .magic-dust {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .dust-particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: var(--silver-sparkle);
+            border-radius: 50%;
+            filter: blur(1px);
+            animation: float-magic 4s infinite;
+        }
+
+        @keyframes float-magic {
+            0% { transform: translateY(100vh) scale(0) rotate(0deg); opacity: 0; }
+            50% { opacity: 1; }
+            100% { transform: translateY(-100px) scale(1) rotate(360deg); opacity: 0; }
+        }
+
+        .story-container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 2rem;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 30px;
+            box-shadow: 0 0 40px rgba(147, 112, 219, 0.3);
+            position: relative;
+            z-index: 1;
+            border: 4px solid var(--silver-sparkle);
+            background-image: 
+                linear-gradient(rgba(255, 255, 255, 0.95), rgba(255, 255, 255, 0.95)),
+                url('data:image/svg+xml,<svg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M10 0L20 10L10 20L0 10L10 0z" fill="%23C0C0C0" fill-opacity="0.1"/></svg>');
+        }
+
+        .navigation-bar {
+            background: linear-gradient(to right, var(--crystal-blue), var(--fairy-pink));
+            padding: 1rem;
+            border-radius: 20px;
+            margin-bottom: 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .back-button {
+            background: rgba(255, 255, 255, 0.2);
+            color: var(--midnight-blue);
+            padding: 0.75rem 1.5rem;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            border: 2px solid var(--silver-sparkle);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .back-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255, 255, 255, 0.3);
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .control-button {
+            background: rgba(255, 255, 255, 0.2);
+            color: var(--midnight-blue);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            border: 2px solid var(--silver-sparkle);
+            margin: 0 0.25rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .control-button:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .story-title {
+            font-family: 'Dancing Script', cursive;
+            font-size: 4.5rem;
+            color: var(--magic-purple);
+            text-align: center;
+            margin: 2rem 0;
+            position: relative;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .cover-section {
+            position: relative;
+            margin: 2rem auto;
+            max-width: 800px;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        .cover-frame {
+            position: relative;
+            padding-top: 40%; /* Adjusted from 56.25% to better fit the image */
+            background: linear-gradient(45deg, var(--crystal-blue), var(--fairy-pink));
+            border-radius: 20px;
+            overflow: hidden;
+            border: 5px solid var(--silver-sparkle);
+        }
+
+        .cover-image {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: contain; /* Changed from cover to contain */
+            transition: transform 0.5s ease;
+            background-color: rgba(255, 255, 255, 0.9); /* Added light background */
+            padding: 10px; /* Added padding around the image */
+        }
+
+        .cover-frame:hover .cover-image {
+            transform: scale(1.05);
+        }
+
+        .story-tags {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin: 2rem 0;
+            flex-wrap: wrap;
+        }
+
+        .story-tag {
+            background: rgba(147, 112, 219, 0.1);
+            color: var(--magic-purple);
+            padding: 0.5rem 1.5rem;
+            border-radius: 20px;
+            font-size: 1.1rem;
+            border: 2px solid var(--silver-sparkle);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .story-content {
+            font-size: 1.2rem;
+            line-height: 1.8;
+            color: #2C3E50;
+            padding: 2rem;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 20px;
+            margin-top: 2rem;
+        }
+
+        .story-paragraph {
+            position: relative;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            border-left: 4px solid var(--fairy-pink);
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 0 20px 20px 0;
+            transition: all 0.3s ease;
+        }
+
+        .story-paragraph:hover {
+            transform: translateX(10px);
+            box-shadow: 5px 5px 15px rgba(0,0,0,0.1);
+            border-left-color: var(--magic-purple);
+        }
+
+        /* Fairy tale decorations */
+        .fairy-decoration {
+            position: absolute;
+            font-size: 2rem;
+            opacity: 0.6;
+            pointer-events: none;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-15px) rotate(5deg); }
+        }
+
+        .slipper { top: 50px; right: 50px; }
+        .pumpkin { top: 100px; left: 50px; }
+        .wand { bottom: 100px; right: 100px; }
+        .clock { bottom: 150px; left: 100px; }
+        .crown { top: 200px; right: 150px; }
+
+        /* Dark mode */
+        @media (prefers-color-scheme: dark) {
+            .story-container {
+                background: rgba(25, 25, 112, 0.95);
+                color: #fff;
+            }
+            .story-content {
+                background: rgba(255, 255, 255, 0.1);
+                color: #fff;
+            }
+            .story-paragraph {
+                background: rgba(25, 25, 112, 0.8);
+                color: #fff;
+            }
+            .story-title {
+                color: var(--crystal-blue);
+            }
+            .story-tag {
+                color: var(--crystal-blue);
+                background: rgba(25, 25, 112, 0.8);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="magic-dust" id="magicDust"></div>
+    <div class="story-container">
+        <nav class="navigation-bar">
+            <button onclick="goBackToLibrary()" class="back-button">
+                <i class="fas fa-magic"></i> Back to Library
+            </button>
+            <div class="font-controls">
+                <button class="control-button" onclick="changeFontSize('decrease')">A-</button>
+                <button class="control-button" onclick="changeFontSize('increase')">A+</button>
+            </div>
+        </nav>
+
+        <h1 class="story-title">Cinderella</h1>
+
+        <div class="cover-section">
+            <div class="cover-frame">
+                <picture>
+                    <img src="../images/library/covers/cinderella.jpg" 
+                         alt="Cinderella's magical transformation" 
+                         class="cover-image"
+                         onerror="handleImageError(this)">
+                </picture>
+            </div>
+        </div>
+
+        <div class="story-tags">
+            <span class="story-tag"><i class="fas fa-child"></i> 5-10 years</span>
+            <span class="story-tag"><i class="fas fa-book-reader"></i> Intermediate</span>
+            <span class="story-tag"><i class="fas fa-crown"></i> Fairy tale</span>
+        </div>
+
+        <div class="story-content">
+            <div class="story-paragraph">
+                Once upon a time, there was a kind and beautiful girl named Cinderella. She lived with her cruel stepmother and two jealous stepsisters, who made her do all the housework.
+            </div>
+
+            <div class="story-paragraph">
+                One day, an invitation arrived from the palace. The prince was having a grand ball to find a bride! Cinderella's stepsisters were very excited and spent days preparing their finest dresses.
+            </div>
+
+            <div class="story-paragraph">
+                "You can't go to the ball," said the stepmother. "You have too much work to do!" Cinderella was heartbroken as she watched her stepfamily leave for the palace.
+            </div>
+
+            <div class="story-paragraph">
+                Suddenly, her Fairy Godmother appeared! With a wave of her magic wand, she turned a pumpkin into a carriage, mice into horses, and Cinderella's rags into a beautiful gown. "But remember," she warned, "the magic will end at midnight!"
+            </div>
+
+            <div class="story-paragraph">
+                At the ball, the prince was enchanted by Cinderella's beauty and kindness. They danced all evening until the clock began to strike twelve. Cinderella fled, leaving behind only a glass slipper.
+            </div>
+
+            <div class="story-paragraph">
+                The prince searched the kingdom until he found Cinderella and the matching slipper. They were married in a grand ceremony, and Cinderella's kindness touched everyone's hearts. They lived happily ever after in the palace.
+            </div>
+        </div>
+
+        <!-- Fairy tale decorations -->
+        <div class="fairy-decoration slipper">👠</div>
+        <div class="fairy-decoration pumpkin">🎃</div>
+        <div class="fairy-decoration wand">✨</div>
+        <div class="fairy-decoration clock">🕐</div>
+        <div class="fairy-decoration crown">👑</div>
+    </div>
+
+    <script>
+        let currentFontSize = 1.2;
+        const minFontSize = 1;
+        const maxFontSize = 1.6;
+        const stepSize = 0.1;
+
+        function createMagicDust() {
+            const dustContainer = document.getElementById('magicDust');
+            const particleCount = 50;
+
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'dust-particle';
+                
+                // Random position
+                particle.style.left = `${Math.random() * 100}%`;
+                
+                // Random delay
+                particle.style.animationDelay = `${Math.random() * 4}s`;
+                
+                dustContainer.appendChild(particle);
+            }
+        }
+
+        function changeFontSize(action) {
+            if (action === 'increase' && currentFontSize < maxFontSize) {
+                currentFontSize += stepSize;
+            } else if (action === 'decrease' && currentFontSize > minFontSize) {
+                currentFontSize -= stepSize;
+            }
+            document.querySelector('.story-content').style.fontSize = `${currentFontSize}rem`;
+            localStorage.setItem('preferredFontSize', currentFontSize);
+        }
+
+        function handleImageError(img) {
+            const container = img.parentElement;
+            container.innerHTML = `
+                <div class="w-full h-full flex flex-col items-center justify-center bg-gradient-to-r from-[var(--crystal-blue)] to-[var(--fairy-pink)]">
+                    <span class="text-6xl mb-4">👠 ✨</span>
+                    <p class="text-xl text-white text-center px-4">A Tale of Magic and Dreams...</p>
+                </div>
+            `;
+        }
+
+        function goBackToLibrary() {
+            window.location.href = '../library.html';
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            createMagicDust();
+            
+            // Restore font size preference
+            const savedFontSize = localStorage.getItem('preferredFontSize');
+            if (savedFontSize) {
+                currentFontSize = parseFloat(savedFontSize);
+                document.querySelector('.story-content').style.fontSize = `${currentFontSize}rem`;
+            }
+        });
+    </script>
+</body>
+</html> 
